@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css">
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
+<style>
+body{padding:0 0 60px}.a{max-width:760px;margin:0 auto;padding:16px 18px}
+.a h1{font-size:20px;margin:6px 0 14px}.bar2{display:flex;gap:6px;overflow-x:auto;margin:0 0 16px;padding-bottom:4px}
+.bar2 button,.a .btn2{font:inherit;font-size:14px;font-weight:500;border:1px solid var(--line);background:transparent;color:var(--ink);padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.bar2 button[aria-pressed=true],.a .pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.a label{display:block;font-size:13px;color:var(--mute);margin:10px 0 0}
+.a input:not([type=checkbox]),.a select,.a textarea{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
+.a .ck{display:flex;gap:8px;align-items:center;color:var(--ink)}.a .ck input{width:18px;height:18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.row small{color:var(--mute);display:block}.box{border:1px solid var(--line);border-radius:6px;padding:14px;margin:0 0 18px}
+.msg{padding:10px;border-radius:6px;background:var(--soft);margin:0 0 12px;font-size:14px}.err{color:var(--L)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.a input[type=color]{width:52px;height:38px;padding:2px;display:inline-block;margin:0;cursor:pointer}
+.cr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;color:var(--ink);font-size:14px}.cr code{color:var(--mute);font-size:12px;margin-right:8px}
+.sr{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}.sr span{flex:1}
+.sr .btn2{padding:4px 10px}.pvw{display:block;margin:0 auto;border:1px solid var(--line);border-radius:6px;width:100%;height:560px;background:#fff;transition:width .2s}
+.pill{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--mute)}.pill.warn{background:#fff3cd;color:#664d03}
+.stk{position:sticky;bottom:0;background:var(--bg);padding:10px 0;border-top:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+</style></head><body>
+<div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="../js/config.js"></script><script src="../data/data.js"></script><script src="../js/design.js"></script>
+<script>
+var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+async function q(p){var r=await p;if(r.error)throw r.error;return r.data}
+function say(t,bad){$("msg").innerHTML=t?'<div class="msg'+(bad?" err":"")+'">'+esc(t)+"</div>":""}
+async function run(f){try{say("");await f()}catch(e){say("Σφάλμα: "+(e.message||e),1)}}
+function ath(d,t){var p=d.split("-"),k=t.split(":"),u=Date.UTC(+p[0],p[1]-1,+p[2],+k[0],+k[1]);function off(s){var o={};new Intl.DateTimeFormat("en-US",{timeZone:"Europe/Athens",hourCycle:"h23",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric"}).formatToParts(new Date(s)).forEach(function(x){o[x.type]=+x.value});return Date.UTC(o.year,o.month-1,o.day,o.hour,o.minute)-s}return new Date(u-off(u-off(u)))}
+function parts(iso){var o={};new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Athens",hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}).formatToParts(new Date(iso)).forEach(function(x){o[x.type]=x.value});return o.year+"-"+o.month+"-"+o.day+"T"+o.hour+":"+o.minute}
+function slug(n){return n.toLowerCase().replace(/[^a-z0-9α-ωά-ώ]+/g,"-").replace(/^-|-$/g,"")||"x"}
+function url(p){if(!p)return"";if(/^assets\//.test(p))return"../"+p;var i=p.indexOf("/");return sb.storage.from(p.slice(0,i)).getPublicUrl(p.slice(i+1)).data.publicUrl}
+async function up(b,f){var p=Date.now()+"-"+f.name.replace(/[^\w.-]/g,"_");await q(sb.storage.from(b).upload(p,f));return b+"/"+p}
+function opts(l,v,e){return(e?'<option value="">–</option>':"")+l.map(function(o){return'<option value="'+o[0]+'"'+(o[0]==v?" selected":"")+">"+esc(o[1])+"</option>"}).join("")}
+function F(fs,d){return fs.map(function(f){var v=d[f[0]]==null?"":d[f[0]],id="f_"+f[0],t=f[2];
+ if(t==="select")return'<label>'+f[1]+'<select id="'+id+'">'+opts(f[3],v,f[4])+"</select></label>";
+ if(t==="check")return'<label class="ck"><input type="checkbox" id="'+id+'"'+(v?" checked":"")+"> "+f[1]+"</label>";
+ if(t==="area")return'<label>'+f[1]+'<textarea id="'+id+'" rows="3">'+esc(v)+"</textarea></label>";
+ if(t==="file")return'<label>'+f[1]+'<input type="file" id="'+id+'" accept="image/*"></label>';
+ return'<label>'+f[1]+'<input id="'+id+'" type="'+t+'" value="'+esc(v)+'"></label>'}).join("")}
+function G(fs){var o={};fs.forEach(function(f){var e=$("f_"+f[0]),t=f[2];o[f[0]]=t==="check"?e.checked:t==="file"?e.files[0]:t==="number"?(e.value===""?null:+e.value):(e.value||null)});return o}
+
+/* ---- σύνδεση ---- */
+async function boot(){
+ var s=(await sb.auth.getSession()).data.session;
+ if(!s){$("app").innerHTML='<div class="box"><b>Σύνδεση</b><label>Email<input id="em" type="email" autocomplete="username"></label><label>Κωδικός<input id="pw" type="password" autocomplete="current-password"></label><p><button class="btn2 pri" id="go">Είσοδος</button></p></div>';
+  $("go").onclick=function(){run(async function(){await q(sb.auth.signInWithPassword({email:$("em").value,password:$("pw").value}));boot()})};return}
+ var a=await q(sb.from("admins").select("user_id"));
+ if(!a.length){$("app").innerHTML='<div class="box">Ο λογαριασμός δεν έχει δικαίωμα διαχειριστή. Δες το README (βήμα Supabase).<p><button class="btn2" id="out">Αποσύνδεση</button></p></div>';$("out").onclick=out;return}
+ nav()}
+function out(){sb.auth.signOut().then(boot)}
+var TABS=[["players","Παίκτες"],["matches","Αγώνες"],["events","Γκολ"],["teams","Ομάδες"],["design","Εμφάνιση"],["tools","Εργαλεία"]];
+function nav(){$("app").innerHTML='<div class="bar2" id="tb">'+TABS.map(function(t){return'<button data-t="'+t[0]+'" aria-pressed="'+(t[0]===tab)+'">'+t[1]+"</button>"}).join("")+'<button id="out">Έξοδος</button></div><div id="pg"></div>';
+ $("out").onclick=out;$("tb").onclick=function(e){var t=e.target.dataset.t;if(t){tab=t;nav()}};run(V[tab])}
+
+/* ---- παίκτες ---- */
+var PF=[["full_name","Ονοματεπώνυμο","text"],["position","Θέση","text"],["shirt_number","Αριθμός φανέλας","number"],["bio","Βιογραφικό","area"],["base_goals","Γκολ (σύνολο μέχρι σήμερα)","number"],["base_assists","Ασίστ (σύνολο μέχρι σήμερα)","number"],["base_apps","Παρουσίες (σύνολο μέχρι σήμερα)","number"],["show_on_roster","Εμφάνιση στο ρόστερ","check"],["photo","Φωτογραφία","file"]];
+var V={};
+V.players=async function(){var L=await q(sb.from("players").select("*").order("full_name"));
+ $("pg").innerHTML='<div id="fm"></div><b>'+L.length+" παίκτες</b>"+L.map(function(p){return'<div class="row"><span>'+esc(p.full_name)+"<small>"+esc(p.position||"")+" · "+p.base_goals+" γκολ · "+p.base_assists+" ασίστ</small></span><button class=\"btn2\" data-e=\""+p.id+'">Επεξεργασία</button></div>'}).join("");
+ var edit=function(p){$("fm").innerHTML='<div class="box"><b>'+(p.id?"Επεξεργασία":"Νέος παίκτης")+"</b>"+F(PF,p)+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> '+(p.id?'<button class="btn2" id="dl">Διαγραφή</button> ':"")+'<button class="btn2" id="cn">Άκυρο</button></p></div>';
+  $("cn").onclick=function(){$("fm").innerHTML=btn};
+  $("sv").onclick=function(){run(async function(){var o=G(PF),f=o.photo;delete o.photo;if(!o.full_name)throw"Λείπει το όνομα";if(f)o.photo_path=await up("player-photos",f);o.base_goals=o.base_goals||0;o.base_assists=o.base_assists||0;o.base_apps=o.base_apps||0;
+   if(p.id)await q(sb.from("players").update(o).eq("id",p.id));else{o.slug=slug(o.full_name)+"-"+Math.random().toString(36).slice(2,6);await q(sb.from("players").insert(o))}say("Αποθηκεύτηκε");V.players()})};
+  if(p.id)$("dl").onclick=function(){if(confirm("Διαγραφή παίκτη;"))run(async function(){await q(sb.from("players").delete().eq("id",p.id));V.players()})}};
+ var btn='<p><button class="btn2 pri" id="nw">+ Νέος παίκτης</button></p>';$("fm").innerHTML=btn;
+ $("pg").onclick=function(e){if(e.target.id==="nw")edit({show_on_roster:true});if(e.target.dataset.e)edit(L.find(function(p){return p.id===e.target.dataset.e}))}};
+
+/* ---- αγώνες ---- */
+V.matches=async function(){var T=await q(sb.from("teams").select("id,name").order("name")),M=await q(sb.from("matches").select("*").order("kickoff",{ascending:false,nullsFirst:false}).limit(60)),tn={};T.forEach(function(t){tn[t.id]=t.name});
+ var tl=T.map(function(t){return[t.id,t.name]});
+ var MF=[["season","Σεζόν (π.χ. 2026/27)","text"],["competition","Διοργάνωση","select",[["Πρωτάθλημα","Πρωτάθλημα"],["Off-Season Tournament","Off-Season Tournament"]]],["round_label","Αγωνιστική (π.χ. 5η αγ.)","text"],["kick","Ημερομηνία και ώρα (ώρα Ελλάδας)","datetime-local"],["home_team","Γηπεδούχος","select",tl],["away_team","Φιλοξενούμενος","select",tl],["home_score","Γκολ γηπεδούχου","number"],["away_score","Γκολ φιλοξενούμενου","number"],["status","Κατάσταση","select",[["scheduled","Προγραμματισμένος"],["live","Σε εξέλιξη"],["finished","Ολοκληρωμένος"],["postponed","Αναβλήθηκε"]]],["venue","Γήπεδο","text"],["venue_map_url","Σύνδεσμος χάρτη","url"]];
+ $("pg").innerHTML='<p><button class="btn2 pri" id="nw">+ Νέος αγώνας (π.χ. επόμενος)</button></p><div id="fm"></div>'+M.map(function(m){var s=m.home_score==null?"vs":m.home_score+" - "+m.away_score;return'<div class="row"><span>'+esc(tn[m.home_team])+" "+s+" "+esc(tn[m.away_team])+"<small>"+esc(m.season)+" · "+esc(m.status)+" · "+(m.kickoff?parts(m.kickoff).replace("T"," "):"χωρίς ημερομηνία")+'</small></span><button class="btn2" data-e="'+m.id+'">Επεξεργασία</button></div>'}).join("");
+ var edit=function(m){var d=Object.assign({},m,{kick:m.kickoff?parts(m.kickoff):"",season:m.season||"2026/27",status:m.status||"scheduled"});
+  $("fm").innerHTML='<div class="box">'+F(MF,d)+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> '+(m.id?'<button class="btn2" id="dl">Διαγραφή</button> ':"")+'<button class="btn2" id="cn">Άκυρο</button></p></div>';
+  $("cn").onclick=function(){$("fm").innerHTML=""};
+  $("sv").onclick=function(){run(async function(){var o=G(MF),k=o.kick;delete o.kick;o.kickoff=k?ath(k.slice(0,10),k.slice(11,16)).toISOString():null;
+   if(o.home_team===o.away_team)throw"Η ίδια ομάδα στις δύο θέσεις";if(o.status==="finished"&&(o.home_score==null||o.away_score==null))throw"Βάλε το σκορ";o.locked=true;
+   if(m.id)await q(sb.from("matches").update(o).eq("id",m.id));else{o.source="manual";await q(sb.from("matches").insert(o))}say("Αποθηκεύτηκε");V.matches()})};
+  if(m.id)$("dl").onclick=function(){if(confirm("Διαγραφή αγώνα και των γεγονότων του;"))run(async function(){await q(sb.from("matches").delete().eq("id",m.id));V.matches()})}};
+ $("pg").onclick=function(e){if(e.target.id==="nw")edit({});if(e.target.dataset.e)edit(M.find(function(m){return m.id===e.target.dataset.e}))}};
+
+/* ---- γκολ, ασίστ, παρουσίες (κάθε γκολ καταχωρείται μία φορά) ---- */
+V.events=async function(){var T=await q(sb.from("teams").select("id,name")),tn={};T.forEach(function(t){tn[t.id]=t.name});
+ var M=await q(sb.from("matches").select("id,season,kickoff,home_team,away_team,status").order("kickoff",{ascending:false,nullsFirst:false}).limit(30)),P=await q(sb.from("players").select("id,full_name").order("full_name")),cur=$("mm")?$("mm").value:(M[0]&&M[0].id);
+ if(!M.length){$("pg").innerHTML="Πρώτα πρόσθεσε έναν αγώνα.";return}
+ var E=await q(sb.from("match_events").select("*").eq("match_id",cur).order("seq")),A=(await q(sb.from("appearances").select("player_id").eq("match_id",cur))).map(function(a){return a.player_id}),pl=P.map(function(p){return[p.id,p.full_name]}),pn={};P.forEach(function(p){pn[p.id]=p.full_name});
+ $("pg").innerHTML='<label>Αγώνας<select id="mm">'+opts(M.map(function(m){return[m.id,(m.kickoff?parts(m.kickoff).slice(0,10):"–")+" "+tn[m.home_team]+" – "+tn[m.away_team]]}),cur)+"</select></label>"+
+  '<div class="box"><b>Γκολ</b>'+E.map(function(e){return'<div class="row"><span>#'+e.seq+" "+esc(e.scorer_id?pn[e.scorer_id]:"αυτογκόλ")+(e.assist_id?" (ασίστ: "+esc(pn[e.assist_id])+")":"")+(e.minute?" "+e.minute+"′":"")+'</span><button class="btn2" data-d="'+e.id+'">Διαγραφή</button></div>'}).join("")+
+  '<label>Σκόρερ<select id="sc">'+opts(pl,"",1)+'</select></label><label>Ασίστ<select id="as">'+opts(pl,"",1)+'</select></label><label>Λεπτό<input id="mn" type="number"></label><p><button class="btn2 pri" id="add">Προσθήκη γκολ</button></p></div>'+
+  '<div class="box"><b>Παρουσίες</b>'+P.map(function(p){return'<label class="ck"><input type="checkbox" class="ap" value="'+p.id+'"'+(A.indexOf(p.id)>=0?" checked":"")+"> "+esc(p.full_name)+"</label>"}).join("")+'<p><button class="btn2 pri" id="sap">Αποθήκευση παρουσιών</button></p></div>';
+ $("mm").onchange=function(){V.events()};
+ $("add").onclick=function(){run(async function(){var s=$("sc").value||null,a=$("as").value||null;if(s&&s===a)throw"Ο σκόρερ δεν μπορεί να δώσει ασίστ στον εαυτό του";var seq=E.length?E[E.length-1].seq+1:1;
+  await q(sb.from("match_events").insert({match_id:cur,seq:seq,kind:s?"goal":"own_goal",scorer_id:s,assist_id:a,minute:$("mn").value?+$("mn").value:null}));V.events()})};
+ $("sap").onclick=function(){run(async function(){await q(sb.from("appearances").delete().eq("match_id",cur));var r=[].filter.call(document.querySelectorAll(".ap"),function(c){return c.checked}).map(function(c){return{match_id:cur,player_id:c.value}});if(r.length)await q(sb.from("appearances").insert(r));say("Αποθηκεύτηκε")})};
+ $("pg").onclick=function(e){if(e.target.dataset.d)run(async function(){await q(sb.from("match_events").delete().eq("id",e.target.dataset.d));V.events()})}};
+
+/* ---- ομάδες και logos ---- */
+V.teams=async function(){var L=await q(sb.from("teams").select("*").order("name")),TF=[["name","Όνομα ομάδας (ακριβές όπως στο Προπάθλημα)","text"],["logo","Logo (PNG, SVG, διαφανές)","file"]];
+ $("pg").innerHTML='<p><button class="btn2 pri" id="nw">+ Νέα ομάδα</button></p><div id="fm"></div>'+L.map(function(t){return'<div class="row"><span style="display:flex;gap:10px;align-items:center">'+(t.logo_path?'<img src="'+esc(url(t.logo_path))+'" width="32" height="32" style="object-fit:contain" alt="">':'<span style="width:32px"></span>')+esc(t.name)+'</span><button class="btn2" data-e="'+t.id+'">Logo / όνομα</button></div>'}).join("");
+ var edit=function(t){$("fm").innerHTML='<div class="box">'+F(TF,t)+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> <button class="btn2" id="cn">Άκυρο</button></p></div>';$("cn").onclick=function(){$("fm").innerHTML=""};
+  $("sv").onclick=function(){run(async function(){var o=G(TF),f=o.logo;delete o.logo;if(!o.name)throw"Λείπει το όνομα";if(f){if(!/^image\/(png|svg\+xml|webp|jpeg)$/.test(f.type))throw"Μόνο PNG, SVG, WebP ή JPG";o.logo_path=await up("team-logos",f)}
+   if(t.id)await q(sb.from("teams").update(o).eq("id",t.id));else{o.slug=slug(o.name);var r=await q(sb.from("teams").insert(o).select());await q(sb.from("team_aliases").insert({alias:o.name,team_id:r[0].id}))}say("Αποθηκεύτηκε");V.teams()})}};
+ $("pg").onclick=function(e){if(e.target.id==="nw")edit({});if(e.target.dataset.e)edit(L.find(function(t){return t.id===e.target.dataset.e}))}};
+
+
+/* ---- εμφάνιση: χρώματα, γραμματοσειρά, σειρά ενοτήτων. Πρόχειρο και δημοσίευση ---- */
+V.design=async function(){
+ var row=(await q(sb.from("site_settings").select("*").eq("key","design")))[0]||{},
+  pub=designClean(row.published),saved=designClean(row.draft||row.published),D=designClean(row.draft||row.published),mobile=false,
+  J=function(x){return JSON.stringify(x)},CL=[["navy","Χρώμα ομάδας (κεφαλίδα, κουμπιά)"],["acc","Χρώμα συνδέσμων"],["bg","Φόντο"],["ink","Κείμενο"]];
+ function cpick(t){return'<div class="box"><b>'+(t==="light"?"Φωτεινό θέμα":"Σκούρο θέμα")+"</b>"+CL.map(function(c){return'<div class="cr"><span>'+c[1]+'</span><span><code>'+D.colors[t][c[0]]+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+D.colors[t][c[0]]+'"></span></div>'}).join("")+"</div>"}
+ function secs(){return D.sections.map(function(x,i){return'<div class="sr"><input type="checkbox" class="ck2" data-i="'+i+'"'+(x.on?" checked":"")+' aria-label="Εμφάνιση"><span>'+DESIGN_SECTIONS[x.id]+'</span><button class="btn2" data-u="'+i+'"'+(i?"":" disabled")+' aria-label="Πάνω">▲</button><button class="btn2" data-dn="'+i+'"'+(i<D.sections.length-1?"":" disabled")+' aria-label="Κάτω">▼</button></div>'}).join("")}
+ function status(){var dirty=J(D)!==J(pub),unsaved=J(D)!==J(saved);return'<span class="pill'+(dirty?" warn":"")+'">'+(dirty?"Αδημοσίευτες αλλαγές":"Δημοσιευμένο")+"</span> "+(unsaved?'<span class="pill warn">Μη αποθηκευμένο πρόχειρο</span>':"")}
+ function push(){var f=$("pv");if(f&&f.contentWindow)f.contentWindow.postMessage({type:"papei-design",settings:D},location.origin);$("st").innerHTML=status()}
+ function draw(){
+  $("pg").innerHTML='<p id="st">'+status()+'</p><div class="box"><b>Προεπισκόπηση</b> <button class="btn2" id="vw" style="float:right">'+(mobile?"Υπολογιστής":"Κινητό")+'</button><div style="clear:both;margin-top:10px"><iframe class="pvw" id="pv" title="Προεπισκόπηση" src="../index.html?preview=1" style="max-width:'+(mobile?"390px":"100%")+'"></iframe></div></div>'+
+  '<div class="box"><b>Γραμματοσειρά</b><label>Γραμματοσειρά όλου του site<select id="fnt">'+opts(Object.keys(DESIGN_FONTS).map(function(k){return[k,DESIGN_FONTS[k].n]}),D.font)+"</select></label></div>"+
+  cpick("light")+cpick("dark")+'<div class="box"><b>Ενότητες</b><p style="margin:4px 0;color:var(--mute);font-size:13px">Το τσεκάρισμα δείχνει ή κρύβει την ενότητα. Τα βέλη αλλάζουν τη σειρά της (και στο μενού).</p><div id="sl">'+secs()+"</div></div>"+
+  '<div class="stk"><button class="btn2" id="sd2">Αποθήκευση πρόχειρου</button><button class="btn2 pri" id="pb">Δημοσίευση</button><button class="btn2" id="dc">Απόρριψη πρόχειρου</button><button class="btn2" id="rs">Προεπιλογές</button></div>';
+  $("pv").onload=push;
+  $("vw").onclick=function(){mobile=!mobile;draw()};
+  $("fnt").onchange=function(){D.font=this.value;push()};
+  [].forEach.call(document.querySelectorAll("input[data-c]"),function(i){i.oninput=function(){var k=i.dataset.c.split(".");D.colors[k[0]][k[1]]=i.value;i.previousSibling.textContent=i.value;push()}});
+  $("sl").onclick=function(e){var t=e.target,i;
+   if(t.dataset.u!=null){i=+t.dataset.u;D.sections.splice(i-1,0,D.sections.splice(i,1)[0])}
+   else if(t.dataset.dn!=null){i=+t.dataset.dn;D.sections.splice(i+1,0,D.sections.splice(i,1)[0])}else return;
+   $("sl").innerHTML=secs();push()};
+  $("sl").onchange=function(e){var t=e.target;if(t.classList.contains("ck2")){D.sections[+t.dataset.i].on=t.checked;push()}};
+  $("sd2").onclick=function(){run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,updated_at:new Date().toISOString()},{onConflict:"key"}));saved=designClean(D);push();say("Το πρόχειρο αποθηκεύτηκε. Δεν φαίνεται ακόμα στο site.")})};
+  $("pb").onclick=function(){if(!confirm("Δημοσίευση αλλαγών στο site;"))return;run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,published:D,updated_at:new Date().toISOString()},{onConflict:"key"}));pub=designClean(D);saved=designClean(D);push();say("Δημοσιεύτηκε. Οι επισκέπτες το βλέπουν μέσα σε λίγα δευτερόλεπτα (ίσως χρειαστεί ανανέωση).")})};
+  $("dc").onclick=function(){if(!confirm("Να χαθούν οι αλλαγές του πρόχειρου και να γυρίσεις σε ό,τι είναι δημοσιευμένο;"))return;D=designClean(pub);draw()};
+  $("rs").onclick=function(){if(!confirm("Επαναφορά στις αρχικές ρυθμίσεις; Δεν αλλάζει το site μέχρι να δημοσιεύσεις."))return;D=designClean(null);draw()}}
+ draw()};
+
+/* ---- εργαλεία: εισαγωγή τωρινών δεδομένων, αντίγραφο ---- */
+V.tools=async function(){$("pg").innerHTML='<div class="box"><b>Εισαγωγή τωρινών δεδομένων του site</b><p>Περνά στη βάση ομάδες, logos, αγώνες, παίκτες (τα σύνολα γίνονται «βάση») και τον επόμενο αγώνα. Τρέχει μόνο αν δεν υπάρχουν ήδη αγώνες.</p><button class="btn2 pri" id="sd">Εισαγωγή</button></div><div class="box"><b>Αντίγραφο ασφαλείας</b><p>Κατεβάζει όλα τα δεδομένα σε αρχείο JSON.</p><button class="btn2" id="bk">Λήψη αντιγράφου</button></div>';
+ $("bk").onclick=function(){run(async function(){var o={};for(var t of["teams","team_aliases","players","matches","appearances","match_events","standings","site_settings"])o[t]=await q(sb.from(t).select("*"));var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:"application/json"}));a.download="papei-sc-backup-"+new Date().toISOString().slice(0,10)+".json";a.click()})};
+ $("sd").onclick=function(){run(async function(){if((await q(sb.from("matches").select("id").limit(1))).length)throw"Υπάρχουν ήδη αγώνες. Η εισαγωγή έγινε ήδη.";
+  var names={};names[US]=1;Object.keys(SEASONS).forEach(function(k){SEASONS[k].forEach(function(m){names[m[1]]=1;names[m[4]]=1})});if(NEXT){names[NEXT.home]=1;names[NEXT.away]=1}
+  var T=await q(sb.from("teams").upsert(Object.keys(names).map(function(n){return{name:n,slug:slug(n),is_us:n===US,logo_path:n!==US&&LOGO[n]||null}}),{onConflict:"slug"}).select()),id={};T.forEach(function(t){id[t.name]=t.id});
+  await q(sb.from("team_aliases").upsert(T.map(function(t){return{alias:t.name,team_id:t.id}}),{onConflict:"alias"}));
+  await q(sb.from("players").upsert(P.map(function(p){return{full_name:p[0],slug:slug(p[0]),base_apps:p[1],base_goals:p[2],base_assists:p[3],show_on_roster:HIDE.indexOf(p[0])<0}}),{onConflict:"slug"}));
+  var R=[];Object.keys(SEASONS).forEach(function(k){SEASONS[k].forEach(function(m){var x=m[7]||{},mt=x.url&&x.url.match(/sport-event\/(\d+)/);R.push({season:k,competition:m[5]===OST?"Off-Season Tournament":"Πρωτάθλημα",round_label:m[6]||null,kickoff:m[0]?ath(m[0],x.t||"00:00").toISOString():null,home_team:id[m[1]],away_team:id[m[4]],home_score:m[2],away_score:m[3],status:"finished",source:mt?"propathlima":"manual",external_id:mt?mt[1]:null,locked:true})})});
+  if(NEXT)R.push({season:"2026/27",competition:"Πρωτάθλημα",kickoff:ath(NEXT.date,NEXT.time).toISOString(),home_team:id[NEXT.home],away_team:id[NEXT.away],status:"scheduled",venue:NEXT.venue||null,venue_map_url:NEXT.map||null,source:"manual",locked:true});
+  for(var i=0;i<R.length;i+=40)await q(sb.from("matches").insert(R.slice(i,i+40)));say("Έγινε εισαγωγή: "+T.length+" ομάδες, "+P.length+" παίκτες, "+R.length+" αγώνες")})};};
+run(boot);
+</script></body></html>
