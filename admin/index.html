@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=5">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 body{padding:0 0 60px}.a{max-width:760px;margin:0 auto;padding:16px 18px}
@@ -24,7 +24,7 @@ body{padding:0 0 60px}.a{max-width:760px;margin:0 auto;padding:16px 18px}
 </style></head><body>
 <div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js"></script><script src="../data/data.js"></script><script src="../js/design.js"></script>
+<script src="../js/config.js?v=5"></script><script src="../data/data.js?v=5"></script><script src="../js/design.js?v=5"></script>
 <script>
 var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
