@@ -121,8 +121,7 @@ html.tt *,html.tt *::before{transition:background-color .25s,color .25s,border-c
 @media (max-width:640px){.menu{display:grid}.top nav{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:6px 20px}.top nav.open{display:flex}.top nav a{padding:13px 0;font-size:15px}}
 
 .pl{all:unset;box-sizing:border-box;display:block;cursor:pointer;text-align:left}
-.pl:hover .ph{border-color:var(--navy)}.pl:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
-.pl .pos{color:var(--mute);font-size:12.5px}
+.pl:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 dialog#pm{border:1px solid var(--line);border-radius:var(--r,6px);padding:0;max-width:min(560px,calc(100vw - 24px));width:100%;background:var(--bg);color:var(--ink);font:inherit}
 dialog#pm::backdrop{background:rgba(6,15,32,.55)}
 .pmb{padding:22px;position:relative}.pmx{all:unset;position:absolute;right:12px;top:10px;width:34px;height:34px;text-align:center;font-size:24px;line-height:34px;cursor:pointer;color:var(--mute)}

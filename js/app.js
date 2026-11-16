@@ -30,8 +30,7 @@ $("tbody").innerHTML=TABLE.length?TABLE.map(function(r){var g=r[6].split("-");re
 /* Ρόστερ */
 $("ros").innerHTML=P.filter(function(p){return HIDE.indexOf(p[0])<0}).sort(function(a,b){return b[1]-a[1]||b[2]+b[3]-a[2]-a[3]}).map(function(p){
  var ph=PHOTOS[p[0]];
- var I=PINFO[p[0]]||{},ps=[I.num?"#"+I.num:"",I.pos||""].filter(Boolean).join(" · ");
- return"<button class=\"pl\" data-n=\""+esc(p[0])+"\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+"</div><div class=\"nm\">"+esc(p[0])+"</div>"+(ps?"<div class=\"pos\">"+esc(ps)+"</div>":"")+"<div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></button>"}).join("");
+ return"<button class=\"pl\" data-n=\""+esc(p[0])+"\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+"</div><div class=\"nm\">"+esc(p[0])+"</div>"+"<div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></button>"}).join("");
 
 
 /* Κάρτα παίκτη: πατάς πάνω του και ανοίγουν τα στοιχεία από το admin */
