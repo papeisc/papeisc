@@ -32,3 +32,4 @@ var OSTN="Off-Season Tournament";
 var PHOTOS={};
 var HIDE=["Κολοβός","Χατζηβασίλης","Χέλμης"];
 var LOGO={"MYSTES FC":"assets/logos/mystes-fc.png", "YONKA MALLORCA":"assets/logos/yonka-mallorca.png", "Peirates SC":"assets/logos/peirates-sc.png", "Peirates II SC":"assets/logos/peirates-ii-sc.png", "Neverlusen FC":"assets/logos/neverlusen-fc.png", "Πανεκπαϊκός":"assets/logos/panekpaikos.png", "Κομπιναδόροι":"assets/logos/kompinadoroi.png"};
+var PINFO={};

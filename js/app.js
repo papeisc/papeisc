@@ -1,4 +1,4 @@
-var MY="assets/logo-256.png";
+var MY=window.US_LOGO||"assets/logo-256.png";
 function $(i){return document.getElementById(i)}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fd(d){if(!d)return"";var p=d.split("-");return p[2]+"/"+p[1]}
@@ -6,8 +6,8 @@ function fdl(d){if(!d)return"Δεν έχει καταχωρηθεί";return new 
 function res(m){var us=m[1]===US,f=us?m[2]:m[3],a=us?m[3]:m[2];return f>a?"W":f<a?"L":"D"}
 function rec(ms){var r={W:0,D:0,L:0,f:0,a:0};ms.forEach(function(m){var us=m[1]===US;r[res(m)]++;r.f+=us?m[2]:m[3];r.a+=us?m[3]:m[2]});return r}
 function ini(n){var w=n.replace(/[^A-Za-zΑ-Ωα-ωά-ώ0-9 ]/g,"").split(" ").filter(Boolean);return(w.length>1?w[0][0]+w[1][0]:(w[0]||"?").slice(0,2)).toUpperCase()}
-function tb(n){var u=n===US?MY:LOGO[n];return u?"<span class=\"tb\"><img alt=\"\" src=\""+u+"\"></span>":""}
-function big(n){var u=n===US?MY:LOGO[n];return"<span class=\"ic\">"+(u?"<img alt=\"\" src=\""+u+"\">":esc(ini(n)))+"</span>"}
+function tb(n){var u=n===US?MY:LOGO[n];return u?"<span class=\"tb\"><img class=\"lg"+(n===US?" us":"")+"\" alt=\"\" src=\""+u+"\"></span>":""}
+function big(n){var u=n===US?MY:LOGO[n];return"<span class=\"ic"+(u?"":" fb")+"\">"+(u?"<img class=\"lg"+(n===US?" us":"")+"\" alt=\"\" src=\""+u+"\">":esc(ini(n)))+"</span>"}
 function lb(id,rows){var mx=rows[0][1];$(id).innerHTML=rows.map(function(r,i){return"<div class=\"lb\"><span class=\"n\">"+(i+1)+"</span><span>"+esc(r[0])+"</span><span class=\"v\">"+r[1]+"</span><span class=\"bw\"><i style=\"width:"+(r[1]/mx*100)+"%\"></i></span></div>"}).join("")}
 
 /* Επόμενος αγώνας */
@@ -30,7 +30,16 @@ $("tbody").innerHTML=TABLE.length?TABLE.map(function(r){var g=r[6].split("-");re
 /* Ρόστερ */
 $("ros").innerHTML=P.filter(function(p){return HIDE.indexOf(p[0])<0}).sort(function(a,b){return b[1]-a[1]||b[2]+b[3]-a[2]-a[3]}).map(function(p){
  var ph=PHOTOS[p[0]];
- return"<div class=\"pl\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+"</div><div class=\"nm\">"+esc(p[0])+"</div><div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></div>"}).join("");
+ var I=PINFO[p[0]]||{},ps=[I.num?"#"+I.num:"",I.pos||""].filter(Boolean).join(" · ");
+ return"<button class=\"pl\" data-n=\""+esc(p[0])+"\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+"</div><div class=\"nm\">"+esc(p[0])+"</div>"+(ps?"<div class=\"pos\">"+esc(ps)+"</div>":"")+"<div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></button>"}).join("");
+
+
+/* Κάρτα παίκτη: πατάς πάνω του και ανοίγουν τα στοιχεία από το admin */
+(function(){var d=$("pm"),M={};P.forEach(function(p){M[p[0]]=p});
+ $("ros").addEventListener("click",function(e){var b=e.target.closest(".pl");if(!b||!d)return;var n=b.dataset.n,p=M[n],I=PINFO[n]||{},ph=PHOTOS[n],ps=[I.num?"#"+I.num:"",I.pos||""].filter(Boolean).join(" · ");
+  d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"pmw\"><div class=\"ph\">"+(ph?"<img alt=\""+esc(n)+"\" src=\""+esc(ph)+"\">":esc(n[0]))+"</div><div><h3 id=\"pmn\">"+esc(n)+"</h3><p class=\"pmm\">"+esc(ps||"Παίκτης")+"</p><div class=\"pmst\"><div><b>"+p[1]+"</b><span>αγώνες</span></div><div><b>"+p[2]+"</b><span>γκολ</span></div><div><b>"+p[3]+"</b><span>ασίστ</span></div></div></div></div>"+(I.bio?"<p class=\"pmbio\">"+esc(I.bio)+"</p>":"")+((I.det&&I.det.length)?"<dl class=\"pmd\">"+I.det.map(function(x){return"<dt>"+esc(x.l)+"</dt><dd>"+esc(x.v)+"</dd>"}).join("")+"</dl>":"")+"</div>";
+  if(d.showModal)d.showModal();else d.setAttribute("open","")});
+ if(d){d.addEventListener("click",function(e){if(e.target===d||e.target.closest(".pmx")){if(d.close)d.close();else d.removeAttribute("open")}})}})();
 
 /* Στατιστικά */
 (function(){var ms=SEASONS["2026/27"],r=rec(ms),G=0,A=0,sc=0;P.forEach(function(p){G+=p[2];A+=p[3];if(p[2]>0)sc++});var d=r.f-r.a;
