@@ -6,8 +6,14 @@ function fdl(d){if(!d)return"Δεν έχει καταχωρηθεί";return new 
 function res(m){var us=m[1]===US,f=us?m[2]:m[3],a=us?m[3]:m[2];return f>a?"W":f<a?"L":"D"}
 function rec(ms){var r={W:0,D:0,L:0,f:0,a:0};ms.forEach(function(m){var us=m[1]===US;r[res(m)]++;r.f+=us?m[2]:m[3];r.a+=us?m[3]:m[2]});return r}
 function ini(n){var w=n.replace(/[^A-Za-zΑ-Ωα-ωά-ώ0-9 ]/g,"").split(" ").filter(Boolean);return(w.length>1?w[0][0]+w[1][0]:(w[0]||"?").slice(0,2)).toUpperCase()}
-function tb(n){var u=n===US?MY:LOGO[n];return u?"<span class=\"tb\"><img class=\"lg"+(n===US?" us":"")+"\" alt=\"\" src=\""+u+"\"></span>":""}
-function big(n){var u=n===US?MY:LOGO[n];return"<span class=\"ic"+(u?"":" fb")+"\">"+(u?"<img class=\"lg"+(n===US?" us":"")+"\" alt=\"\" src=\""+u+"\">":esc(ini(n)))+"</span>"}
+/* Logos: πρώτα από το Προπάθλημα (js/logos.js), μετά το LOGO του data.js/βάσης, μετά αρχικά */
+function lsrc(n){if(n===US)return[MY,""];var p=window.plLogo?plLogo(n):"",l=LOGO[n]||"";return p?[p,l]:[l,""]}
+function limg(n){var s=lsrc(n),u=s[0];if(!u)return"";return"<img class=\"lg"+(n===US?" us":u.indexOf("propathlima.gr")>=0?" pl":"")+"\" alt=\"\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" data-n=\""+esc(n)+"\""+(s[1]?" data-fb=\""+esc(s[1])+"\"":"")+" src=\""+esc(u)+"\">"}
+function tb(n){var i=limg(n);return i?"<span class=\"tb\">"+i+"</span>":""}
+function big(n){var i=limg(n);return"<span class=\"ic"+(i?"":" fb")+"\">"+(i||esc(ini(n)))+"</span>"}
+function sl(n){var i=limg(n);return"<span class=\"sl"+(i?"":" fb")+"\">"+(i||esc(ini(n)))+"</span>"}
+document.addEventListener("error",function(e){var t=e.target;if(!t||t.tagName!=="IMG"||!t.classList.contains("lg"))return;var f=t.dataset.fb;if(f){t.dataset.fb="";t.classList.remove("pl");t.src=f;return}var p=t.parentNode;if(!p)return;if(p.classList.contains("ic")||p.classList.contains("sl")){p.classList.add("fb");p.textContent=ini(t.dataset.n||"?")}else t.remove()},true);
+
 function lb(id,rows){var mx=rows[0][1];$(id).innerHTML=rows.map(function(r,i){return"<div class=\"lb\"><span class=\"n\">"+(i+1)+"</span><span>"+esc(r[0])+"</span><span class=\"v\">"+r[1]+"</span><span class=\"bw\"><i style=\"width:"+(r[1]/mx*100)+"%\"></i></span></div>"}).join("")}
 
 /* Επόμενος αγώνας */
@@ -25,7 +31,7 @@ function nextRender(){
 nextRender();
 
 /* Βαθμολογία */
-$("tbody").innerHTML=TABLE.length?TABLE.map(function(r){var g=r[6].split("-");return"<tr"+(r[1]===US?" class=\"me\"":"")+"><td>"+r[0]+"</td><td>"+esc(r[1])+"</td><td><b>"+r[8]+"</b></td><td>"+r[2]+"</td><td>"+r[3]+"/"+r[4]+"/"+r[5]+"</td><td>"+g[0]+"</td><td>"+g[1]+"</td></tr>"}).join(""):"<tr class=\"empty\"><td colspan=\"7\">Η βαθμολογία ανεβαίνει σύντομα. <a href=\""+SOFA+"\" rel=\"noopener\">Δες την στο SofaScore</a></td></tr>";
+$("tbody").innerHTML=TABLE.length?TABLE.map(function(r){var g=r[6].split("-");return"<tr"+(r[1]===US?" class=\"me\"":"")+"><td>"+r[0]+"</td><td><div class=\"stn\">"+sl(r[1])+"<span>"+esc(r[1])+"</span></div></td><td><b>"+r[8]+"</b></td><td>"+r[2]+"</td><td>"+r[3]+"/"+r[4]+"/"+r[5]+"</td><td>"+g[0]+"</td><td>"+g[1]+"</td></tr>"}).join(""):"<tr class=\"empty\"><td colspan=\"7\">Η βαθμολογία ανεβαίνει σύντομα. <a href=\""+SOFA+"\" rel=\"noopener\">Δες την στο SofaScore</a></td></tr>";
 
 /* Ρόστερ */
 $("ros").innerHTML=P.filter(function(p){return HIDE.indexOf(p[0])<0}).sort(function(a,b){return b[1]-a[1]||b[2]+b[3]-a[2]-a[3]}).map(function(p){
