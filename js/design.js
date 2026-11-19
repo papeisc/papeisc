@@ -17,7 +17,9 @@ var DESIGN_IMAGES=[["header_logo","Λογότυπο στη μπάρα πάνω",
 var DESIGN_DEFAULT={
  colors:{light:{navy:"#0b2d5e",acc:"#0b2d5e",bg:"#ffffff",ink:"#0b1b36"},dark:{navy:"#0b2d5e",acc:"#8fb0ea",bg:"#060f20",ink:"#eef2fb"}},
  font:"geom",
- look:{radius:6,wrap:960,dark_invert:true,hero_overlay:70},
+ look:{radius:6,wrap:960,dark_invert:true,hero_overlay:70,anim:true,anim_style:"up",anim_speed:600,hero_align:"left",hero_size:"normal",density:"normal",card:"line",roster:"medium",photo:"rounded",progress:true},
+ stats:{kpi:true,form:true,donut:true,goals:true,leaders:true,records:true},
+ announce:{on:false,text:"",url:"",tone:"navy"},
  texts:{},links:[],images:{header_logo:"",hero_logo:"",hero_bg:""},
  sections:[{id:"nextsec",on:true},{id:"mc",on:true},{id:"matches",on:true},{id:"table",on:true},{id:"roster",on:true},{id:"stats",on:true},{id:"links",on:true}]
 };
@@ -29,6 +31,23 @@ var DESIGN_FONTS={
  system:{n:"Γραμματοσειρά συσκευής",css:"system-ui,-apple-system,\"Segoe UI\",Roboto,sans-serif"},
  serif:{n:"Georgia (με πατούρες)",css:"Georgia,\"Times New Roman\",serif"}
 };
+var DESIGN_PRESETS=[
+ {n:"PAPEI μπλε",c:{light:{navy:"#0b2d5e",acc:"#0b2d5e"},dark:{navy:"#0b2d5e",acc:"#8fb0ea"}}},
+ {n:"Κόκκινο",c:{light:{navy:"#8a1020",acc:"#8a1020"},dark:{navy:"#8a1020",acc:"#ff8a95"}}},
+ {n:"Πράσινο",c:{light:{navy:"#0b5d3b",acc:"#0b5d3b"},dark:{navy:"#0b5d3b",acc:"#6fd1a0"}}},
+ {n:"Μαύρο & χρυσό",c:{light:{navy:"#141414",acc:"#8a6d00"},dark:{navy:"#1c1c1c",acc:"#e6c35c"}}},
+ {n:"Μωβ",c:{light:{navy:"#4a1d96",acc:"#4a1d96"},dark:{navy:"#4a1d96",acc:"#b79cf2"}}},
+ {n:"Πορτοκαλί",c:{light:{navy:"#b34a00",acc:"#b34a00"},dark:{navy:"#b34a00",acc:"#ffb27a"}}}];
+var DESIGN_OPTS={
+ anim_style:[["up","Από κάτω"],["fade","Διάλυση"],["zoom","Μεγέθυνση"],["slide","Από αριστερά"]],
+ hero_align:[["left","Αριστερά"],["center","Κέντρο"]],
+ hero_size:[["compact","Μικρή"],["normal","Κανονική"],["tall","Ψηλή"]],
+ density:[["compact","Συμπαγής"],["normal","Κανονική"],["airy","Αέρινη"]],
+ card:[["line","Με περίγραμμα"],["soft","Γεμισμένη"],["shadow","Με σκιά"]],
+ roster:[["small","Μικρές κάρτες"],["medium","Μεσαίες"],["large","Μεγάλες"]],
+ photo:[["rounded","Ορθογώνιες"],["circle","Στρογγυλές"]],
+ tone:[["navy","Μπλε"],["red","Κόκκινο"],["green","Πράσινο"],["gold","Χρυσό"]]};
+var DESIGN_STATS={kpi:"Βασικοί αριθμοί",form:"Φόρμα, νίκες/ισοπαλίες/ήττες, γκολ",goals:"Γράφημα γκολ ανά αγώνα",leaders:"Σκόρερ και ασίστ",records:"Ρεκόρ και σερί"};
 var DESIGN_SECTIONS={nextsec:"Επόμενος αγώνας",mc:"Match Center",matches:"Αγώνες",table:"Βαθμολογία",roster:"Ρόστερ",stats:"Στατιστικά",links:"Σύνδεσμοι"};
 var DESIGN_NAV=["nextsec","mc","matches","table","roster","stats"]; /* οι «Σύνδεσμοι» δεν μπαίνουν στο μενού */
 function dmedia(p){if(!p)return"";if(/^(assets\/|https?:)/.test(p))return p;return SUPABASE_URL+"/storage/v1/object/public/"+p}
@@ -41,6 +60,13 @@ function designClean(s){
  if([840,960,1100].indexOf(l.wrap)>=0)d.look.wrap=l.wrap;
  if(typeof l.dark_invert==="boolean")d.look.dark_invert=l.dark_invert;
  if(typeof l.hero_overlay==="number"&&l.hero_overlay>=0&&l.hero_overlay<=90)d.look.hero_overlay=Math.round(l.hero_overlay);
+ ["anim_style","hero_align","hero_size","density","card","roster","photo"].forEach(function(k){var v=l[k];if(typeof v==="string"&&DESIGN_OPTS[k].some(function(o){return o[0]===v}))d.look[k]=v});
+ if(typeof l.anim==="boolean")d.look.anim=l.anim;if(typeof l.progress==="boolean")d.look.progress=l.progress;
+ if(typeof l.anim_speed==="number"&&l.anim_speed>=250&&l.anim_speed<=1400)d.look.anim_speed=Math.round(l.anim_speed);
+ if(s.stats&&typeof s.stats==="object")Object.keys(d.stats).forEach(function(k){if(typeof s.stats[k]==="boolean")d.stats[k]=s.stats[k]});
+ var an=s.announce;if(an&&typeof an==="object"){if(typeof an.on==="boolean")d.announce.on=an.on;if(typeof an.text==="string")d.announce.text=an.text.trim().slice(0,200);
+  if(typeof an.url==="string"&&/^(https?:\/\/|mailto:|#)/i.test(an.url.trim()))d.announce.url=an.url.trim().slice(0,400);
+  if(typeof an.tone==="string"&&DESIGN_OPTS.tone.some(function(o){return o[0]===an.tone}))d.announce.tone=an.tone}
  DESIGN_TEXTS.forEach(function(t){var v=s.texts&&s.texts[t[0]];if(typeof v==="string"&&v.trim())d.texts[t[0]]=v.trim().slice(0,300)});
  if(Array.isArray(s.links))s.links.slice(0,10).forEach(function(x){if(x&&typeof x.t==="string"&&typeof x.u==="string"&&x.t.trim()&&/^(https?:\/\/|mailto:)/i.test(x.u.trim()))d.links.push({t:x.t.trim().slice(0,60),u:x.u.trim().slice(0,400)})});
  DESIGN_IMAGES.forEach(function(m){var v=s.images&&s.images[m[0]];if(typeof v==="string"&&/^[\w-]+\/[\w.\-\/]+$/.test(v))d.images[m[0]]=v});
@@ -53,14 +79,20 @@ function designCss(d){
   if(c.bg!==o.bg||c.ink!==o.ink)r+="--soft:color-mix(in srgb,"+c.ink+" 5%,"+c.bg+");--line:color-mix(in srgb,"+c.ink+" 13%,"+c.bg+");--mute:color-mix(in srgb,"+c.ink+" 58%,"+c.bg+");";
   if(c.navy!==o.navy)r+="--W:"+(t==="light"?c.navy:"color-mix(in srgb,"+c.navy+" 70%,#fff)")+";";
   css+=":root[data-theme=\""+t+"\"]{"+r+"}"});
- css+=":root{--f:"+DESIGN_FONTS[d.font].css+";--r:"+d.look.radius+"px;--wrap:"+d.look.wrap+"px}";
+ css+=":root{--f:"+DESIGN_FONTS[d.font].css+";--r:"+d.look.radius+"px;--wrap:"+d.look.wrap+"px;--ad:"+(d.look.anim_speed/1000)+"s;--rw:"+({small:"118px",medium:"150px",large:"205px"}[d.look.roster])+"}";
  if(d.images.hero_bg){var g="color-mix(in srgb,var(--navy) "+d.look.hero_overlay+"%,transparent)";css+=".hero{background:linear-gradient("+g+","+g+"),url(\""+dmedia(d.images.hero_bg)+"\") center/cover no-repeat}"}
  return css}
 function applyDesign(s){
  var d=designClean(s);if(!document.querySelector("main"))return d; /* το admin δεν έχει <main>: δεν αλλάζει την όψη του */
  var st=document.getElementById("design-style");
  if(!st){st=document.createElement("style");st.id="design-style";document.head.appendChild(st)}
- st.textContent=designCss(d);document.documentElement.dataset.di=d.look.dark_invert?"1":"0";
+ st.textContent=designCss(d);var R=document.documentElement;R.dataset.di=d.look.dark_invert?"1":"0";
+ R.dataset.hs=d.look.hero_size;R.dataset.ha=d.look.hero_align;R.dataset.dn=d.look.density;R.dataset.cd=d.look.card;R.dataset.ps=d.look.photo;R.dataset.an=d.look.anim_style;
+ var canAn=d.look.anim&&"IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion:reduce)").matches;R.classList.toggle("anim",!!canAn);
+ var pg=document.getElementById("prog");if(pg)pg.hidden=!d.look.progress;
+ var an=document.getElementById("ann");if(an){an.hidden=!(d.announce.on&&d.announce.text);an.className="ann "+d.announce.tone;an.textContent=d.announce.text;
+  if(d.announce.url){var aa=document.createElement("a");aa.href=d.announce.url;aa.textContent="Δες περισσότερα";aa.rel="noopener";an.appendChild(aa)}}
+ Object.keys(d.stats).forEach(function(k){document.querySelectorAll("[data-st=\""+k+"\"]").forEach(function(el){el.hidden=!d.stats[k]})});
  var g=DESIGN_FONTS[d.font].g,lk=document.getElementById("design-font");
  if(g){if(!lk){lk=document.createElement("link");lk.id="design-font";lk.rel="stylesheet";document.head.appendChild(lk)}lk.href="https://fonts.googleapis.com/css2?family="+g+"&display=swap"}else if(lk)lk.remove();
  DESIGN_TEXTS.forEach(function(t){var el=document.querySelector("[data-t=\""+t[0]+"\"]");if(el)el.textContent=d.texts[t[0]]||t[2]});
@@ -71,13 +103,28 @@ function applyDesign(s){
  var main=document.querySelector("main"),nav=document.getElementById("nav");
  d.sections.forEach(function(x){var el=document.getElementById(x.id);if(el){main.appendChild(el);el.hidden=!x.on}});
  if(nav)nav.innerHTML=d.sections.filter(function(x){return x.on&&DESIGN_NAV.indexOf(x.id)>=0}).map(function(x){var t=d.texts[{nextsec:"next_eb",mc:"mc_h",matches:"matches_eb",table:"table_eb",roster:"roster_h",stats:"stats_h"}[x.id]];return"<a href=\"#"+x.id+"\">"+DESIGN_SECTIONS[x.id]+"</a>"}).join("");
+ if(window.animScan)window.animScan();
  return d}
 /* Φόρτωση: άμεσα από τη μνήμη του browser (χωρίς αναβοσβήσιμο), μετά ό,τι δημοσιεύτηκε στη βάση */
 (function(){
  var pv=/[?&]preview=1/.test(location.search);
- if(pv){window.addEventListener("message",function(e){if(e.origin===location.origin&&e.data&&e.data.type==="papei-design")applyDesign(e.data.settings)});return}
+ if(pv){document.documentElement.classList.add("pv");
+  window.addEventListener("message",function(e){if(e.origin!==location.origin||!e.data)return;
+   if(e.data.type==="papei-design")applyDesign(e.data.settings);
+   if(e.data.type==="papei-scroll"){var el=document.getElementById(e.data.id)||document.querySelector("[data-t=\""+e.data.id+"\"]");if(el)el.scrollIntoView({behavior:"smooth",block:"center"})}});
+  /* Κλικ πάνω στο site (προεπισκόπηση) -> το admin ανοίγει το αντίστοιχο πεδίο */
+  document.addEventListener("click",function(e){var m=null,t=e.target;
+   if(t.closest){var x;
+    if(x=t.closest("[data-t]"))m={kind:"text",key:x.getAttribute("data-t")};
+    else if(t.id==="hdlogo")m={kind:"image",key:"header_logo"};else if(t.id==="herologo")m={kind:"image",key:"hero_logo"};
+    else if(x=t.closest("#ann"))m={kind:"announce"};
+    else if(x=t.closest(".hero"))m={kind:"image",key:"hero_bg"};
+    else if(x=t.closest("section[id]"))m={kind:"section",key:x.id}}
+   e.preventDefault();e.stopPropagation();if(m){m.type="papei-pick";parent.postMessage(m,location.origin)}},true);
+  return}
  try{var c=localStorage.getItem("design");if(c)applyDesign(JSON.parse(c))}catch(e){}
 })();
+window.refreshDesign=function(){return loadDesign()};
 function loadDesign(){
  if(/[?&]preview=1/.test(location.search)||typeof sb==="undefined"||!sb)return Promise.resolve();
  var job=sb.from("site_settings").select("published").eq("key","design").then(function(r){
