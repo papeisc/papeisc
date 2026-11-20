@@ -57,7 +57,7 @@ ul.ml{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .mb .t.us b{font-weight:700}
 .tb{display:inline-grid;place-items:center;width:26px;height:26px;flex:none}
 .tb img{width:100%;height:100%;object-fit:contain}
-:root[data-theme="dark"]:not([data-di="0"]) img.lg:not(.us){filter:brightness(0) invert(1)}
+/* v7.1: οι αντίπαλοι δεν γίνονται πια λευκές σιλουέτες στο σκούρο θέμα */
 .mb .s{text-align:center;font-weight:700;font-variant-numeric:tabular-nums;color:#fff;border-radius:calc(var(--r,6px)*.67);padding:3px 0;font-size:13.5px}
 .s.W{background:var(--W)}.s.D{background:var(--D)}.s.L{background:var(--L)}
 .mb .ch{width:7px;height:7px;border-right:1.5px solid var(--mute);border-bottom:1.5px solid var(--mute);transform:rotate(45deg);transition:transform .15s;justify-self:end;margin-top:-3px}
@@ -251,3 +251,7 @@ html.pv section:hover{box-shadow:inset 3px 0 0 color-mix(in srgb,var(--acc) 45%,
 @keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
 @media (prefers-reduced-motion:reduce){.live::before{animation:none}}
 .live[hidden]{display:none}
+
+/* v7.1: logos που χάνονται στο φόντο παίρνουν διακριτικό κυκλικό φόντο */
+:root:not([data-theme="dark"]) img.lg.tl{background:#16264a;border-radius:50%;padding:13%}
+:root[data-theme="dark"] img.lg.td{background:#eef2f9;border-radius:50%;padding:13%}
