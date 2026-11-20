@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=7">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=8">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
@@ -46,7 +46,7 @@ details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
 </style></head><body>
 <div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js?v=7"></script><script src="../data/data.js?v=7"></script><script src="../js/logos.js?v=7"></script><script src="../js/design.js?v=7"></script>
+<script src="../js/config.js?v=8"></script><script src="../data/data.js?v=8"></script><script src="../js/logos.js?v=8"></script><script src="../js/design.js?v=8"></script>
 <script>
 var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -204,7 +204,7 @@ V.design=async function(){
   ac("layout","Διάταξη και στυλ","",'<label>Γραμματοσειρά όλου του site<select data-ft="1">'+opts(Object.keys(DESIGN_FONTS).map(function(k){return[k,DESIGN_FONTS[k].n]}),D.font)+'</select></label>'+
    '<label>Στρογγυλότητα γωνιών: <span id="rv">'+D.look.radius+'</span>px<input type="range" min="0" max="24" step="1" data-lk="radius" value="'+D.look.radius+'"></label>'+
    '<label>Πλάτος περιεχομένου<select data-lk="wrap">'+opts([[840,"Στενό"],[960,"Κανονικό"],[1100,"Πλατύ"]],D.look.wrap)+'</select></label>'+sel("density","Κενά ανάμεσα στις ενότητες")+sel("card","Στυλ καρτών")+sel("roster","Μέγεθος καρτών στο ρόστερ")+sel("photo","Σχήμα φωτογραφιών παικτών")+
-   chk('data-lk="dark_invert"',"Τα logos των αντιπάλων γίνονται λευκά στο σκούρο θέμα",D.look.dark_invert))+
+   "")+
   ac("anim","Animations στο scroll","",chk('data-lk="anim"',"Animations όταν κάνεις scroll (εμφάνιση ενοτήτων, αριθμοί που μετράνε, μπάρες που γεμίζουν)",D.look.anim)+sel("anim_style","Στυλ εμφάνισης")+'<label>Ταχύτητα: <span id="av">'+D.look.anim_speed+'</span> ms (μικρότερο = πιο γρήγορο)<input type="range" min="250" max="1400" step="50" data-lk="anim_speed" value="'+D.look.anim_speed+'"></label>'+chk('data-lk="progress"',"Λεπτή μπάρα προόδου scroll στην κορυφή",D.look.progress)+'<p class="hint">Σε συσκευές με ενεργή ρύθμιση «μείωση κίνησης» οι animations απενεργοποιούνται αυτόματα.</p>')+
   ac("stats","Στατιστικά: τι εμφανίζεται","",Object.keys(DESIGN_STATS).map(function(k){return chk('data-sk="'+k+'"',DESIGN_STATS[k],D.stats[k])}).join(""))+
   ac("col","Χρώματα","φωτεινό και σκούρο",cpick("light")+cpick("dark"))+
