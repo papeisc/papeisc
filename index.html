@@ -1,268 +1,68 @@
 <!DOCTYPE html>
-<html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=7">
-<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
-<style>
-body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
-.a h1{font-size:20px;margin:6px 0 14px}.bar2{display:flex;gap:6px;overflow-x:auto;margin:0 0 16px;padding-bottom:4px}
-.bar2 button,.a .btn2{font:inherit;font-size:14px;font-weight:500;border:1px solid var(--line);background:transparent;color:var(--ink);padding:8px 14px;border-radius:6px;cursor:pointer;white-space:nowrap}
-.bar2 button[aria-pressed=true],.a .pri{background:var(--navy);color:#fff;border-color:var(--navy)}
-.a label{display:block;font-size:13px;color:var(--mute);margin:10px 0 0}
-.a input:not([type=checkbox]),.a select,.a textarea{display:block;width:100%;margin-top:4px;padding:10px;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px}
-.a .ck{display:flex;gap:8px;align-items:center;color:var(--ink)}.a .ck input{width:18px;height:18px}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
-.row small{color:var(--mute);display:block}.box{border:1px solid var(--line);border-radius:6px;padding:14px;margin:0 0 18px}
-.msg{padding:10px;border-radius:6px;background:var(--soft);margin:0 0 12px;font-size:14px}.err{color:var(--L)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.a input[type=color]{width:52px;height:38px;padding:2px;display:inline-block;margin:0;cursor:pointer}
-.cr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;color:var(--ink);font-size:14px}.cr code{color:var(--mute);font-size:12px;margin-right:8px}
-.sr{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}.sr span{flex:1}
-.sr .btn2{padding:4px 10px}.sr input:not([type=checkbox]){margin:0;flex:1;min-width:0;padding:8px}.pvw{display:block;margin:0 auto;border:1px solid var(--line);border-radius:6px;width:100%;height:560px;background:#fff;transition:width .2s}
-.pill{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;background:var(--soft);color:var(--mute)}.pill.warn{background:#fff3cd;color:#664d03}
-.stk{position:sticky;bottom:0;background:var(--bg);padding:10px 0;border-top:1px solid var(--line);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="build" content="v7-live">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PAPEI SC</title>
+<meta name="description" content="PAPEI SC: αγώνες, βαθμολογία, ρόστερ και στατιστικά της ομάδας του Πανεπιστημίου Πειραιώς στο Προπάθλημα.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="favicon.ico" sizes="48x48"><link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="manifest.webmanifest">
+<script>try{var _d=JSON.parse(localStorage.getItem("design")||"null");if((!_d||!_d.look||_d.look.anim!==false)&&"IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion:reduce)").matches)document.documentElement.classList.add("anim")}catch(e){}</script>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){document.documentElement.dataset.theme="light"}</script>
+<link rel="stylesheet" href="css/style.css?v=7">
+</head>
+<body>
+<div id="prog" aria-hidden="true"></div>
+<div class="ann" id="ann" hidden></div>
+<div class="top"><div class="wrap">
+<a class="logo" href="#top"><img id="hdlogo" alt="" width="28" height="28" src="assets/logo-128.png"><span data-t="brand">PAPEI SC</span></a>
+<nav id="nav" aria-label="Ενότητες"><a href="#nextsec">Επόμενος αγώνας</a><a href="#mc">Match Center</a><a href="#matches">Αγώνες</a><a href="#table">Βαθμολογία</a><a href="#roster">Ρόστερ</a><a href="#stats">Στατιστικά</a></nav><div class="ctl"><button class="tgl" id="theme" aria-label="Αλλαγή σε σκούρο θέμα"><svg class="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button><button class="menu" id="menu" aria-label="Μενού" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
+</div></div>
 
-.row[hidden]{display:none}.qs{margin:0 0 12px!important}
-.th{width:40px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--line);background:var(--soft);flex:none}.th.lg{object-fit:contain;padding:3px}
-.row .l{display:flex;gap:10px;align-items:center;min-width:0}
-.dz{display:block}.pvcol .box{margin:0}.pvcol{margin:0 0 16px}
-@media(min-width:1000px){.dz{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:22px;align-items:start}.pvcol{position:sticky;top:10px}.pvcol .pvw{height:calc(100vh - 190px);min-height:460px}}
-details.ac{border:1px solid var(--line);border-radius:8px;margin:0 0 10px;background:var(--bg)}
-details.ac>summary{cursor:pointer;list-style:none;padding:13px 14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px}
-details.ac>summary::-webkit-details-marker{display:none}details.ac>summary::after{content:"+";font-size:20px;color:var(--mute);font-weight:400}details.ac[open]>summary::after{content:"–"}
-details.ac>summary small{font-weight:400;color:var(--mute);font-size:12.5px;margin-right:auto;margin-left:6px}
-details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
-.pr{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:6px}
-.pr button{font:inherit;font-size:13px;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:9px;cursor:pointer;text-align:left}
-.pr button i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:7px;vertical-align:-2px}
-.pr button:hover{border-color:var(--navy)}
-.flash{animation:fl 1.4s}@keyframes fl{0%,60%{background:color-mix(in srgb,var(--navy) 16%,transparent)}100%{background:transparent}}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 18px;border-radius:99px;font-size:14px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.hint{margin:4px 0 0;color:var(--mute);font-size:13px}
-.stt{width:100%;border-collapse:collapse;font-size:14px}.stt th{font-size:12px;color:var(--mute);text-align:left;padding:4px}.stt td{padding:3px}
-.stt input{width:56px!important;margin:0!important;padding:7px!important;font-size:14px!important}.stt select{margin:0!important;padding:7px!important;font-size:14px!important;min-width:150px}
-.stt td.p{font-weight:700;font-variant-numeric:tabular-nums}.tw2{overflow-x:auto}
-.pw{width:100%;min-height:130px;font-family:ui-monospace,monospace;font-size:13px!important}
-</style></head><body>
-<div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
+<header class="hero" id="top"><div class="wrap">
+<img class="hl" id="herologo" alt="PAPEI SC" width="104" height="104" src="assets/logo-256.png">
+<div><span class="kick" data-t="hero_kick">ΠΡΟΠΑΘΛΗΜΑ 2026/27 · ΣΤ ΟΜΙΛΟΣ</span><h1 data-t="hero_title">PAPEI SC</h1><p data-t="hero_tag">We Are Piraeus.</p></div>
+</div></header>
+
+<main class="wrap">
+<section id="nextsec"><p class="eb" data-t="next_eb">Επόμενος αγώνας</p><h2 data-t="next_h">Πρόγραμμα</h2><div class="nx" id="nextcard"></div></section>
+
+<section id="mc"><p class="eb" data-t="mc_eb">Αποτελέσματα</p><h2 data-t="mc_h">Match Center</h2><div class="mcs" id="mcs"></div><div class="mcd" id="mcd" hidden></div><p class="note">Πάτησε έναν αγώνα για λεπτομέρειες.</p></section>
+
+<section id="matches"><p class="eb" data-t="matches_eb">Αγώνες</p><h2 data-t="matches_h">Αποτελέσματα</h2>
+<div class="tabs" id="tabs" role="group" aria-label="Σεζόν"></div>
+<div id="list"></div>
+<p class="note">Πάτησε έναν αγώνα για λεπτομέρειες.</p></section>
+
+<section id="table"><p class="eb" data-t="table_eb">Προπάθλημα 2026/27</p><h2 data-t="table_h">Βαθμολογία ΣΤ Ομίλου</h2>
+<div class="stbox"><div class="tw"><table>
+<thead><tr><th>#</th><th>ΟΜΑΔΑ</th><th>ΒΑΘ</th><th>ΑΓ</th><th>Ν/Ι/Η</th><th>ΓΥ</th><th>ΓΚ</th></tr></thead>
+<tbody id="tbody"></tbody></table></div></div><p class="note">Πηγή: Προπάθλημα, ΣΤ Όμιλος 2026/27.</p></section>
+
+<section id="roster"><p class="eb" data-t="roster_eb">Ομάδα</p><h2 data-t="roster_h">Ρόστερ</h2><div class="ros" id="ros"></div></section>
+
+<section id="stats"><p class="eb" data-t="stats_eb">Σεζόν 2026/27</p><h2 data-t="stats_h">Στατιστικά</h2>
+<div id="st_kpi" data-st="kpi"></div>
+<div id="st_form" data-st="form"></div>
+<div id="st_goals" data-st="goals"></div>
+<div class="lbs" data-st="leaders"><div class="lc" id="lbg"></div><div class="lc" id="lba"></div><div class="lc" id="lbt"></div></div>
+<div id="st_records" data-st="records"></div>
+<p class="note">Οι ασίστ είναι εκτιμώμενη κατανομή. <span class="live" id="sync" hidden></span></p></section>
+
+<section id="links"><p class="eb" data-t="links_eb">Ακολούθησε μας</p><h2 data-t="links_h">Σύνδεσμοι</h2>
+<div class="links" id="lnk"><a href="https://propathlima.gr/team/papei-sc/" rel="noopener">Προπάθλημα</a><a href="https://www.sofascore.com/el/minifootball/team/papei-sc/1221219" rel="noopener">SofaScore</a><a href="https://www.instagram.com/papeisc" rel="noopener">Instagram</a></div></section>
+</main>
+<dialog id="pm" aria-labelledby="pmn"></dialog>
+<footer><div class="wrap"><span data-t="footer_l">PAPEI SC · We Are Piraeus</span><span data-t="footer_r">Στοιχεία: Προπάθλημα και καταγραφές της ομάδας</span></div></footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js?v=7"></script><script src="../data/data.js?v=7"></script><script src="../js/logos.js?v=7"></script><script src="../js/design.js?v=7"></script>
-<script>
-var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
-function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-async function q(p){var r=await p;if(r.error)throw r.error;return r.data}
-function say(t,bad){$("msg").innerHTML=t?'<div class="msg'+(bad?" err":"")+'">'+esc(t)+"</div>":""}
-async function run(f){try{say("");await f()}catch(e){say("Σφάλμα: "+(e.message||e),1)}}
-function ath(d,t){var p=d.split("-"),k=t.split(":"),u=Date.UTC(+p[0],p[1]-1,+p[2],+k[0],+k[1]);function off(s){var o={};new Intl.DateTimeFormat("en-US",{timeZone:"Europe/Athens",hourCycle:"h23",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric"}).formatToParts(new Date(s)).forEach(function(x){o[x.type]=+x.value});return Date.UTC(o.year,o.month-1,o.day,o.hour,o.minute)-s}return new Date(u-off(u-off(u)))}
-function parts(iso){var o={};new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Athens",hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}).formatToParts(new Date(iso)).forEach(function(x){o[x.type]=x.value});return o.year+"-"+o.month+"-"+o.day+"T"+o.hour+":"+o.minute}
-function slug(n){return n.toLowerCase().replace(/[^a-z0-9α-ωά-ώ]+/g,"-").replace(/^-|-$/g,"")||"x"}
-function url(p){if(!p)return"";if(/^assets\//.test(p))return"../"+p;var i=p.indexOf("/");return sb.storage.from(p.slice(0,i)).getPublicUrl(p.slice(i+1)).data.publicUrl}
-function shrink(f,max,png){return new Promise(function(res,rej){if(f.type==="image/svg+xml")return res(f);var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){var k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);c.toBlob(function(b){res(b?new File([b],f.name.replace(/\.\w+$/,"")+(png?".png":".jpg"),{type:png?"image/png":"image/jpeg"}):f)},png?"image/png":"image/jpeg",.86)};im.onerror=function(){URL.revokeObjectURL(u);rej("Η φωτογραφία δεν μπόρεσε να διαβαστεί (π.χ. HEIC). Δοκίμασε JPG ή PNG.")};im.src=u})}
-/* Logo: κόβει τα κενά γύρω-γύρω και το βάζει σε τετράγωνο 256x256 με ίδια περιθώρια, ώστε όλα τα logos να φαίνονται ίδιου μεγέθους */
-function normLogo(f){return new Promise(function(res,rej){if(f.type==="image/svg+xml")return res(f);var im=new Image(),u=URL.createObjectURL(f);im.onload=function(){
- var S=256,P=16,k0=Math.min(1,1200/Math.max(im.naturalWidth,im.naturalHeight)),w=Math.round(im.naturalWidth*k0),h=Math.round(im.naturalHeight*k0),c=document.createElement("canvas");c.width=w;c.height=h;var x=c.getContext("2d");x.drawImage(im,0,0,w,h);URL.revokeObjectURL(u);
- var d=x.getImageData(0,0,w,h).data,hasA=false,i,y,xx;for(i=3;i<d.length;i+=4)if(d[i]<250){hasA=true;break}
- var x0=w,y0=h,x1=-1,y1=-1;for(y=0;y<h;y++)for(xx=0;xx<w;xx++){i=(y*w+xx)*4;var bg=hasA?d[i+3]<13:(d[i]>244&&d[i+1]>244&&d[i+2]>244);if(!bg){if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y}}
- if(x1<x0){x0=0;y0=0;x1=w-1;y1=h-1}
- var cw=x1-x0+1,ch=y1-y0+1,k=(S-2*P)/Math.max(cw,ch),o=document.createElement("canvas");o.width=o.height=S;var ox=o.getContext("2d");ox.imageSmoothingQuality="high";ox.drawImage(c,x0,y0,cw,ch,(S-cw*k)/2,(S-ch*k)/2,cw*k,ch*k);
- o.toBlob(function(b){b?res(new File([b],f.name.replace(/\.\w+$/,"")+".png",{type:"image/png"})):res(f)},"image/png")};im.onerror=function(){URL.revokeObjectURL(u);rej("Το logo δεν μπόρεσε να διαβαστεί. Δοκίμασε PNG ή SVG.")};im.src=u})}
-function toast(t){var e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(function(){e.remove()},2600)}
-function sbox(ph){return'<input class="qs" id="qs" type="search" placeholder="'+ph+'" aria-label="Αναζήτηση">'}
-function bindSearch(){var e=$("qs");if(e)e.oninput=function(){var v=e.value.toLowerCase().trim();[].forEach.call(document.querySelectorAll("#lst .row"),function(r){r.hidden=v&&r.textContent.toLowerCase().indexOf(v)<0})}}
-function det2txt(a){return(a||[]).map(function(x){return x.l+": "+x.v}).join("\n")}
-function txt2det(t){return(t||"").split("\n").map(function(l){var i=l.indexOf(":");return i>0?{l:l.slice(0,i).trim(),v:l.slice(i+1).trim()}:null}).filter(function(x){return x&&x.l&&x.v})}
-async function up(b,f){var ext=((f.name.match(/\.(\w+)$/)||[])[1]||"jpg").toLowerCase(),p=Date.now()+"-"+Math.random().toString(36).slice(2,8)+"."+ext;
- await q(sb.storage.from(b).upload(p,f,{cacheControl:"31536000",upsert:false,contentType:f.type||"image/jpeg"}));return b+"/"+p}
-function opts(l,v,e){return(e?'<option value="">–</option>':"")+l.map(function(o){return'<option value="'+o[0]+'"'+(o[0]==v?" selected":"")+">"+esc(o[1])+"</option>"}).join("")}
-function F(fs,d){return fs.map(function(f){var v=d[f[0]]==null?"":d[f[0]],id="f_"+f[0],t=f[2];
- if(t==="select")return'<label>'+f[1]+'<select id="'+id+'">'+opts(f[3],v,f[4])+"</select></label>";
- if(t==="check")return'<label class="ck"><input type="checkbox" id="'+id+'"'+(v?" checked":"")+"> "+f[1]+"</label>";
- if(t==="area")return'<label>'+f[1]+'<textarea id="'+id+'" rows="3">'+esc(v)+"</textarea></label>";
- if(t==="file")return'<label>'+f[1]+'<input type="file" id="'+id+'" accept="image/*"></label>';
- return'<label>'+f[1]+'<input id="'+id+'" type="'+t+'" value="'+esc(v)+'"></label>'}).join("")}
-function G(fs){var o={};fs.forEach(function(f){var e=$("f_"+f[0]),t=f[2];o[f[0]]=t==="check"?e.checked:t==="file"?e.files[0]:t==="number"?(e.value===""?null:+e.value):(e.value||null)});return o}
-
-/* ---- σύνδεση ---- */
-async function boot(){
- var s=(await sb.auth.getSession()).data.session;
- if(!s){$("app").innerHTML='<div class="box"><b>Σύνδεση</b><label>Email<input id="em" type="email" autocomplete="username"></label><label>Κωδικός<input id="pw" type="password" autocomplete="current-password"></label><p><button class="btn2 pri" id="go">Είσοδος</button></p></div>';
-  $("go").onclick=function(){run(async function(){await q(sb.auth.signInWithPassword({email:$("em").value,password:$("pw").value}));boot()})};return}
- var a=await q(sb.from("admins").select("user_id"));
- if(!a.length){$("app").innerHTML='<div class="box">Ο λογαριασμός δεν έχει δικαίωμα διαχειριστή. Δες το README (βήμα Supabase).<p><button class="btn2" id="out">Αποσύνδεση</button></p></div>';$("out").onclick=out;return}
- nav()}
-function out(){sb.auth.signOut().then(boot)}
-var TABS=[["players","Παίκτες"],["matches","Αγώνες"],["events","Γκολ"],["teams","Ομάδες"],["standings","Βαθμολογία"],["design","Εμφάνιση"],["tools","Εργαλεία"]];
-function nav(){$("app").innerHTML='<div class="bar2" id="tb">'+TABS.map(function(t){return'<button data-t="'+t[0]+'" aria-pressed="'+(t[0]===tab)+'">'+t[1]+"</button>"}).join("")+'<button id="out">Έξοδος</button></div><div id="pg"></div>';
- $("out").onclick=out;$("tb").onclick=function(e){var t=e.target.dataset.t;if(t){tab=t;nav()}};window.onmessage=null;window.onbeforeunload=null;run(V[tab])}
-
-/* ---- παίκτες ---- */
-var PF=[["full_name","Ονοματεπώνυμο","text"],["position","Θέση","text"],["shirt_number","Αριθμός φανέλας","number"],["bio","Βιογραφικό (κείμενο στην κάρτα του παίκτη)","area"],["details_txt","Άλλα στοιχεία: μία γραμμή το καθένα, μορφή Ετικέτα: Τιμή (π.χ. Ηλικία: 22, Σχολή: ΟΠΑ, Πόδι: Δεξί)","area"],["base_goals","Γκολ (σύνολο μέχρι σήμερα)","number"],["base_assists","Ασίστ (σύνολο μέχρι σήμερα)","number"],["base_apps","Παρουσίες (σύνολο μέχρι σήμερα)","number"],["show_on_roster","Εμφάνιση στο ρόστερ","check"],["photo","Φωτογραφία (μικραίνει αυτόματα πριν ανέβει)","file"],["rm_photo","Αφαίρεση τρέχουσας φωτογραφίας","check"]];
-var V={};
-V.players=async function(){var L=await q(sb.from("players").select("*").order("full_name"));
- $("pg").innerHTML='<div id="fm"></div><b>'+L.length+" παίκτες</b>"+sbox("Αναζήτηση παίκτη…")+'<div id="lst">'+L.map(function(p){return'<div class="row"><span class="l">'+(p.photo_path?'<img class="th" loading="lazy" alt="" src="'+esc(url(p.photo_path))+'">':'<span class="th"></span>')+'<span>'+esc(p.full_name)+"<small>"+esc(p.position||"")+" · "+p.base_goals+" γκολ · "+p.base_assists+" ασίστ"+(p.show_on_roster?"":" · κρυφός")+"</small></span></span><button class=\"btn2\" data-e=\""+p.id+'">Επεξεργασία</button></div>'}).join("")+"</div>";bindSearch();
- var edit=function(p){$("fm").innerHTML='<div class="box"><b>'+(p.id?"Επεξεργασία":"Νέος παίκτης")+"</b>"+(p.photo_path?'<p><img src="'+esc(url(p.photo_path))+'" alt="" style="height:90px;border-radius:6px;border:1px solid var(--line)"></p>':"")+F(PF,Object.assign({},p,{details_txt:det2txt(p.details)}))+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> '+(p.id?'<button class="btn2" id="dl">Διαγραφή</button> ':"")+'<button class="btn2" id="cn">Άκυρο</button></p></div>';
-  $("cn").onclick=function(){$("fm").innerHTML=btn};$("fm").scrollIntoView({behavior:"smooth",block:"start"});
-  $("f_photo").onchange=function(){var f=this.files[0];if(!f)return;var im=document.getElementById("ph_new")||document.createElement("img");im.id="ph_new";im.style.cssText="height:90px;border-radius:6px;border:1px solid var(--line);margin-top:8px;display:block";im.src=URL.createObjectURL(f);this.parentNode.appendChild(im)};
-  $("sv").onclick=function(){run(async function(){var o=G(PF),f=o.photo;delete o.photo;if(!o.full_name)throw"Λείπει το όνομα";if(f)o.photo_path=await up("player-photos",await shrink(f,1000));if(o.rm_photo&&!f)o.photo_path=null;delete o.rm_photo;o.details=txt2det(o.details_txt);delete o.details_txt;o.base_goals=o.base_goals||0;o.base_assists=o.base_assists||0;o.base_apps=o.base_apps||0;
-   if(p.id)await q(sb.from("players").update(o).eq("id",p.id));else{o.slug=slug(o.full_name)+"-"+Math.random().toString(36).slice(2,6);await q(sb.from("players").insert(o))}say("");toast("Αποθηκεύτηκε");V.players()})};
-  if(p.id)$("dl").onclick=function(){if(confirm("Διαγραφή παίκτη;"))run(async function(){await q(sb.from("players").delete().eq("id",p.id));V.players()})}};
- var btn='<p><button class="btn2 pri" id="nw">+ Νέος παίκτης</button></p>';$("fm").innerHTML=btn;
- $("pg").onclick=function(e){if(e.target.id==="nw")edit({show_on_roster:true});if(e.target.dataset.e)edit(L.find(function(p){return p.id===e.target.dataset.e}))}};
-
-/* ---- αγώνες ---- */
-V.matches=async function(){var T=await q(sb.from("teams").select("id,name").order("name")),M=await q(sb.from("matches").select("*").order("kickoff",{ascending:false,nullsFirst:false}).limit(60)),tn={};T.forEach(function(t){tn[t.id]=t.name});
- var tl=T.map(function(t){return[t.id,t.name]});
- var MF=[["season","Σεζόν (π.χ. 2026/27)","text"],["competition","Διοργάνωση","select",[["Πρωτάθλημα","Πρωτάθλημα"],["Off-Season Tournament","Off-Season Tournament"]]],["round_label","Αγωνιστική (π.χ. 5η αγ.)","text"],["kick","Ημερομηνία και ώρα (ώρα Ελλάδας)","datetime-local"],["home_team","Γηπεδούχος","select",tl],["away_team","Φιλοξενούμενος","select",tl],["home_score","Γκολ γηπεδούχου","number"],["away_score","Γκολ φιλοξενούμενου","number"],["status","Κατάσταση","select",[["scheduled","Προγραμματισμένος"],["live","Σε εξέλιξη"],["finished","Ολοκληρωμένος"],["postponed","Αναβλήθηκε"]]],["venue","Γήπεδο","text"],["venue_map_url","Σύνδεσμος χάρτη","url"]];
- $("pg").innerHTML='<p><button class="btn2 pri" id="nw">+ Νέος αγώνας (π.χ. επόμενος)</button></p><div id="fm"></div>'+sbox("Αναζήτηση αγώνα ή ομάδας…")+'<div id="lst">'+M.map(function(m){var s=m.home_score==null?"vs":m.home_score+" - "+m.away_score;return'<div class="row"><span>'+esc(tn[m.home_team])+" "+s+" "+esc(tn[m.away_team])+"<small>"+esc(m.season)+" · "+esc(m.status)+" · "+(m.kickoff?parts(m.kickoff).replace("T"," "):"χωρίς ημερομηνία")+'</small></span><button class="btn2" data-e="'+m.id+'">Επεξεργασία</button></div>'}).join("")+"</div>";bindSearch();
- var edit=function(m){var d=Object.assign({},m,{kick:m.kickoff?parts(m.kickoff):"",season:m.season||"2026/27",status:m.status||"scheduled"});
-  $("fm").innerHTML='<div class="box">'+F(MF,d)+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> '+(m.id?'<button class="btn2" id="dl">Διαγραφή</button> ':"")+'<button class="btn2" id="cn">Άκυρο</button></p></div>';
-  $("cn").onclick=function(){$("fm").innerHTML=""};
-  $("sv").onclick=function(){run(async function(){var o=G(MF),k=o.kick;delete o.kick;o.kickoff=k?ath(k.slice(0,10),k.slice(11,16)).toISOString():null;
-   if(o.home_team===o.away_team)throw"Η ίδια ομάδα στις δύο θέσεις";if(o.status==="finished"&&(o.home_score==null||o.away_score==null))throw"Βάλε το σκορ";o.locked=true;
-   if(m.id)await q(sb.from("matches").update(o).eq("id",m.id));else{o.source="manual";await q(sb.from("matches").insert(o))}say("Αποθηκεύτηκε");V.matches()})};
-  if(m.id)$("dl").onclick=function(){if(confirm("Διαγραφή αγώνα και των γεγονότων του;"))run(async function(){await q(sb.from("matches").delete().eq("id",m.id));V.matches()})}};
- $("pg").onclick=function(e){if(e.target.id==="nw")edit({});if(e.target.dataset.e)edit(M.find(function(m){return m.id===e.target.dataset.e}))}};
-
-/* ---- γκολ, ασίστ, παρουσίες (κάθε γκολ καταχωρείται μία φορά) ---- */
-V.events=async function(){var T=await q(sb.from("teams").select("id,name")),tn={};T.forEach(function(t){tn[t.id]=t.name});
- var M=await q(sb.from("matches").select("id,season,kickoff,home_team,away_team,status").order("kickoff",{ascending:false,nullsFirst:false}).limit(30)),P=await q(sb.from("players").select("id,full_name").order("full_name")),cur=$("mm")?$("mm").value:(M[0]&&M[0].id);
- if(!M.length){$("pg").innerHTML="Πρώτα πρόσθεσε έναν αγώνα.";return}
- var E=await q(sb.from("match_events").select("*").eq("match_id",cur).order("seq")),A=(await q(sb.from("appearances").select("player_id").eq("match_id",cur))).map(function(a){return a.player_id}),pl=P.map(function(p){return[p.id,p.full_name]}),pn={};P.forEach(function(p){pn[p.id]=p.full_name});
- $("pg").innerHTML='<label>Αγώνας<select id="mm">'+opts(M.map(function(m){return[m.id,(m.kickoff?parts(m.kickoff).slice(0,10):"–")+" "+tn[m.home_team]+" – "+tn[m.away_team]]}),cur)+"</select></label>"+
-  '<div class="box"><b>Γκολ</b>'+E.map(function(e){return'<div class="row"><span>#'+e.seq+" "+esc(e.scorer_id?pn[e.scorer_id]:"αυτογκόλ")+(e.assist_id?" (ασίστ: "+esc(pn[e.assist_id])+")":"")+(e.minute?" "+e.minute+"′":"")+'</span><button class="btn2" data-d="'+e.id+'">Διαγραφή</button></div>'}).join("")+
-  '<label>Σκόρερ<select id="sc">'+opts(pl,"",1)+'</select></label><label>Ασίστ<select id="as">'+opts(pl,"",1)+'</select></label><label>Λεπτό<input id="mn" type="number"></label><p><button class="btn2 pri" id="add">Προσθήκη γκολ</button></p></div>'+
-  '<div class="box"><b>Παρουσίες</b>'+P.map(function(p){return'<label class="ck"><input type="checkbox" class="ap" value="'+p.id+'"'+(A.indexOf(p.id)>=0?" checked":"")+"> "+esc(p.full_name)+"</label>"}).join("")+'<p><button class="btn2 pri" id="sap">Αποθήκευση παρουσιών</button></p></div>';
- $("mm").onchange=function(){V.events()};
- $("add").onclick=function(){run(async function(){var s=$("sc").value||null,a=$("as").value||null;if(s&&s===a)throw"Ο σκόρερ δεν μπορεί να δώσει ασίστ στον εαυτό του";var seq=E.length?E[E.length-1].seq+1:1;
-  await q(sb.from("match_events").insert({match_id:cur,seq:seq,kind:s?"goal":"own_goal",scorer_id:s,assist_id:a,minute:$("mn").value?+$("mn").value:null}));V.events()})};
- $("sap").onclick=function(){run(async function(){await q(sb.from("appearances").delete().eq("match_id",cur));var r=[].filter.call(document.querySelectorAll(".ap"),function(c){return c.checked}).map(function(c){return{match_id:cur,player_id:c.value}});if(r.length)await q(sb.from("appearances").insert(r));say("Αποθηκεύτηκε")})};
- $("pg").onclick=function(e){if(e.target.dataset.d)run(async function(){await q(sb.from("match_events").delete().eq("id",e.target.dataset.d));V.events()})}};
-
-/* ---- ομάδες και logos ---- */
-V.teams=async function(){var L=await q(sb.from("teams").select("*").order("name")),TF=[["name","Όνομα ομάδας (ακριβές όπως στο Προπάθλημα)","text"],["logo","Logo (PNG, SVG, διαφανές)","file"]];
- $("pg").innerHTML='<p><button class="btn2 pri" id="nw">+ Νέα ομάδα</button></p><div id="fm"></div>'+sbox("Αναζήτηση ομάδας…")+'<p class="hint">Τα logos που ανεβάζεις εδώ κόβονται αυτόματα στο περιεχόμενο και μπαίνουν σε ίδιο τετράγωνο, ώστε να φαίνονται όλα ίδιου μεγέθους. Αν μια ομάδα δεν έχει logo εδώ, το site χρησιμοποιεί το αρχείο του/του Προπαθλήματος.</p><div id="lst">'+L.map(function(t){return'<div class="row"><span class="l">'+(t.logo_path?'<img class="th lg" loading="lazy" src="'+esc(url(t.logo_path))+'" alt="">':'<span class="th"></span>')+esc(t.name)+(t.is_us?" ★":"")+'</span><button class="btn2" data-e="'+t.id+'">Logo / όνομα</button></div>'}).join("")+"</div>";bindSearch();
- var edit=function(t){$("fm").innerHTML='<div class="box">'+F(TF,t)+'<p><button class="btn2 pri" id="sv">Αποθήκευση</button> <button class="btn2" id="cn">Άκυρο</button></p></div>';$("cn").onclick=function(){$("fm").innerHTML=""};
-  $("sv").onclick=function(){run(async function(){var o=G(TF),f=o.logo;delete o.logo;if(!o.name)throw"Λείπει το όνομα";if(f){if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";o.logo_path=await up("team-logos",await normLogo(f))}
-   if(t.id)await q(sb.from("teams").update(o).eq("id",t.id));else{o.slug=slug(o.name);var r=await q(sb.from("teams").insert(o).select());await q(sb.from("team_aliases").insert({alias:o.name,team_id:r[0].id}))}say("");toast("Αποθηκεύτηκε");V.teams()})}};
- $("pg").onclick=function(e){if(e.target.id==="nw")edit({});if(e.target.dataset.e)edit(L.find(function(t){return t.id===e.target.dataset.e}))}};
-
-
-/* ---- βαθμολογία: χειροκίνητη επεξεργασία ή επικόλληση από το Προπάθλημα ---- */
-V.standings=async function(){
- var T=await q(sb.from("teams").select("id,name").order("name")),AL=await q(sb.from("team_aliases").select("alias,team_id")),S=await q(sb.from("standings").select("*")),
-  seasons=S.map(function(r){return r.season}).filter(function(v,i,a){return v&&a.indexOf(v)===i}).sort().reverse(),season=window._ssn||seasons[0]||"2026/27",
-  byKey={};T.forEach(function(t){byKey[lkey(t.name)]=t.id});AL.forEach(function(a){byKey[lkey(a.alias)]=a.team_id});
- var R=S.filter(function(r){return r.season===season}).sort(function(a,b){return a.rank-b.rank}).map(function(r){return{team_id:r.team_id,played:r.played,won:r.won,drawn:r.drawn,lost:r.lost,gf:r.gf,ga:r.ga}});
- function pts(r){return(+r.won||0)*3+(+r.drawn||0)}
- function draw(){
-  $("pg").innerHTML='<div class="box"><b>Βαθμολογία</b><p class="hint">Η βαθμολογία του site διαβάζεται από εδώ και ανανεώνεται ζωντανά σε όλους τους επισκέπτες μόλις πατήσεις Αποθήκευση. Αν υπάρχει αυτόματος συγχρονισμός από το Προπάθλημα που γράφει στον ίδιο πίνακα, μπορεί να αντικαταστήσει αυτά που βάζεις εδώ.</p>'+
-   '<label>Σεζόν<input id="ss" value="'+esc(season)+'" style="max-width:160px"></label></div>'+
-   '<div class="box"><b>Γρήγορη επικόλληση από το Προπάθλημα</b><p class="hint">Αντίγραψε τον πίνακα από τη σελίδα και κόλλησέ τον. Μία ομάδα ανά γραμμή, μορφή: θέση, όνομα, αγώνες, νίκες, ισοπαλίες, ήττες, γκολ (π.χ. 12-5), βαθμοί. Το διαφορά τερμάτων (αν υπάρχει) αγνοείται.</p><textarea class="pw" id="pw" placeholder="1 ΠΑΠΕΙ SC 5 4 1 0 12-3 13"></textarea><p><button class="btn2" id="pp">Ανάλυση κειμένου</button></p></div>'+
-   '<div class="box"><div class="tw2"><table class="stt"><thead><tr><th>#</th><th>Ομάδα</th><th>Αγ</th><th>Ν</th><th>Ι</th><th>Η</th><th>ΓΥ</th><th>ΓΚ</th><th>Βαθ</th><th></th></tr></thead><tbody>'+
-   R.map(function(r,i){return'<tr><td>'+(i+1)+'</td><td><select data-k="team_id" data-i="'+i+'">'+opts(T.map(function(t){return[t.id,t.name]}),r.team_id,1)+'</select></td>'+["played","won","drawn","lost","gf","ga"].map(function(k){return'<td><input type="number" min="0" data-k="'+k+'" data-i="'+i+'" value="'+(r[k]==null?"":r[k])+'"></td>'}).join("")+'<td class="p">'+pts(r)+'</td><td><button class="btn2" data-x="'+i+'" aria-label="Διαγραφή">✕</button></td></tr>'}).join("")+
-   '</tbody></table></div><p><button class="btn2" id="ad">+ Ομάδα</button> <button class="btn2" id="so">Ταξινόμηση (βαθμοί, διαφορά, γκολ)</button></p></div>'+
-   '<div class="stk"><button class="btn2 pri" id="sv">Αποθήκευση βαθμολογίας</button><span class="pill">Οι βαθμοί υπολογίζονται: 3 ανά νίκη, 1 ανά ισοπαλία</span></div>'}
- draw();
- $("pg").onchange=function(e){var t=e.target;if(t.id==="ss"){season=t.value.trim();window._ssn=season;V.standings();return}};
- $("pg").oninput=function(e){var t=e.target,i=t.dataset.i;if(i==null)return;var k=t.dataset.k;R[+i][k]=k==="team_id"?t.value:(t.value===""?null:+t.value);if(k!=="team_id"){var c=t.closest("tr").querySelector(".p");c.textContent=pts(R[+i])}};
- $("pg").onclick=function(e){var t=e.target;
-  if(t.dataset.x!=null){R.splice(+t.dataset.x,1);draw();return}
-  if(t.id==="ad"){R.push({team_id:"",played:0,won:0,drawn:0,lost:0,gf:0,ga:0});draw();return}
-  if(t.id==="so"){R.sort(function(a,b){return pts(b)-pts(a)||((b.gf-b.ga)-(a.gf-a.ga))||b.gf-a.gf});draw();return}
-  if(t.id==="pp"){var lines=$("pw").value.split("\n").map(function(l){return l.trim()}).filter(Boolean),out=[],bad=[];
-   lines.forEach(function(l){var tk=l.split(/\s+/),gi=-1,j;for(j=0;j<tk.length;j++)if(/^\d+[-:–]\d+$/.test(tk[j])){gi=j;break}
-    if(gi<5||!/^\d+\.?$/.test(tk[0])){bad.push(l);return}
-    var g=tk[gi].split(/[-:–]/),nums=tk.slice(gi-4,gi).map(Number),name=tk.slice(1,gi-4).join(" "),id=byKey[lkey(name)];
-    if(!id||nums.some(isNaN)){bad.push(l);return}
-    out.push({team_id:id,played:nums[0],won:nums[1],drawn:nums[2],lost:nums[3],gf:+g[0],ga:+g[1]})});
-   if(out.length)R=out;draw();say(out.length?("Αναγνώστηκαν "+out.length+" ομάδες."+(bad.length?" Δεν αναγνωρίστηκαν: "+bad.join(" | "):"")):"Δεν αναγνωρίστηκε καμία γραμμή. Έλεγξε τη μορφή και τα ονόματα των ομάδων.",!out.length||bad.length);return}
-  if(t.id==="sv")run(async function(){season=$("ss").value.trim();if(!season)throw"Βάλε σεζόν";
-   var ids={};R.forEach(function(r,i){if(!r.team_id)throw"Η γραμμή "+(i+1)+" δεν έχει ομάδα";if(ids[r.team_id])throw"Η ίδια ομάδα υπάρχει δύο φορές (γραμμή "+(i+1)+")";ids[r.team_id]=1});
-   var rows=R.map(function(r,i){return{season:season,team_id:r.team_id,rank:i+1,played:r.played||0,won:r.won||0,drawn:r.drawn||0,lost:r.lost||0,gf:r.gf||0,ga:r.ga||0,points:pts(r)}});
-   await q(sb.from("standings").delete().eq("season",season));if(rows.length)await q(sb.from("standings").insert(rows));window._ssn=season;toast("Η βαθμολογία αποθηκεύτηκε και ανανεώνεται στο site");V.standings()})}};
-
-/* ---- εμφάνιση: προεπισκόπηση δίπλα, πατάς πάνω στο site για να αλλάξεις το στοιχείο, πολλές επιλογές σε πτυσσόμενες ομάδες ---- */
-V.design=async function(){
- var row=(await q(sb.from("site_settings").select("*").eq("key","design")))[0]||{},
-  pub=designClean(row.published),saved=designClean(row.draft||row.published),D=designClean(row.draft||row.published),mobile=false,OPEN=window._dopen||{presets:1},
-  J=JSON.stringify,CL=[["navy","Χρώμα ομάδας (κεφαλίδα, κουμπιά)"],["acc","Χρώμα συνδέσμων"],["bg","Φόντο"],["ink","Κείμενο"]],
-  STRK=["anim_style","hero_align","hero_size","density","card","roster","photo"];
- function sel(k,label){return'<label>'+label+'<select data-lk="'+k+'">'+opts(DESIGN_OPTS[k],D.look[k])+'</select></label>'}
- function chk(attr,label,on){return'<label class="ck"><input type="checkbox" '+attr+(on?" checked":"")+'> '+label+'</label>'}
- function ac(g,title,sub,body){return'<details class="ac" data-g="'+g+'"'+(OPEN[g]?" open":"")+'><summary>'+title+(sub?'<small>'+sub+'</small>':'')+'</summary><div class="in2">'+body+'</div></details>'}
- function cpick(t){return'<div class="box"><b>'+(t==="light"?"Φωτεινό θέμα":"Σκούρο θέμα")+"</b>"+CL.map(function(c){return'<div class="cr"><span>'+c[1]+'</span><span><code>'+D.colors[t][c[0]]+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+D.colors[t][c[0]]+'"></span></div>'}).join("")+"</div>"}
- function secs(){return D.sections.map(function(x,i){return'<div class="sr" data-sec="'+x.id+'"><input type="checkbox" class="ck2" data-i="'+i+'"'+(x.on?" checked":"")+' aria-label="Εμφάνιση"><span>'+DESIGN_SECTIONS[x.id]+'</span><button class="btn2" data-u="'+i+'"'+(i?"":" disabled")+' aria-label="Πάνω">▲</button><button class="btn2" data-dn="'+i+'"'+(i<D.sections.length-1?"":" disabled")+' aria-label="Κάτω">▼</button></div>'}).join("")}
- function lks(){return D.links.map(function(l,i){return'<div class="sr"><input data-lt="'+i+'" value="'+esc(l.t)+'" placeholder="Κείμενο" aria-label="Κείμενο"><input data-lu="'+i+'" value="'+esc(l.u)+'" placeholder="https://..." aria-label="Διεύθυνση"><button class="btn2" data-ld="'+i+'" aria-label="Διαγραφή">✕</button></div>'}).join("")}
- function imgs(){return DESIGN_IMAGES.map(function(m){var v=D.images[m[0]];return'<div class="box" data-img="'+m[0]+'"><b>'+m[1]+"</b>"+(v?'<p><img src="'+esc(dmedia(v))+'" alt="" style="max-height:80px;max-width:100%;background:#8884"></p>':'<p class="hint">Τωρινή: προεπιλογή</p>')+'<input type="file" accept="image/*" data-im="'+m[0]+'">'+(v?'<p><button class="btn2" data-ir="'+m[0]+'">Επαναφορά προεπιλογής</button></p>':"")+(m[0]==="hero_bg"?'<label>Σκουρότητα πάνω από τη φωτογραφία: <span id="ov">'+D.look.hero_overlay+'</span>%<input type="range" min="0" max="90" step="5" data-lk="hero_overlay" value="'+D.look.hero_overlay+'"></label>':"")+"</div>"}).join("")}
- function status(){var dirty=J(D)!==J(pub),unsaved=J(D)!==J(saved);return'<span class="pill'+(dirty?" warn":"")+'">'+(dirty?"Αδημοσίευτες αλλαγές":"Δημοσιευμένο")+"</span> "+(unsaved?'<span class="pill warn">Μη αποθηκευμένο πρόχειρο</span>':"")}
- function push(){var f=$("pv");if(f&&f.contentWindow)f.contentWindow.postMessage({type:"papei-design",settings:D},location.origin);$("st").innerHTML=status();window.onbeforeunload=J(D)!==J(saved)?function(){return"Έχεις μη αποθηκευμένες αλλαγές"}:null}
- function ctl(){
-  $("ctl").innerHTML=
-  ac("presets","Έτοιμα θέματα χρωμάτων","ένα κλικ",'<div class="pr">'+DESIGN_PRESETS.map(function(p,i){return'<button data-pr="'+i+'"><i style="background:'+p.c.light.navy+'"></i>'+p.n+'</button>'}).join("")+'</div><p class="hint">Αλλάζει τα χρώματα ομάδας και συνδέσμων. Μπορείς μετά να τα ρυθμίσεις μόνος σου στα «Χρώματα».</p>')+
-  ac("ann","Ανακοίνωση πάνω-πάνω","μπάρα με μήνυμα",chk('data-an="on"',"Εμφάνιση ανακοίνωσης",D.announce.on)+'<label>Κείμενο<input data-an="text" maxlength="200" value="'+esc(D.announce.text)+'" placeholder="π.χ. Ο επόμενος αγώνας μεταφέρθηκε στις 20:30"></label><label>Σύνδεσμος (προαιρετικό)<input data-an="url" value="'+esc(D.announce.url)+'" placeholder="https://..."></label><label>Χρώμα<select data-an="tone">'+opts(DESIGN_OPTS.tone,D.announce.tone)+'</select></label>')+
-  ac("hero","Κεφαλίδα","",sel("hero_align","Στοίχιση")+sel("hero_size","Ύψος κεφαλίδας")+'<p class="hint">Τα κείμενα και οι εικόνες της κεφαλίδας: πάτα πάνω τους στην προεπισκόπηση.</p>')+
-  ac("layout","Διάταξη και στυλ","",'<label>Γραμματοσειρά όλου του site<select data-ft="1">'+opts(Object.keys(DESIGN_FONTS).map(function(k){return[k,DESIGN_FONTS[k].n]}),D.font)+'</select></label>'+
-   '<label>Στρογγυλότητα γωνιών: <span id="rv">'+D.look.radius+'</span>px<input type="range" min="0" max="24" step="1" data-lk="radius" value="'+D.look.radius+'"></label>'+
-   '<label>Πλάτος περιεχομένου<select data-lk="wrap">'+opts([[840,"Στενό"],[960,"Κανονικό"],[1100,"Πλατύ"]],D.look.wrap)+'</select></label>'+sel("density","Κενά ανάμεσα στις ενότητες")+sel("card","Στυλ καρτών")+sel("roster","Μέγεθος καρτών στο ρόστερ")+sel("photo","Σχήμα φωτογραφιών παικτών")+
-   "")+
-  ac("anim","Animations στο scroll","",chk('data-lk="anim"',"Animations όταν κάνεις scroll (εμφάνιση ενοτήτων, αριθμοί που μετράνε, μπάρες που γεμίζουν)",D.look.anim)+sel("anim_style","Στυλ εμφάνισης")+'<label>Ταχύτητα: <span id="av">'+D.look.anim_speed+'</span> ms (μικρότερο = πιο γρήγορο)<input type="range" min="250" max="1400" step="50" data-lk="anim_speed" value="'+D.look.anim_speed+'"></label>'+chk('data-lk="progress"',"Λεπτή μπάρα προόδου scroll στην κορυφή",D.look.progress)+'<p class="hint">Σε συσκευές με ενεργή ρύθμιση «μείωση κίνησης» οι animations απενεργοποιούνται αυτόματα.</p>')+
-  ac("stats","Στατιστικά: τι εμφανίζεται","",Object.keys(DESIGN_STATS).map(function(k){return chk('data-sk="'+k+'"',DESIGN_STATS[k],D.stats[k])}).join(""))+
-  ac("col","Χρώματα","φωτεινό και σκούρο",cpick("light")+cpick("dark"))+
-  ac("img","Εικόνες και λογότυπα","",'<p class="hint">Ανεβαίνουν αμέσως, φαίνονται στο site όταν πατήσεις Δημοσίευση.</p><div id="il">'+imgs()+"</div>")+
-  ac("tx","Κείμενα","",'<input class="qs" id="tq" type="search" placeholder="Φίλτρο κειμένων…" style="margin-top:10px"><p class="hint">Άδειο πεδίο = το προεπιλεγμένο κείμενο (φαίνεται ως ένδειξη).</p><div id="tl">'+DESIGN_TEXTS.map(function(t){return'<label>'+t[1]+'<input data-tx="'+t[0]+'" value="'+esc(D.texts[t[0]]||"")+'" placeholder="'+esc(t[2])+'" maxlength="300"></label>'}).join("")+"</div>")+
-  ac("lk","Σύνδεσμοι","ενότητα «Σύνδεσμοι»",'<p class="hint">Αν η λίστα είναι άδεια, μένουν οι προεπιλεγμένοι (Προπάθλημα, SofaScore, Instagram).</p><div id="ll">'+lks()+'</div><p><button class="btn2" data-la="1">+ Νέος σύνδεσμος</button></p>')+
-  ac("sec","Ενότητες","εμφάνιση και σειρά",'<p class="hint">Το τσεκάρισμα δείχνει ή κρύβει την ενότητα. Τα βέλη αλλάζουν τη σειρά της (και στο μενού).</p><div id="sl">'+secs()+"</div>")}
- function shell(){
-  $("pg").innerHTML='<p id="st"></p><div class="dz"><div id="ctl"></div><div class="pvcol"><div class="box"><b>Προεπισκόπηση</b> <small style="color:var(--mute)">πάτα πάνω σε κείμενο, εικόνα ή ενότητα για να την αλλάξεις</small> <button class="btn2" id="vw" style="float:right">Κινητό</button><div style="clear:both;margin-top:10px"><iframe class="pvw" id="pv" title="Προεπισκόπηση" src="../index.html?preview=1" style="max-width:100%"></iframe></div></div></div></div>'+
-   '<div class="stk"><button class="btn2" id="sd2">Αποθήκευση πρόχειρου</button><button class="btn2 pri" id="pb">Δημοσίευση</button><button class="btn2" id="dc">Απόρριψη πρόχειρου</button><button class="btn2" id="rs">Προεπιλογές</button></div>';
-  $("pv").onload=push;ctl();$("st").innerHTML=status()}
- function openG(g){OPEN[g]=1;window._dopen=OPEN;var d=document.querySelector('details[data-g="'+g+'"]');if(d)d.open=true;return d}
- function flash(el){if(!el)return;el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
- shell();
- window.onmessage=function(e){var m=e.data;if(e.origin!==location.origin||!m||m.type!=="papei-pick")return;
-  if(m.kind==="text"){openG("tx");var i=document.querySelector('[data-tx="'+m.key+'"]');if(i){flash(i.parentNode);i.focus({preventScroll:true})}}
-  else if(m.kind==="image"){openG("img");flash(document.querySelector('[data-img="'+m.key+'"]'))}
-  else if(m.kind==="announce"){openG("ann");flash(document.querySelector('[data-g="ann"]'))}
-  else if(m.kind==="section"){openG("sec");flash(document.querySelector('[data-sec="'+m.key+'"]'))}};
- $("ctl").addEventListener("toggle",function(e){var d=e.target;if(d.dataset&&d.dataset.g){OPEN[d.dataset.g]=d.open?1:0;window._dopen=OPEN}},true);
- $("pg").oninput=function(e){var t=e.target,k;
-  if(t.id==="tq"){var v=t.value.toLowerCase();[].forEach.call($("tl").children,function(l){l.hidden=v&&l.textContent.toLowerCase().indexOf(v)<0&&(l.querySelector("input").value||"").toLowerCase().indexOf(v)<0});return}
-  if(t.dataset.c){k=t.dataset.c.split(".");D.colors[k[0]][k[1]]=t.value;t.previousSibling.textContent=t.value}
-  else if(t.dataset.ft)D.font=t.value;
-  else if(t.dataset.tx)D.texts[t.dataset.tx]=t.value;
-  else if(t.dataset.an){k=t.dataset.an;D.announce[k]=t.type==="checkbox"?t.checked:t.value}
-  else if(t.dataset.sk)D.stats[t.dataset.sk]=t.checked;
-  else if(t.dataset.lt!=null)D.links[+t.dataset.lt].t=t.value;
-  else if(t.dataset.lu!=null)D.links[+t.dataset.lu].u=t.value;
-  else if(t.dataset.lk){k=t.dataset.lk;D.look[k]=t.type==="checkbox"?t.checked:STRK.indexOf(k)>=0?t.value:+t.value;if(k==="radius")$("rv").textContent=t.value;if(k==="hero_overlay")$("ov").textContent=t.value;if(k==="anim_speed")$("av").textContent=t.value}
-  else if(t.classList.contains("ck2"))D.sections[+t.dataset.i].on=t.checked;
-  else return;push()};
- $("pg").onchange=function(e){var t=e.target;if(t.dataset.im&&t.files[0])run(async function(){var f=t.files[0],m=DESIGN_IMAGES.filter(function(x){return x[0]===t.dataset.im})[0];
-  if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";
-  D.images[m[0]]=await up("site-media",m[3]?(f.type==="image/svg+xml"?f:await shrink(f,1200,true)):await shrink(f,2000));ctl();push();say("");toast("Η εικόνα ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")})};
- $("pg").onclick=function(e){var t=e.target,i;
-  if(t.dataset.pr!=null){var p=DESIGN_PRESETS[+t.dataset.pr];["light","dark"].forEach(function(m){D.colors[m].navy=p.c[m].navy;D.colors[m].acc=p.c[m].acc});ctl();push();return}
-  if(t.dataset.u!=null){i=+t.dataset.u;D.sections.splice(i-1,0,D.sections.splice(i,1)[0]);$("sl").innerHTML=secs();push();return}
-  if(t.dataset.dn!=null){i=+t.dataset.dn;D.sections.splice(i+1,0,D.sections.splice(i,1)[0]);$("sl").innerHTML=secs();push();return}
-  if(t.dataset.la){if(D.links.length>=10){say("Μέχρι 10 σύνδεσμοι",1);return}D.links.push({t:"",u:"https://"});$("ll").innerHTML=lks();push();return}
-  if(t.dataset.ld!=null){D.links.splice(+t.dataset.ld,1);$("ll").innerHTML=lks();push();return}
-  if(t.dataset.ir){D.images[t.dataset.ir]="";ctl();push();return}
-  if(t.id==="vw"){mobile=!mobile;t.textContent=mobile?"Υπολογιστής":"Κινητό";$("pv").style.maxWidth=mobile?"390px":"100%";return}
-  if(t.id==="sd2")run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,updated_at:new Date().toISOString()},{onConflict:"key"}));saved=designClean(D);push();toast("Το πρόχειρο αποθηκεύτηκε (δεν φαίνεται ακόμα στο site)")});
-  if(t.id==="pb"&&confirm("Δημοσίευση αλλαγών στο site;"))run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,published:D,updated_at:new Date().toISOString()},{onConflict:"key"}));pub=designClean(D);saved=designClean(D);push();toast("Δημοσιεύτηκε! Οι επισκέπτες το βλέπουν σε λίγα δευτερόλεπτα, χωρίς refresh.")});
-  if(t.id==="dc"&&confirm("Να χαθούν οι αλλαγές του πρόχειρου και να γυρίσεις σε ό,τι είναι δημοσιευμένο;")){D=designClean(pub);ctl();push()}
-  if(t.id==="rs"&&confirm("Επαναφορά στις αρχικές ρυθμίσεις; Δεν αλλάζει το site μέχρι να δημοσιεύσεις.")){D=designClean(null);ctl();push()}}};
-
-/* ---- εργαλεία: εισαγωγή τωρινών δεδομένων, αντίγραφο ---- */
-V.tools=async function(){$("pg").innerHTML='<div class="box"><b>Εισαγωγή τωρινών δεδομένων του site</b><p>Περνά στη βάση ομάδες, logos, αγώνες, παίκτες (τα σύνολα γίνονται «βάση») και τον επόμενο αγώνα. Τρέχει μόνο αν δεν υπάρχουν ήδη αγώνες.</p><button class="btn2 pri" id="sd">Εισαγωγή</button></div><div class="box"><b>Αντίγραφο ασφαλείας</b><p>Κατεβάζει όλα τα δεδομένα σε αρχείο JSON.</p><button class="btn2" id="bk">Λήψη αντιγράφου</button></div>';
- $("bk").onclick=function(){run(async function(){var o={};for(var t of["teams","team_aliases","players","matches","appearances","match_events","standings","site_settings"])o[t]=await q(sb.from(t).select("*"));var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:"application/json"}));a.download="papei-sc-backup-"+new Date().toISOString().slice(0,10)+".json";a.click()})};
- $("sd").onclick=function(){run(async function(){if((await q(sb.from("matches").select("id").limit(1))).length)throw"Υπάρχουν ήδη αγώνες. Η εισαγωγή έγινε ήδη.";
-  var names={};names[US]=1;Object.keys(SEASONS).forEach(function(k){SEASONS[k].forEach(function(m){names[m[1]]=1;names[m[4]]=1})});if(NEXT){names[NEXT.home]=1;names[NEXT.away]=1}
-  var T=await q(sb.from("teams").upsert(Object.keys(names).map(function(n){return{name:n,slug:slug(n),is_us:n===US,logo_path:n!==US&&LOGO[n]||null}}),{onConflict:"slug"}).select()),id={};T.forEach(function(t){id[t.name]=t.id});
-  await q(sb.from("team_aliases").upsert(T.map(function(t){return{alias:t.name,team_id:t.id}}),{onConflict:"alias"}));
-  await q(sb.from("players").upsert(P.map(function(p){return{full_name:p[0],slug:slug(p[0]),base_apps:p[1],base_goals:p[2],base_assists:p[3],show_on_roster:HIDE.indexOf(p[0])<0}}),{onConflict:"slug"}));
-  var R=[];Object.keys(SEASONS).forEach(function(k){SEASONS[k].forEach(function(m){var x=m[7]||{},mt=x.url&&x.url.match(/sport-event\/(\d+)/);R.push({season:k,competition:m[5]===OST?"Off-Season Tournament":"Πρωτάθλημα",round_label:m[6]||null,kickoff:m[0]?ath(m[0],x.t||"00:00").toISOString():null,home_team:id[m[1]],away_team:id[m[4]],home_score:m[2],away_score:m[3],status:"finished",source:mt?"propathlima":"manual",external_id:mt?mt[1]:null,locked:true})})});
-  if(NEXT)R.push({season:"2026/27",competition:"Πρωτάθλημα",kickoff:ath(NEXT.date,NEXT.time).toISOString(),home_team:id[NEXT.home],away_team:id[NEXT.away],status:"scheduled",venue:NEXT.venue||null,venue_map_url:NEXT.map||null,source:"manual",locked:true});
-  for(var i=0;i<R.length;i+=40)await q(sb.from("matches").insert(R.slice(i,i+40)));say("Έγινε εισαγωγή: "+T.length+" ομάδες, "+P.length+" παίκτες, "+R.length+" αγώνες")})};};
-run(boot);
-</script></body></html>
+<script src="js/config.js?v=7"></script>
+<script src="data/data.js?v=7"></script>
+<script src="js/logos.js?v=7"></script>
+<script src="js/db.js?v=7"></script>
+<script src="js/design.js?v=7"></script>
+<script src="js/anim.js?v=7"></script>
+<script>loadDB().then(loadDesign).then(function(){var s=document.createElement("script");s.src="js/app.js?v=7";document.body.appendChild(s)})</script>
+</body>
+</html>
