@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=11">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=12">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
@@ -45,9 +45,9 @@ details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
 .ti{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--line)}.ti .f{display:grid;gap:6px;min-width:0}.ti .f input{margin:0!important}.ti .ab{display:flex;gap:6px;flex-wrap:wrap}.ti .th{width:52px;height:64px}.tmb textarea{min-height:150px}
 .pw{width:100%;min-height:130px;font-family:ui-monospace,monospace;font-size:13px!important}
 </style></head><body>
-<div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
+<div class="a"><h1>PAPEI SC · Διαχείριση <small style="font-size:12px;font-weight:500;color:var(--mute);margin-left:8px">έκδοση 12</small></h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js?v=11"></script><script src="../data/data.js?v=11"></script><script src="../js/logos.js?v=11"></script><script src="../js/design.js?v=11"></script>
+<script src="../js/config.js?v=12"></script><script src="../data/data.js?v=12"></script><script src="../js/logos.js?v=12"></script><script src="../js/design.js?v=12"></script>
 <script>
 var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -281,9 +281,9 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   else if(t.classList.contains("ck2"))D.sections[+t.dataset.i].on=t.checked;
   else return;push()};
  $("pg").onchange=function(e){var t=e.target;
-  if(t.dataset.tf&&t.files[0])return run(async function(){var f=t.files[0];if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";var q=t.dataset.tf.split(":"),b=D.team.blocks[+q[0]],path=await up("site-media",b.type==="logos"?await shrink(f,800,true):await shrink(f,1400));
+  if(t.dataset.tf&&t.files[0])return run(async function(){var f=t.files[0];say("Ανεβαίνει η φωτογραφία…");if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";var q=t.dataset.tf.split(":"),b=D.team.blocks[+q[0]],path=await up("site-media",b.type==="logos"?await shrink(f,800,true):await shrink(f,1400));
    if(q.length>1)b.items[+q[1]].img=path;else b.image=path;keep(ctl);push();if(await probe(path)){say("");toast("Η φωτογραφία ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")}else say(nopub(path),1)});
-  if(t.dataset.tfm&&t.files.length)return run(async function(){var b=D.team.blocks[+t.dataset.tfm],fs=[].slice.call(t.files).slice(0,Math.max(0,48-b.items.length));
+  if(t.dataset.tfm&&t.files.length)return run(async function(){say("Ανεβαίνουν οι φωτογραφίες…");var b=D.team.blocks[+t.dataset.tfm],fs=[].slice.call(t.files).slice(0,Math.max(0,48-b.items.length));
    for(var i=0;i<fs.length;i++){if(!/^image\//.test(fs[i].type))continue;toast("Ανεβαίνει "+(i+1)+" από "+fs.length+"…");var path=await up("site-media",b.type==="logos"?await shrink(fs[i],800,true):await shrink(fs[i],1400));b.items.push({name:"",role:"",img:path,url:""})}
    keep(ctl);push();var last=b.items.length?b.items[b.items.length-1].img:"";if(last&&!(await probe(last)))say(nopub(last),1);else{say("");toast("Ανέβηκαν "+fs.length+" φωτογραφίες. Γράψε τώρα τα ονόματα.")}});
   if(t.dataset.im&&t.files[0])run(async function(){var f=t.files[0],m=DESIGN_IMAGES.filter(function(x){return x[0]===t.dataset.im})[0];
