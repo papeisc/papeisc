@@ -13,7 +13,8 @@ body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
 .a .ck{display:flex;gap:8px;align-items:center;color:var(--ink)}.a .ck input{width:18px;height:18px}
 .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
 .row small{color:var(--mute);display:block}.box{border:1px solid var(--line);border-radius:6px;padding:14px;margin:0 0 18px}
-.msg{padding:10px;border-radius:6px;background:var(--soft);margin:0 0 12px;font-size:14px}.err{color:var(--L)}
+.msg{padding:10px;border-radius:6px;background:var(--soft);margin:0 0 12px;font-size:14px}
+#msg{position:sticky;top:0;z-index:60}#msg .msg{box-shadow:0 6px 18px rgba(0,0,0,.18);border:1px solid var(--line);background:var(--bg)}#msg .msg.err{border-color:var(--L);background:color-mix(in srgb,var(--L) 10%,var(--bg))}.err{color:var(--L)}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .a input[type=color]{width:52px;height:38px;padding:2px;display:inline-block;margin:0;cursor:pointer}
 .cr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;color:var(--ink);font-size:14px}.cr code{color:var(--mute);font-size:12px;margin-right:8px}
@@ -45,7 +46,7 @@ details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
 .ti{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--line)}.ti .f{display:grid;gap:6px;min-width:0}.ti .f input{margin:0!important}.ti .ab{display:flex;gap:6px;flex-wrap:wrap}.ti .th{width:52px;height:64px}.tmb textarea{min-height:150px}
 .pw{width:100%;min-height:130px;font-family:ui-monospace,monospace;font-size:13px!important}
 </style></head><body>
-<div class="a"><h1>PAPEI SC · Διαχείριση <small style="font-size:12px;font-weight:500;color:var(--mute);margin-left:8px">έκδοση 12</small></h1><div id="msg"></div><div id="app"></div></div>
+<div class="a"><h1>PAPEI SC · Διαχείριση <small style="font-size:12px;font-weight:500;color:var(--mute);margin-left:8px">έκδοση 13</small></h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="../js/config.js?v=12"></script><script src="../data/data.js?v=12"></script><script src="../js/logos.js?v=12"></script><script src="../js/design.js?v=12"></script>
 <script>
