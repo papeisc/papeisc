@@ -184,7 +184,19 @@ V.standings=async function(){
    if(out.length)R=out;draw();say(out.length?("Αναγνώστηκαν "+out.length+" ομάδες."+(bad.length?" Δεν αναγνωρίστηκαν: "+bad.join(" | "):"")):"Δεν αναγνωρίστηκε καμία γραμμή. Έλεγξε τη μορφή και τα ονόματα των ομάδων.",!out.length||bad.length);return}
   if(t.id==="sv")run(async function(){season=$("ss").value.trim();if(!season)throw"Βάλε σεζόν";
    var ids={};R.forEach(function(r,i){if(!r.team_id)throw"Η γραμμή "+(i+1)+" δεν έχει ομάδα";if(ids[r.team_id])throw"Η ίδια ομάδα υπάρχει δύο φορές (γραμμή "+(i+1)+")";ids[r.team_id]=1});
-   var rows=R.map(function(r,i){return{season:season,team_id:r.team_id,rank:i+1,played:r.played||0,won:r.won||0,drawn:r.drawn||0,lost:r.lost||0,gf:r.gf||0,ga:r.ga||0,points:pts(r)}});
+  var rows=R.map(function(r,i){return{
+  season:season,
+  group_name:"ΣΤ΄ Όμιλος",
+  team_id:r.team_id,
+  rank:i+1,
+  played:r.played||0,
+  won:r.won||0,
+  drawn:r.drawn||0,
+  lost:r.lost||0,
+  gf:r.gf||0,
+  ga:r.ga||0,
+  points:pts(r)
+}});
    await q(sb.from("standings").delete().eq("season",season));if(rows.length)await q(sb.from("standings").insert(rows));window._ssn=season;toast("Η βαθμολογία αποθηκεύτηκε και ανανεώνεται στο site");V.standings()})}};
 
 /* ---- εμφάνιση: προεπισκόπηση δίπλα, πατάς πάνω στο site για να αλλάξεις το στοιχείο, πολλές επιλογές σε πτυσσόμενες ομάδες ---- */
