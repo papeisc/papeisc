@@ -154,7 +154,7 @@ function applyDesign(s){
 /* Φόρτωση: άμεσα από τη μνήμη του browser (χωρίς αναβοσβήσιμο), μετά ό,τι δημοσιεύτηκε στη βάση */
 (function(){
  var pv=/[?&]preview=1/.test(location.search);
- if(pv){document.documentElement.classList.add("pv");
+ if(pv){if(window.__pvInit)return;window.__pvInit=1;document.documentElement.classList.add("pv");
   window.addEventListener("message",function(e){if(e.origin!==location.origin||!e.data)return;
    if(e.data.type==="papei-design")applyDesign(e.data.settings);
    if(e.data.type==="papei-scroll"){var el=document.getElementById(e.data.id)||document.querySelector("[data-t=\""+e.data.id+"\"]");if(el)el.scrollIntoView({behavior:"smooth",block:"center"})}});

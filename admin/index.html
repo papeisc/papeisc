@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=10">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=11">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
@@ -47,7 +47,7 @@ details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
 </style></head><body>
 <div class="a"><h1>PAPEI SC · Διαχείριση</h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js?v=10"></script><script src="../data/data.js?v=10"></script><script src="../js/logos.js?v=10"></script><script src="../js/design.js?v=10"></script>
+<script src="../js/config.js?v=11"></script><script src="../data/data.js?v=11"></script><script src="../js/logos.js?v=11"></script><script src="../js/design.js?v=11"></script>
 <script>
 var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -172,12 +172,7 @@ V.standings=async function(){
    '</tbody></table></div><p><button class="btn2" id="ad">+ Ομάδα</button> <button class="btn2" id="so">Ταξινόμηση (βαθμοί, διαφορά, γκολ)</button></p></div>'+
    '<div class="stk"><button class="btn2 pri" id="sv">Αποθήκευση βαθμολογίας</button><span class="pill">Οι βαθμοί υπολογίζονται: 3 ανά νίκη, 1 ανά ισοπαλία</span></div>'}
  draw();
- $("pg").onchange=function(e){var t=e.target;
-  if(t.dataset.tf&&t.files[0])return run(async function(){var f=t.files[0];if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";var q=t.dataset.tf.split(":"),b=D.team.blocks[+q[0]],path=await up("site-media",b.type==="logos"?await shrink(f,800,true):await shrink(f,1400));
-   if(q.length>1)b.items[+q[1]].img=path;else b.image=path;keep(ctl);push();say("");toast("Η φωτογραφία ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")});
-  if(t.dataset.tfm&&t.files.length)return run(async function(){var b=D.team.blocks[+t.dataset.tfm],fs=[].slice.call(t.files).slice(0,Math.max(0,48-b.items.length));
-   for(var i=0;i<fs.length;i++){if(!/^image\//.test(fs[i].type))continue;toast("Ανεβαίνει "+(i+1)+" από "+fs.length+"…");var path=await up("site-media",b.type==="logos"?await shrink(fs[i],800,true):await shrink(fs[i],1400));b.items.push({name:"",role:"",img:path,url:""})}
-   keep(ctl);push();say("");toast("Ανέβηκαν "+fs.length+" φωτογραφίες. Γράψε τώρα τα ονόματα.")});if(t.id==="ss"){season=t.value.trim();window._ssn=season;V.standings();return}};
+ $("pg").onchange=function(e){var t=e.target;if(t.id==="ss"){season=t.value.trim();window._ssn=season;V.standings();return}};
  $("pg").oninput=function(e){var t=e.target,i=t.dataset.i;if(i==null)return;var k=t.dataset.k;R[+i][k]=k==="team_id"?t.value:(t.value===""?null:+t.value);if(k!=="team_id"){var c=t.closest("tr").querySelector(".p");c.textContent=pts(R[+i])}};
  $("pg").onclick=function(e){var t=e.target;
   if(t.dataset.x!=null){R.splice(+t.dataset.x,1);draw();return}
@@ -202,6 +197,9 @@ V.design=async function(){
  function ac(g,title,sub,body){return'<details class="ac" data-g="'+g+'"'+(OPEN[g]?" open":"")+'><summary>'+title+(sub?'<small>'+sub+'</small>':'')+'</summary><div class="in2">'+body+'</div></details>'}
  function cpick(t){return'<div class="box"><b>'+(t==="light"?"Φωτεινό θέμα":"Σκούρο θέμα")+"</b>"+CL.map(function(c){return'<div class="cr"><span>'+c[1]+'</span><span><code>'+D.colors[t][c[0]]+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+D.colors[t][c[0]]+'"></span></div>'}).join("")+"</div>"}
 function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedia(p))+'" alt="">':'<span class="th"></span>'}
+ function probe(path){return new Promise(function(res){var im=new Image();im.onload=function(){res(true)};im.onerror=function(){res(false)};im.src=dmedia(path)+"?t="+Date.now()})}
+ function nopub(path){return"Η φωτογραφία ανέβηκε στο Supabase αλλά ΔΕΝ φορτώνει δημόσια από τη διεύθυνση "+dmedia(path)+" . Πιθανή αιτία: το bucket «site-media» δεν είναι Public. Λύση: Supabase → Storage → site-media → ⋯ → Edit bucket → ενεργοποίησε το «Public bucket» → Save. Μετά ανέβασε ξανά τη φωτογραφία."}
+ function nimg(o){return(JSON.stringify(o).match(/"(img|image|hero_bg|hero_logo|header_logo)":"[^"]+"/g)||[]).length}
  function keep(fn){var y=window.scrollY;fn();window.scrollTo(0,y)}
  function tblock(b,bi){var n=D.team.blocks.length,h='<div class="box tmb" data-tmb="'+bi+'"><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><b style="flex:1;min-width:160px">'+(bi+1)+'. '+TEAM_TYPES[b.type]+'</b><button class="btn2" data-ta="bup:'+bi+'"'+(bi?'':' disabled')+' aria-label="Πάνω">▲</button><button class="btn2" data-ta="bdn:'+bi+'"'+(bi<n-1?'':' disabled')+' aria-label="Κάτω">▼</button><button class="btn2" data-ta="bdel:'+bi+'">Διαγραφή</button></div>'+
   '<label>Μικρός τίτλος (πάνω από τον τίτλο, προαιρετικό)<input data-tb="'+bi+':eyebrow" maxlength="80" value="'+esc(b.eyebrow)+'"></label><label>Τίτλος<input data-tb="'+bi+':title" maxlength="120" value="'+esc(b.title)+'"></label>';
@@ -282,9 +280,15 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   else if(t.dataset.lk){k=t.dataset.lk;D.look[k]=t.type==="checkbox"?t.checked:STRK.indexOf(k)>=0?t.value:+t.value;if(k==="radius")$("rv").textContent=t.value;if(k==="hero_overlay")$("ov").textContent=t.value;if(k==="anim_speed")$("av").textContent=t.value}
   else if(t.classList.contains("ck2"))D.sections[+t.dataset.i].on=t.checked;
   else return;push()};
- $("pg").onchange=function(e){var t=e.target;if(t.dataset.im&&t.files[0])run(async function(){var f=t.files[0],m=DESIGN_IMAGES.filter(function(x){return x[0]===t.dataset.im})[0];
+ $("pg").onchange=function(e){var t=e.target;
+  if(t.dataset.tf&&t.files[0])return run(async function(){var f=t.files[0];if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";var q=t.dataset.tf.split(":"),b=D.team.blocks[+q[0]],path=await up("site-media",b.type==="logos"?await shrink(f,800,true):await shrink(f,1400));
+   if(q.length>1)b.items[+q[1]].img=path;else b.image=path;keep(ctl);push();if(await probe(path)){say("");toast("Η φωτογραφία ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")}else say(nopub(path),1)});
+  if(t.dataset.tfm&&t.files.length)return run(async function(){var b=D.team.blocks[+t.dataset.tfm],fs=[].slice.call(t.files).slice(0,Math.max(0,48-b.items.length));
+   for(var i=0;i<fs.length;i++){if(!/^image\//.test(fs[i].type))continue;toast("Ανεβαίνει "+(i+1)+" από "+fs.length+"…");var path=await up("site-media",b.type==="logos"?await shrink(fs[i],800,true):await shrink(fs[i],1400));b.items.push({name:"",role:"",img:path,url:""})}
+   keep(ctl);push();var last=b.items.length?b.items[b.items.length-1].img:"";if(last&&!(await probe(last)))say(nopub(last),1);else{say("");toast("Ανέβηκαν "+fs.length+" φωτογραφίες. Γράψε τώρα τα ονόματα.")}});
+  if(t.dataset.im&&t.files[0])run(async function(){var f=t.files[0],m=DESIGN_IMAGES.filter(function(x){return x[0]===t.dataset.im})[0];
   if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";
-  D.images[m[0]]=await up("site-media",m[3]?(f.type==="image/svg+xml"?f:await shrink(f,1200,true)):await shrink(f,2000));ctl();push();say("");toast("Η εικόνα ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")})};
+  D.images[m[0]]=await up("site-media",m[3]?(f.type==="image/svg+xml"?f:await shrink(f,1200,true)):await shrink(f,2000));ctl();push();if(await probe(D.images[m[0]])){say("");toast("Η εικόνα ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")}else say(nopub(D.images[m[0]]),1)})};
  $("pg").onclick=function(e){var t=e.target,i;
   if(t.dataset.ta){teamAct(t.dataset.ta);return}
   if(t.dataset.pr!=null){var p=DESIGN_PRESETS[+t.dataset.pr];["light","dark"].forEach(function(m){D.colors[m].navy=p.c[m].navy;D.colors[m].acc=p.c[m].acc});ctl();push();return}
@@ -295,7 +299,12 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   if(t.dataset.ir){D.images[t.dataset.ir]="";ctl();push();return}
   if(t.id==="vw"){mobile=!mobile;t.textContent=mobile?"Υπολογιστής":"Κινητό";$("pv").style.maxWidth=mobile?"390px":"100%";return}
   if(t.id==="sd2")run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,updated_at:new Date().toISOString()},{onConflict:"key"}));saved=designClean(D);push();toast("Το πρόχειρο αποθηκεύτηκε (δεν φαίνεται ακόμα στο site)")});
-  if(t.id==="pb"&&confirm("Δημοσίευση αλλαγών στο site;"))run(async function(){await q(sb.from("site_settings").upsert({key:"design",draft:D,published:D,updated_at:new Date().toISOString()},{onConflict:"key"}));pub=designClean(D);saved=designClean(D);push();toast("Δημοσιεύτηκε! Οι επισκέπτες το βλέπουν σε λίγα δευτερόλεπτα, χωρίς refresh.")});
+  if(t.id==="pb"&&confirm("Δημοσίευση αλλαγών στο site;"))run(async function(){var clean=designClean(D);await q(sb.from("site_settings").upsert({key:"design",draft:clean,published:clean,updated_at:new Date().toISOString()},{onConflict:"key"}));
+   /* έλεγχος: ξαναδιαβάζουμε από τη βάση ό,τι δημοσιεύτηκε */
+   var back=(await q(sb.from("site_settings").select("published").eq("key","design")))[0],bp=back&&back.published?designClean(back.published):null;
+   pub=designClean(D);saved=designClean(D);push();
+   if(!bp||nimg(bp)!==nimg(clean)){say("Προσοχή: η δημοσίευση έγινε, αλλά στη βάση αποθηκεύτηκαν "+(bp?nimg(bp):0)+" από "+nimg(clean)+" φωτογραφίες. Στείλε μου αυτό το μήνυμα.",1);return}
+   say("");toast("Δημοσιεύτηκε και επαληθεύτηκε ("+nimg(bp)+" φωτογραφίες). Οι επισκέπτες το βλέπουν σε λίγα δευτερόλεπτα, χωρίς refresh.")});
   if(t.id==="dc"&&confirm("Να χαθούν οι αλλαγές του πρόχειρου και να γυρίσεις σε ό,τι είναι δημοσιευμένο;")){D=designClean(pub);ctl();push()}
   if(t.id==="rs"&&confirm("Επαναφορά στις αρχικές ρυθμίσεις; Δεν αλλάζει το site μέχρι να δημοσιεύσεις.")){D=designClean(null);ctl();push()}}};
 
