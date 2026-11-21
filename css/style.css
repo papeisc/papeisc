@@ -282,3 +282,103 @@ a.tm-logo:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(11,27,54,.
 .tm-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
 @media (max-width:760px){.tm-intro.tm-l-right,.tm-intro.tm-l-left{grid-template-columns:1fr}.tm-intro.tm-l-left .tm-img{order:-1}.tm-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
 html.pv .tm-b:hover,html.pv .tm-c:hover,html.pv .tm-logo:hover{outline:2px dashed var(--acc);outline-offset:4px;cursor:pointer}
+
+/* ===== v14: προσαρμογές εμφάνισης (από το admin) και κινητό ===== */
+:root{--hh:56px;--hl:28px;--fs:15px;--h2s:24px;--cb:1px;--tl:26px;--fh:var(--f)}
+html[data-fs="s"]{--fs:14px}html[data-fs="l"]{--fs:16.5px}html[data-fs="xl"]{--fs:18px}
+html[data-h2s="s"]{--h2s:20px}html[data-h2s="l"]{--h2s:30px}html[data-h2s="xl"]{--h2s:38px}
+body{font-size:var(--fs)}
+h1,h2,.nx .tm,.logo,.kpi b,.cd b{font-family:var(--fh)}
+h2{font-size:var(--h2s)}
+html[data-h_case="upper"] :is(h1,h2){text-transform:uppercase;letter-spacing:.02em}
+html[data-eb="wide"] .eb{letter-spacing:.28em}html[data-eb="hide"] .eb{display:none}
+
+/* μπάρα πάνω */
+.top{background:var(--hdr,var(--bg))}
+.top .wrap{height:var(--hh)}.logo img{height:var(--hl)}
+html[data-h_style="glass"] .top{background:color-mix(in srgb,var(--hdr,var(--bg)) 70%,transparent);-webkit-backdrop-filter:saturate(1.5) blur(14px);backdrop-filter:saturate(1.5) blur(14px)}
+html[data-h_style="clear"] .top{border-bottom-color:transparent}
+html[data-h_sticky="0"] .top{position:relative}
+html[data-nav="pills"] .top nav a{padding:6px 13px;border-radius:99px}
+html[data-nav="pills"] .top nav a.on{background:var(--navy);color:#fff}
+html[data-nav="pills"] .top nav a::after,html[data-nav="text"] .top nav a::after{display:none}
+html[data-nav="text"] .top nav a.on{color:var(--acc)}
+
+/* κεφαλίδα σελίδας */
+.hero{background:var(--hero1,var(--navy));position:relative;overflow:hidden}
+.hero .wrap{position:relative}
+html[data-hero_mode="gradient"] .hero{background:linear-gradient(var(--hang,135deg),var(--hero1,var(--navy)),var(--hero2,color-mix(in srgb,var(--navy) 50%,#000)))}
+html[data-hero_pat="dots"] .hero::before,html[data-hero_pat="grid"] .hero::before,html[data-hero_pat="diag"] .hero::before{content:"";position:absolute;inset:0;pointer-events:none}
+html[data-hero_pat="dots"] .hero::before{background-image:radial-gradient(rgba(255,255,255,.18) 1.3px,transparent 1.5px);background-size:20px 20px}
+html[data-hero_pat="grid"] .hero::before{background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);background-size:36px 36px}
+html[data-hero_pat="diag"] .hero::before{background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2px,transparent 2px 16px)}
+html[data-hero_t="l"] .hero h1{font-size:clamp(40px,9vw,72px)}html[data-hero_t="xl"] .hero h1{font-size:clamp(46px,12vw,96px);line-height:.98}
+html[data-hero_logo="hide"] .hero img{display:none}
+.hbtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.hbtns[hidden]{display:none}
+.hbtns a{display:inline-block;padding:11px 22px;border-radius:calc(var(--r,6px)*1.2);font-weight:700;text-decoration:none;font-size:14.5px;transition:transform .2s,background .2s}
+.hbtns .b1{background:#fff;color:#0b1b36}.hbtns .b2{border:1.5px solid rgba(255,255,255,.7);color:#fff}
+.hbtns a:hover{transform:translateY(-2px)}
+html[data-btn="pill"] .hbtns a{border-radius:99px}
+
+/* ενότητες, κάρτες, κουμπιά */
+html[data-sec_bg="alt"] section.alt{background:var(--soft);box-shadow:0 0 0 100vmax var(--soft);clip-path:inset(0 -100vmax);padding-bottom:44px;margin-top:44px}
+html[data-sec_bg="alt"] section.alt+section{padding-top:56px}
+html[data-sec_head="bar"] :is(section>h2,.tm-b>h2)::before{content:"";display:inline-block;width:5px;height:.85em;background:var(--acc);margin-right:10px;border-radius:2px;vertical-align:-.08em}
+html[data-sec_head="under"] :is(section>h2,.tm-b>h2)::after{content:"";display:block;width:52px;height:3px;background:var(--acc);margin-top:10px;border-radius:2px}
+:is(.nx,.stbox,.mc,.mcd,.kpi,.sx>div,.gw,.lc,.tm-logo,.links a,.scard){border-width:var(--cb,1px)}
+:is(.nx,.mc,.mcd,.kpi,.sx>div,.gw,.lc,.stbox){background-color:var(--card,transparent)}
+html[data-card_hover="lift"] :is(.nx,.mc,.kpi,.sx>div,.gw,.lc,.pl .ph,.tm-c .tm-ph,.links a){transition:transform .22s,box-shadow .22s}
+html[data-card_hover="lift"] :is(.nx,.mc,.kpi,.sx>div,.gw,.lc,.links a):hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(11,27,54,.16)}
+html[data-card_hover="lift"] :is(.pl,.tm-c):hover :is(.ph,.tm-ph){transform:translateY(-4px);box-shadow:0 14px 30px rgba(11,27,54,.18)}
+html[data-btn="solid"] .btn{background:var(--navy);color:#fff}
+html[data-btn="pill"] :is(.btn,.tabs button,.tg,.links a){border-radius:99px}
+
+/* πίνακας */
+.sl{width:var(--tl);height:var(--tl)}.tb{width:calc(var(--tl)*.95);height:calc(var(--tl)*.95)}
+tr.me .sl{width:calc(var(--tl)*1.5);height:calc(var(--tl)*1.5)}
+html[data-tbl_stripe="1"] tbody tr:nth-child(even):not(.me) td{background:var(--soft)}
+html[data-tbl_head="navy"] th{background:var(--navy);color:#fff}
+
+/* κινητό: πάντα ενεργά */
+@media (max-width:640px){
+ .wrap{padding:0 16px}
+ section{padding-top:38px}
+ .top .wrap{gap:10px}
+ table{min-width:0!important;font-size:13px}
+ th,td{padding:10px 5px}
+ th:nth-child(1),td:nth-child(1){width:26px;padding-left:10px}
+ td:nth-child(2){max-width:0;width:38%}
+ .stn{gap:8px}.stn span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .hero .wrap{flex-direction:column;align-items:flex-start;gap:14px}
+ .hero img{width:64px}
+ .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi b{font-size:26px}
+ html[data-m_kpi="1"] .kpis{grid-template-columns:1fr}
+ .ros{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}
+ html[data-m_roster="3"] .ros{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px}
+ html[data-m_roster="3"] .pl .ps{font-size:11px}
+ html[data-m_hero="compact"] .hero{padding:20px 0}html[data-m_hero="compact"] .hero p{display:none}
+ .tm-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tm-lg{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .mcs{margin-inline:-16px;padding-inline:16px}
+ .tabs button,.tg{padding:8px 14px}
+ .nx{padding:22px 12px}
+ .sx{grid-template-columns:1fr}
+ .menu,.tgl{width:40px;height:40px}
+ /* μενού κινητού: οριζόντια μπάρα */
+ html[data-m_nav="chips"] .menu{display:none}
+ html[data-m_nav="chips"] .top .wrap{flex-wrap:wrap;height:auto;padding-top:8px;padding-bottom:0}
+ html[data-m_nav="chips"] .top nav{display:flex;position:static;order:3;width:100%;flex-direction:row;gap:8px;overflow-x:auto;padding:4px 0 10px;border:0;background:transparent;scrollbar-width:none}
+ html[data-m_nav="chips"] .top nav::-webkit-scrollbar{display:none}
+ html[data-m_nav="chips"] .top nav a{flex:none;padding:7px 14px;border-radius:99px;border:1px solid var(--line);font-size:13px;white-space:nowrap}
+ html[data-m_nav="chips"] .top nav a.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+ /* μενού κινητού: κάτω μπάρα σαν εφαρμογή */
+ html[data-m_nav="bottom"] .top{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+ html[data-m_nav="bottom"] .menu{display:none}
+ html[data-m_nav="bottom"] body{padding-bottom:calc(66px + env(safe-area-inset-bottom,0px))}
+ html[data-m_nav="bottom"] .top nav{display:flex;position:fixed;inset:auto 0 0 0;z-index:40;flex-direction:row;justify-content:space-around;gap:0;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--hdr,var(--bg)) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:0}
+ html[data-m_nav="bottom"] .top nav a{flex:1 1 0;min-width:0;padding:9px 2px;font-size:10.5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:10px}
+ html[data-m_nav="bottom"] .top nav a.on{color:var(--acc);background:var(--soft)}
+ html[data-m_nav="bottom"] .top nav a::after{display:none}
+}
+
+.top nav a .ns{display:none}
+@media (max-width:640px){html[data-m_nav="bottom"] .top nav a .nl{display:none}html[data-m_nav="bottom"] .top nav a .ns{display:inline}}

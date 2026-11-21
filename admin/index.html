@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="el"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PAPEI SC · Admin</title><meta name="robots" content="noindex">
-<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=12">
+<link rel="icon" href="../favicon.ico"><link rel="stylesheet" href="../css/style.css?v=14">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("theme")==="dark"?"dark":"light"}catch(e){}</script>
 <style>
 body{padding:0 0 60px}.a{max-width:1240px;margin:0 auto;padding:16px 18px}
@@ -46,9 +46,9 @@ details.ac>.in2{padding:0 14px 14px}.in2 .box{margin:10px 0 0}
 .ti{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid var(--line)}.ti .f{display:grid;gap:6px;min-width:0}.ti .f input{margin:0!important}.ti .ab{display:flex;gap:6px;flex-wrap:wrap}.ti .th{width:52px;height:64px}.tmb textarea{min-height:150px}
 .pw{width:100%;min-height:130px;font-family:ui-monospace,monospace;font-size:13px!important}
 </style></head><body>
-<div class="a"><h1>PAPEI SC · Διαχείριση <small style="font-size:12px;font-weight:500;color:var(--mute);margin-left:8px">έκδοση 13</small></h1><div id="msg"></div><div id="app"></div></div>
+<div class="a"><h1>PAPEI SC · Διαχείριση <small style="font-size:12px;font-weight:500;color:var(--mute);margin-left:8px">έκδοση 14</small></h1><div id="msg"></div><div id="app"></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="../js/config.js?v=12"></script><script src="../data/data.js?v=12"></script><script src="../js/logos.js?v=12"></script><script src="../js/design.js?v=12"></script>
+<script src="../js/config.js?v=14"></script><script src="../data/data.js?v=14"></script><script src="../js/logos.js?v=14"></script><script src="../js/design.js?v=14"></script>
 <script>
 var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY),$=function(i){return document.getElementById(i)},tab="players";
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
@@ -184,31 +184,19 @@ V.standings=async function(){
    if(out.length)R=out;draw();say(out.length?("Αναγνώστηκαν "+out.length+" ομάδες."+(bad.length?" Δεν αναγνωρίστηκαν: "+bad.join(" | "):"")):"Δεν αναγνωρίστηκε καμία γραμμή. Έλεγξε τη μορφή και τα ονόματα των ομάδων.",!out.length||bad.length);return}
   if(t.id==="sv")run(async function(){season=$("ss").value.trim();if(!season)throw"Βάλε σεζόν";
    var ids={};R.forEach(function(r,i){if(!r.team_id)throw"Η γραμμή "+(i+1)+" δεν έχει ομάδα";if(ids[r.team_id])throw"Η ίδια ομάδα υπάρχει δύο φορές (γραμμή "+(i+1)+")";ids[r.team_id]=1});
-   var rows=R.map(function(r,i){return{
-  season:season,
-  group_name:"ΣΤ΄ Όμιλος",
-  team_id:r.team_id,
-  rank:i+1,
-  played:r.played||0,
-  won:r.won||0,
-  drawn:r.drawn||0,
-  lost:r.lost||0,
-  gf:r.gf||0,
-  ga:r.ga||0,
-  points:pts(r)
-}});
+   var rows=R.map(function(r,i){return{season:season,team_id:r.team_id,rank:i+1,played:r.played||0,won:r.won||0,drawn:r.drawn||0,lost:r.lost||0,gf:r.gf||0,ga:r.ga||0,points:pts(r)}});
    await q(sb.from("standings").delete().eq("season",season));if(rows.length)await q(sb.from("standings").insert(rows));window._ssn=season;toast("Η βαθμολογία αποθηκεύτηκε και ανανεώνεται στο site");V.standings()})}};
 
 /* ---- εμφάνιση: προεπισκόπηση δίπλα, πατάς πάνω στο site για να αλλάξεις το στοιχείο, πολλές επιλογές σε πτυσσόμενες ομάδες ---- */
 V.design=async function(){
  var row=(await q(sb.from("site_settings").select("*").eq("key","design")))[0]||{},
-  pub=designClean(row.published),saved=designClean(row.draft||row.published),D=designClean(row.draft||row.published),mobile=false,OPEN=window._dopen||{presets:1},
+  pub=designClean(row.published),saved=designClean(row.draft||row.published),D=designClean(row.draft||row.published),mobile=false,OPEN=window._dopen||{looks:1},UNDO=null,
   J=JSON.stringify,CL=[["navy","Χρώμα ομάδας (κεφαλίδα, κουμπιά)"],["acc","Χρώμα συνδέσμων"],["bg","Φόντο"],["ink","Κείμενο"]],
   STRK=["anim_style","hero_align","hero_size","density","card","roster","photo"];
  function sel(k,label){return'<label>'+label+'<select data-lk="'+k+'">'+opts(DESIGN_OPTS[k],D.look[k])+'</select></label>'}
  function chk(attr,label,on){return'<label class="ck"><input type="checkbox" '+attr+(on?" checked":"")+'> '+label+'</label>'}
  function ac(g,title,sub,body){return'<details class="ac" data-g="'+g+'"'+(OPEN[g]?" open":"")+'><summary>'+title+(sub?'<small>'+sub+'</small>':'')+'</summary><div class="in2">'+body+'</div></details>'}
- function cpick(t){return'<div class="box"><b>'+(t==="light"?"Φωτεινό θέμα":"Σκούρο θέμα")+"</b>"+CL.map(function(c){return'<div class="cr"><span>'+c[1]+'</span><span><code>'+D.colors[t][c[0]]+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+D.colors[t][c[0]]+'"></span></div>'}).join("")+"</div>"}
+ function cpick(t){return'<div class="box"><b>'+(t==="light"?"Φωτεινό θέμα":"Σκούρο θέμα")+"</b>"+CL.map(function(c){return'<div class="cr"><span>'+c[1]+'</span><span><code>'+D.colors[t][c[0]]+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+D.colors[t][c[0]]+'"></span></div>'}).join("")+DESIGN_COLORS_OPT.map(function(c){var v=D.colors[t][c[0]];return'<div class="cr"><span>'+c[1]+'</span><span><code>'+(v||"προεπιλογή")+'</code><input type="color" data-c="'+t+"."+c[0]+'" value="'+(v||"#888888")+'"><button class="btn2" data-cc="'+t+"."+c[0]+'" aria-label="Επαναφορά στην προεπιλογή">↺</button></span></div>'}).join("")+"</div>"}
 function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedia(p))+'" alt="">':'<span class="th"></span>'}
  function probe(path){return new Promise(function(res){var im=new Image();im.onload=function(){res(true)};im.onerror=function(){res(false)};im.src=dmedia(path)+"?t="+Date.now()})}
  function nopub(path){return"Η φωτογραφία ανέβηκε στο Supabase αλλά ΔΕΝ φορτώνει δημόσια από τη διεύθυνση "+dmedia(path)+" . Πιθανή αιτία: το bucket «site-media» δεν είναι Public. Λύση: Supabase → Storage → site-media → ⋯ → Edit bucket → ενεργοποίησε το «Public bucket» → Save. Μετά ανέβασε ξανά τη φωτογραφία."}
@@ -243,6 +231,17 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   else if(k==="idel")b.items.splice(ii,1);else if(k==="rmi")b.items[ii].img="";
   else return;
   keep(ctl);push()}
+ function fld(f){var v=D.s[f.k];
+  if(f.t==="select")return'<label>'+f.l+'<select data-o="'+f.k+'">'+opts(f.o,v)+'</select></label>';
+  if(f.t==="fontsel")return'<label>'+f.l+'<select data-o="'+f.k+'">'+opts([["same","Ίδια με το κείμενο"]].concat(Object.keys(DESIGN_FONTS).map(function(k){return[k,DESIGN_FONTS[k].n]})),v)+'</select></label>';
+  if(f.t==="range")return'<label>'+f.l+': <b data-ov="'+f.k+'">'+v+'</b>'+f.u+'<input type="range" min="'+f.min+'" max="'+f.max+'" step="'+f.step+'" data-o="'+f.k+'" value="'+v+'"></label>';
+  if(f.t==="check")return chk('data-o="'+f.k+'"',f.l,v);
+  if(f.t==="area")return'<p class="hint">Για προχωρημένους: το CSS που γράφεις εφαρμόζεται πάνω από όλα τα άλλα. Δεν επιτρέπονται @import και εξωτερικές εικόνες που δεν είναι https.</p><label>'+f.l+'<textarea data-o="'+f.k+'" rows="9" spellcheck="false" maxlength="4000" style="font-family:ui-monospace,monospace">'+esc(v)+'</textarea></label>';
+  return'<label>'+f.l+'<input data-o="'+f.k+'" maxlength="'+(f.t==="url"?300:40)+'" value="'+esc(v)+'"></label>'}
+ function fgroup(g){return DESIGN_FIELDS.filter(function(f){return f.g===g}).map(fld).join("")}
+ function looksHtml(){return'<div class="pr">'+DESIGN_LOOKS.map(function(l,i){return'<button data-lk2="'+i+'"><b>'+l.n+'</b><br><small style="color:var(--mute)">'+l.d+'</small></button>'}).join("")+'</div><p class="hint">Ένα στυλ αλλάζει χρώματα, γραμματοσειρές και διάταξη μαζί. Δεν πειράζει τα κείμενά σου, τις εικόνες, την ομάδα και την ανακοίνωση. Μετά μπορείς να ρυθμίσεις ό,τι θέλεις στις ομάδες παρακάτω. Αν δεν σου αρέσει, πάτα «Αναίρεση» στη μπάρα κάτω ή «Απόρριψη πρόχειρου».</p>'}
+ function merge(t,s){Object.keys(s).forEach(function(k){if(s[k]&&typeof s[k]==="object"&&!Array.isArray(s[k])){if(!t[k]||typeof t[k]!=="object")t[k]={};merge(t[k],s[k])}else t[k]=s[k]})}
+ function applyLook(i){UNDO=JSON.parse(JSON.stringify(D));var N=designClean(null),keep={texts:D.texts,images:D.images,links:D.links,sections:D.sections,team:D.team,announce:D.announce,stats:D.stats};merge(N,DESIGN_LOOKS[i].v);Object.keys(keep).forEach(function(k){N[k]=keep[k]});D=designClean(N);ctl();push();toast("Εφαρμόστηκε το στυλ «"+DESIGN_LOOKS[i].n+"». Αν δεν σου αρέσει, πάτα Αναίρεση.")}
  function secs(){return D.sections.map(function(x,i){return'<div class="sr" data-sec="'+x.id+'"><input type="checkbox" class="ck2" data-i="'+i+'"'+(x.on?" checked":"")+' aria-label="Εμφάνιση"><span>'+DESIGN_SECTIONS[x.id]+'</span><button class="btn2" data-u="'+i+'"'+(i?"":" disabled")+' aria-label="Πάνω">▲</button><button class="btn2" data-dn="'+i+'"'+(i<D.sections.length-1?"":" disabled")+' aria-label="Κάτω">▼</button></div>'}).join("")}
  function lks(){return D.links.map(function(l,i){return'<div class="sr"><input data-lt="'+i+'" value="'+esc(l.t)+'" placeholder="Κείμενο" aria-label="Κείμενο"><input data-lu="'+i+'" value="'+esc(l.u)+'" placeholder="https://..." aria-label="Διεύθυνση"><button class="btn2" data-ld="'+i+'" aria-label="Διαγραφή">✕</button></div>'}).join("")}
  function imgs(){return DESIGN_IMAGES.map(function(m){var v=D.images[m[0]];return'<div class="box" data-img="'+m[0]+'"><b>'+m[1]+"</b>"+(v?'<p><img src="'+esc(dmedia(v))+'" alt="" style="max-height:80px;max-width:100%;background:#8884"></p>':'<p class="hint">Τωρινή: προεπιλογή</p>')+'<input type="file" accept="image/*" data-im="'+m[0]+'">'+(v?'<p><button class="btn2" data-ir="'+m[0]+'">Επαναφορά προεπιλογής</button></p>':"")+(m[0]==="hero_bg"?'<label>Σκουρότητα πάνω από τη φωτογραφία: <span id="ov">'+D.look.hero_overlay+'</span>%<input type="range" min="0" max="90" step="5" data-lk="hero_overlay" value="'+D.look.hero_overlay+'"></label>':"")+"</div>"}).join("")}
@@ -250,6 +249,7 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
  function push(){var f=$("pv");if(f&&f.contentWindow)f.contentWindow.postMessage({type:"papei-design",settings:D},location.origin);$("st").innerHTML=status();window.onbeforeunload=J(D)!==J(saved)?function(){return"Έχεις μη αποθηκευμένες αλλαγές"}:null}
  function ctl(){
   $("ctl").innerHTML=
+  ac("looks","Έτοιμα στυλ όλου του site","1 κλικ, αλλάζει όλη την εμφάνιση",looksHtml())+
   ac("presets","Έτοιμα θέματα χρωμάτων","ένα κλικ",'<div class="pr">'+DESIGN_PRESETS.map(function(p,i){return'<button data-pr="'+i+'"><i style="background:'+p.c.light.navy+'"></i>'+p.n+'</button>'}).join("")+'</div><p class="hint">Αλλάζει τα χρώματα ομάδας και συνδέσμων. Μπορείς μετά να τα ρυθμίσεις μόνος σου στα «Χρώματα».</p>')+
   ac("team","Η ομάδα μας","κείμενο, φωτογραφίες, επιτελείο, χορηγοί",teamEd())+
   ac("ann","Ανακοίνωση πάνω-πάνω","μπάρα με μήνυμα",chk('data-an="on"',"Εμφάνιση ανακοίνωσης",D.announce.on)+'<label>Κείμενο<input data-an="text" maxlength="200" value="'+esc(D.announce.text)+'" placeholder="π.χ. Ο επόμενος αγώνας μεταφέρθηκε στις 20:30"></label><label>Σύνδεσμος (προαιρετικό)<input data-an="url" value="'+esc(D.announce.url)+'" placeholder="https://..."></label><label>Χρώμα<select data-an="tone">'+opts(DESIGN_OPTS.tone,D.announce.tone)+'</select></label>')+
@@ -258,6 +258,7 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
    '<label>Στρογγυλότητα γωνιών: <span id="rv">'+D.look.radius+'</span>px<input type="range" min="0" max="24" step="1" data-lk="radius" value="'+D.look.radius+'"></label>'+
    '<label>Πλάτος περιεχομένου<select data-lk="wrap">'+opts([[840,"Στενό"],[960,"Κανονικό"],[1100,"Πλατύ"]],D.look.wrap)+'</select></label>'+sel("density","Κενά ανάμεσα στις ενότητες")+sel("card","Στυλ καρτών")+sel("roster","Μέγεθος καρτών στο ρόστερ")+sel("photo","Σχήμα φωτογραφιών παικτών")+
    "")+
+  ["hdr","hero","type","cards","tbl","mob","adv"].map(function(g){return ac("g_"+g,DESIGN_GROUPS[g][0],DESIGN_GROUPS[g][1],fgroup(g))}).join("")+
   ac("anim","Animations στο scroll","",chk('data-lk="anim"',"Animations όταν κάνεις scroll (εμφάνιση ενοτήτων, αριθμοί που μετράνε, μπάρες που γεμίζουν)",D.look.anim)+sel("anim_style","Στυλ εμφάνισης")+'<label>Ταχύτητα: <span id="av">'+D.look.anim_speed+'</span> ms (μικρότερο = πιο γρήγορο)<input type="range" min="250" max="1400" step="50" data-lk="anim_speed" value="'+D.look.anim_speed+'"></label>'+chk('data-lk="progress"',"Λεπτή μπάρα προόδου scroll στην κορυφή",D.look.progress)+'<p class="hint">Σε συσκευές με ενεργή ρύθμιση «μείωση κίνησης» οι animations απενεργοποιούνται αυτόματα.</p>')+
   ac("stats","Στατιστικά: τι εμφανίζεται","",Object.keys(DESIGN_STATS).map(function(k){return chk('data-sk="'+k+'"',DESIGN_STATS[k],D.stats[k])}).join(""))+
   ac("col","Χρώματα","φωτεινό και σκούρο",cpick("light")+cpick("dark"))+
@@ -267,7 +268,7 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   ac("sec","Ενότητες","εμφάνιση και σειρά",'<p class="hint">Το τσεκάρισμα δείχνει ή κρύβει την ενότητα. Τα βέλη αλλάζουν τη σειρά της (και στο μενού).</p><div id="sl">'+secs()+"</div>")}
  function shell(){
   $("pg").innerHTML='<p id="st"></p><div class="dz"><div id="ctl"></div><div class="pvcol"><div class="box"><b>Προεπισκόπηση</b> <small style="color:var(--mute)">πάτα πάνω σε κείμενο, εικόνα ή ενότητα για να την αλλάξεις</small> <button class="btn2" id="vw" style="float:right">Κινητό</button><div style="clear:both;margin-top:10px"><iframe class="pvw" id="pv" title="Προεπισκόπηση" src="../index.html?preview=1" style="max-width:100%"></iframe></div></div></div></div>'+
-   '<div class="stk"><button class="btn2" id="sd2">Αποθήκευση πρόχειρου</button><button class="btn2 pri" id="pb">Δημοσίευση</button><button class="btn2" id="dc">Απόρριψη πρόχειρου</button><button class="btn2" id="rs">Προεπιλογές</button></div>';
+   '<div class="stk"><button class="btn2" id="sd2">Αποθήκευση πρόχειρου</button><button class="btn2 pri" id="pb">Δημοσίευση</button><button class="btn2" id="un">Αναίρεση</button><button class="btn2" id="dc">Απόρριψη πρόχειρου</button><button class="btn2" id="rs">Προεπιλογές</button></div>';
   $("pv").onload=push;ctl();$("st").innerHTML=status()}
  function openG(g){OPEN[g]=1;window._dopen=OPEN;var d=document.querySelector('details[data-g="'+g+'"]');if(d)d.open=true;return d}
  function flash(el){if(!el)return;el.scrollIntoView({behavior:"smooth",block:"center"});el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
@@ -280,6 +281,7 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   else if(m.kind==="section"){if(m.key==="team"){openG("team");flash(document.querySelector('[data-g="team"]'))}else{openG("sec");flash(document.querySelector('[data-sec="'+m.key+'"]'))}}};
  $("ctl").addEventListener("toggle",function(e){var d=e.target;if(d.dataset&&d.dataset.g){OPEN[d.dataset.g]=d.open?1:0;window._dopen=OPEN}},true);
  $("pg").oninput=function(e){var t=e.target,k;
+  if(t.dataset.o){var f=DESIGN_FIELD[t.dataset.o];if(f){D.s[f.k]=f.t==="check"?t.checked:f.t==="range"?+t.value:t.value;var sp=document.querySelector('[data-ov="'+f.k+'"]');if(sp)sp.textContent=t.value}push();return}
   if(t.dataset.tb){var q1=t.dataset.tb.split(":"),b1=D.team.blocks[+q1[0]];if(b1){if(q1[1]==="paras")b1.paras=t.value.split(/\n\s*\n/).map(function(x){return x.trim()}).filter(Boolean);else b1[q1[1]]=t.value}push();return}
   if(t.dataset.ti){var q2=t.dataset.ti.split(":"),b2=D.team.blocks[+q2[0]];if(b2&&b2.items[+q2[1]])b2.items[+q2[1]][q2[2]]=t.value;push();return}
   if(t.id==="tq"){var v=t.value.toLowerCase();[].forEach.call($("tl").children,function(l){l.hidden=v&&l.textContent.toLowerCase().indexOf(v)<0&&(l.querySelector("input").value||"").toLowerCase().indexOf(v)<0});return}
@@ -303,6 +305,9 @@ function thumb(p,sq){return p?'<img class="th'+(sq?' lg':'')+'" src="'+esc(dmedi
   if(!/^image\//.test(f.type))throw"Διάλεξε αρχείο εικόνας";
   D.images[m[0]]=await up("site-media",m[3]?(f.type==="image/svg+xml"?f:await shrink(f,1200,true)):await shrink(f,2000));ctl();push();if(await probe(D.images[m[0]])){say("");toast("Η εικόνα ανέβηκε. Πάτα Δημοσίευση για να φανεί στο site.")}else say(nopub(D.images[m[0]]),1)})};
  $("pg").onclick=function(e){var t=e.target,i;
+  if(t.closest&&t.closest("[data-lk2]")){applyLook(+t.closest("[data-lk2]").dataset.lk2);return}
+  if(t.dataset.cc){var cc=t.dataset.cc.split(".");D.colors[cc[0]][cc[1]]="";keep(ctl);push();return}
+  if(t.id==="un"){if(UNDO){D=designClean(UNDO);UNDO=null;ctl();push()}return}
   if(t.dataset.ta){teamAct(t.dataset.ta);return}
   if(t.dataset.pr!=null){var p=DESIGN_PRESETS[+t.dataset.pr];["light","dark"].forEach(function(m){D.colors[m].navy=p.c[m].navy;D.colors[m].acc=p.c[m].acc});ctl();push();return}
   if(t.dataset.u!=null){i=+t.dataset.u;D.sections.splice(i-1,0,D.sections.splice(i,1)[0]);$("sl").innerHTML=secs();push();return}

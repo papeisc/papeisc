@@ -30,9 +30,67 @@ var DESIGN_FONTS={
  inter:{n:"Inter",css:"Inter,system-ui,-apple-system,\"Segoe UI\",sans-serif",g:"Inter:wght@400;500;700"},
  poppins:{n:"Poppins",css:"Poppins,system-ui,sans-serif",g:"Poppins:wght@400;500;700"},
  montserrat:{n:"Montserrat",css:"Montserrat,system-ui,sans-serif",g:"Montserrat:wght@400;500;700"},
+ oswald:{n:"Oswald (στενή, έντονη)",css:"Oswald,Impact,sans-serif",g:"Oswald:wght@400;500;700"},
+ barlow:{n:"Barlow Condensed (αθλητική)",css:"\"Barlow Condensed\",Impact,sans-serif",g:"Barlow+Condensed:wght@400;500;700"},
+ bebas:{n:"Bebas Neue (κεφαλαία)",css:"\"Bebas Neue\",Impact,sans-serif",g:"Bebas+Neue"},
+ robotocond:{n:"Roboto Condensed",css:"\"Roboto Condensed\",sans-serif",g:"Roboto+Condensed:wght@400;500;700"},
+ dmsans:{n:"DM Sans",css:"\"DM Sans\",system-ui,sans-serif",g:"DM+Sans:wght@400;500;700"},
+ manrope:{n:"Manrope",css:"Manrope,system-ui,sans-serif",g:"Manrope:wght@400;500;700"},
+ spacegrotesk:{n:"Space Grotesk",css:"\"Space Grotesk\",system-ui,sans-serif",g:"Space+Grotesk:wght@400;500;700"},
+ playfair:{n:"Playfair Display (κομψή)",css:"\"Playfair Display\",Georgia,serif",g:"Playfair+Display:wght@400;700"},
  system:{n:"Γραμματοσειρά συσκευής",css:"system-ui,-apple-system,\"Segoe UI\",Roboto,sans-serif"},
  serif:{n:"Georgia (με πατούρες)",css:"Georgia,\"Times New Roman\",serif"}
 };
+var SZ=[["s","Μικρό"],["m","Κανονικό"],["l","Μεγάλο"],["xl","Πολύ μεγάλο"]];
+var DESIGN_GROUPS={hdr:["Μπάρα πάνω και μενού","στυλ, ύψος, λογότυπο"],hero:["Κεφαλίδα σελίδας (hero)","φόντο, σχέδιο, τίτλος, κουμπιά"],type:["Γραμματοσειρές και μεγέθη","τίτλοι, κείμενο, κεφαλαία"],cards:["Ενότητες, κάρτες και κουμπιά","φόντο ενοτήτων, περίγραμμα, κινήσεις"],tbl:["Πίνακας βαθμολογίας","ρίγες, κεφαλίδα, μέγεθος logos"],mob:["Κινητό","μενού, ρόστερ, κεφαλίδα"],adv:["Προχωρημένο: δικό σου CSS","για όσους ξέρουν"]};
+var DESIGN_FIELDS=[
+ {k:"h_style",g:"hdr",t:"select",l:"Στυλ μπάρας πάνω",d:"solid",o:[["solid","Συμπαγής"],["glass","Θολό γυαλί"],["clear","Χωρίς γραμμή από κάτω"]]},
+ {k:"h_height",g:"hdr",t:"range",l:"Ύψος μπάρας",d:56,min:44,max:84,step:2,u:"px",v:"--hh"},
+ {k:"h_logo",g:"hdr",t:"range",l:"Μέγεθος λογοτύπου",d:28,min:18,max:60,step:2,u:"px",v:"--hl"},
+ {k:"h_sticky",g:"hdr",t:"check",l:"Η μπάρα μένει πάνω όταν κάνεις scroll",d:true},
+ {k:"nav",g:"hdr",t:"select",l:"Στυλ μενού",d:"underline",o:[["underline","Υπογράμμιση"],["pills","Κουμπιά"],["text","Απλό κείμενο"]]},
+ {k:"hero_mode",g:"hero",t:"select",l:"Φόντο κεφαλίδας",d:"solid",o:[["solid","Συμπαγές χρώμα"],["gradient","Διαβάθμιση (gradient)"]]},
+ {k:"hero_ang",g:"hero",t:"range",l:"Γωνία διαβάθμισης",d:135,min:0,max:360,step:15,u:"°",v:"--hang",x:"deg"},
+ {k:"hero_pat",g:"hero",t:"select",l:"Σχέδιο πάνω στο φόντο",d:"none",o:[["none","Κανένα"],["dots","Τελείες"],["grid","Πλέγμα"],["diag","Διαγώνιες γραμμές"]]},
+ {k:"hero_t",g:"hero",t:"select",l:"Μέγεθος τίτλου",d:"m",o:[["m","Κανονικό"],["l","Μεγάλο"],["xl","Τεράστιο"]]},
+ {k:"hero_logo",g:"hero",t:"select",l:"Λογότυπο στην κεφαλίδα",d:"show",o:[["show","Εμφάνιση"],["hide","Απόκρυψη"]]},
+ {k:"cta1_t",g:"hero",t:"text",l:"Κουμπί 1: κείμενο (π.χ. Δες το πρόγραμμα)",d:""},
+ {k:"cta1_u",g:"hero",t:"url",l:"Κουμπί 1: σύνδεσμος (https://… ή #table για ενότητα)",d:""},
+ {k:"cta2_t",g:"hero",t:"text",l:"Κουμπί 2: κείμενο",d:""},
+ {k:"cta2_u",g:"hero",t:"url",l:"Κουμπί 2: σύνδεσμος",d:""},
+ {k:"font_head",g:"type",t:"fontsel",l:"Γραμματοσειρά τίτλων",d:"same"},
+ {k:"fs",g:"type",t:"select",l:"Μέγεθος κειμένου",d:"m",o:SZ},
+ {k:"h2s",g:"type",t:"select",l:"Μέγεθος τίτλων ενοτήτων",d:"m",o:SZ},
+ {k:"h_case",g:"type",t:"select",l:"Τίτλοι",d:"normal",o:[["normal","Όπως γράφονται"],["upper","ΚΕΦΑΛΑΙΑ"]]},
+ {k:"eb",g:"type",t:"select",l:"Μικροί τίτλοι πάνω από τους τίτλους",d:"normal",o:[["normal","Κανονικοί"],["wide","Με πλατιά διαστήματα"],["hide","Να κρύβονται"]]},
+ {k:"sec_bg",g:"cards",t:"select",l:"Φόντο ενοτήτων",d:"none",o:[["none","Ίδιο παντού"],["alt","Εναλλάξ απαλό φόντο"]]},
+ {k:"sec_head",g:"cards",t:"select",l:"Διακόσμηση τίτλων ενοτήτων",d:"plain",o:[["plain","Καμία"],["bar","Μπάρα χρώματος μπροστά"],["under","Γραμμή από κάτω"]]},
+ {k:"card_b",g:"cards",t:"range",l:"Πάχος περιγράμματος καρτών",d:1,min:0,max:3,step:0.5,u:"px",v:"--cb"},
+ {k:"card_hover",g:"cards",t:"select",l:"Κάρτες όταν περνάς το ποντίκι",d:"none",o:[["none","Τίποτα"],["lift","Ανασηκώνονται"]]},
+ {k:"btn",g:"cards",t:"select",l:"Στυλ κουμπιών",d:"outline",o:[["outline","Περίγραμμα"],["solid","Γεμάτα"],["pill","Στρογγυλά (pill)"]]},
+ {k:"tbl_stripe",g:"tbl",t:"check",l:"Εναλλάξ ρίγες στις γραμμές",d:false},
+ {k:"tbl_head",g:"tbl",t:"select",l:"Κεφαλίδα πίνακα",d:"soft",o:[["soft","Απαλή"],["navy","Στο χρώμα της ομάδας"]]},
+ {k:"tbl_logo",g:"tbl",t:"range",l:"Μέγεθος logos ομάδων",d:26,min:20,max:44,step:2,u:"px",v:"--tl"},
+ {k:"m_nav",g:"mob",t:"select",l:"Μενού στο κινητό",d:"menu",o:[["menu","Κουμπί μενού (☰)"],["chips","Οριζόντια μπάρα κάτω από τον τίτλο"],["bottom","Κάτω μπάρα, σαν εφαρμογή"]]},
+ {k:"m_roster",g:"mob",t:"select",l:"Ρόστερ: στήλες",d:"2",o:[["2","2 στήλες"],["3","3 στήλες"]]},
+ {k:"m_hero",g:"mob",t:"select",l:"Κεφαλίδα σελίδας",d:"normal",o:[["normal","Κανονική"],["compact","Συμπαγής"]]},
+ {k:"m_kpi",g:"mob",t:"select",l:"Στατιστικά: αριθμοί ανά γραμμή",d:"2",o:[["2","2 ανά γραμμή"],["1","1 ανά γραμμή"]]},
+ {k:"css",g:"adv",t:"area",l:"Δικό σου CSS (προχωρημένο)",d:""}
+];
+var DESIGN_FIELD={};DESIGN_FIELDS.forEach(function(f){DESIGN_FIELD[f.k]=f});
+DESIGN_DEFAULT.s={};DESIGN_FIELDS.forEach(function(f){DESIGN_DEFAULT.s[f.k]=f.d});
+["light","dark"].forEach(function(t){["hdr","hero1","hero2","card","line"].forEach(function(k){DESIGN_DEFAULT.colors[t][k]=""})});
+var DESIGN_COLORS_OPT=[["hdr","Φόντο μπάρας πάνω"],["hero1","Κεφαλίδα σελίδας: χρώμα 1"],["hero2","Κεφαλίδα σελίδας: χρώμα 2 (για διαβάθμιση)"],["card","Φόντο καρτών"],["line","Χρώμα περιγραμμάτων"]];
+/* Έτοιμα στυλ όλου του site: αλλάζουν χρώματα, γραμματοσειρές και διάταξη μαζί. Δεν πειράζουν κείμενα, εικόνες, ομάδα και ανακοίνωση. */
+var DESIGN_LOOKS=[
+ {n:"Κλασικό PAPEI",d:"Όπως ξεκίνησε το site",v:{}},
+ {n:"Αθλητικό",d:"Έντονοι τίτλοι, διαβάθμιση, θολή μπάρα",v:{font:"inter",look:{radius:10,card:"soft"},s:{font_head:"barlow",h_case:"upper",h_style:"glass",hero_mode:"gradient",hero_ang:160,hero_pat:"diag",hero_t:"xl",sec_head:"bar",btn:"pill",card_hover:"lift",nav:"pills",tbl_head:"navy"},colors:{light:{acc:"#1d4ed8",hero2:"#1e3a8a"},dark:{acc:"#7aa2ff",hero2:"#0b1b3a"}}}},
+ {n:"Μινιμαλ",d:"Καθαρό, με πολύ αέρα",v:{font:"dmsans",look:{radius:2,density:"airy",wrap:840,hero_size:"compact"},s:{h_style:"clear",nav:"text",sec_head:"plain",eb:"wide",card_b:0.5,tbl_stripe:false},colors:{light:{navy:"#111827",acc:"#111827"},dark:{navy:"#1f2937",acc:"#e5e7eb"}}}},
+ {n:"Έντονο κόκκινο",d:"Δυνατή κεφαλίδα και κεφαλαία",v:{font:"montserrat",look:{radius:4},s:{font_head:"oswald",h_case:"upper",hero_mode:"gradient",hero_ang:120,hero_t:"xl",sec_head:"under",btn:"solid",card_hover:"lift",nav:"pills",tbl_head:"navy"},colors:{light:{navy:"#8a1020",acc:"#b3122a",hero2:"#3d0710"},dark:{navy:"#8a1020",acc:"#ff8a95",hero2:"#2a050b"}}}},
+ {n:"Γυαλί και σκιές",d:"Στρογγυλεμένο, με σκιές και γυαλί",v:{font:"manrope",look:{radius:18,card:"shadow"},s:{h_style:"glass",hero_mode:"gradient",hero_ang:120,hero_pat:"dots",btn:"pill",card_hover:"lift",sec_bg:"alt",nav:"pills"},colors:{light:{hero2:"#2b6cb0"},dark:{hero2:"#10244a"}}}},
+ {n:"Σαν εφαρμογή (κινητό)",d:"Κάτω μπάρα πλοήγησης στο κινητό",v:{font:"inter",look:{radius:16,card:"shadow"},s:{h_style:"glass",btn:"pill",nav:"text",m_nav:"bottom",m_hero:"compact",card_hover:"lift"}}}
+];
+function cssClean(v){return String(v).slice(0,4000).replace(/[<>]/g,"").replace(/@import[^;]*;?/gi,"").replace(/javascript:|expression\s*\(|-moz-binding|behavior\s*:/gi,"").replace(/url\(\s*(['"]?)(.*?)\1\s*\)/gi,function(m,q,u){return/^(https:\/\/|data:image\/)/i.test(u)?m:"none"})}
 var DESIGN_PRESETS=[
  {n:"PAPEI μπλε",c:{light:{navy:"#0b2d5e",acc:"#0b2d5e"},dark:{navy:"#0b2d5e",acc:"#8fb0ea"}}},
  {n:"Κόκκινο",c:{light:{navy:"#8a1020",acc:"#8a1020"},dark:{navy:"#8a1020",acc:"#ff8a95"}}},
@@ -54,6 +112,7 @@ var DESIGN_OPTS={
  tone:[["navy","Μπλε"],["red","Κόκκινο"],["green","Πράσινο"],["gold","Χρυσό"]]};
 var DESIGN_STATS={kpi:"Βασικοί αριθμοί",form:"Φόρμα, νίκες/ισοπαλίες/ήττες, γκολ",goals:"Γράφημα γκολ ανά αγώνα",leaders:"Σκόρερ και ασίστ",records:"Ρεκόρ και σερί"};
 var DESIGN_SECTIONS={nextsec:"Επόμενος αγώνας",mc:"Match Center",matches:"Αγώνες",table:"Βαθμολογία",roster:"Ρόστερ",team:"Η ομάδα μας",stats:"Στατιστικά",links:"Σύνδεσμοι"};
+var DESIGN_NAV_SHORT={nextsec:"Επόμενος",mc:"Αποτ.",matches:"Αγώνες",table:"Βαθμ.",roster:"Ρόστερ",team:"Ομάδα",stats:"Στατ."};
 var DESIGN_NAV=["nextsec","mc","matches","table","roster","team","stats"]; /* οι «Σύνδεσμοι» δεν μπαίνουν στο μενού */
 var TEAM_TYPES={text:"Κείμενο με φωτογραφία",people:"Πρόσωπα (π.χ. τεχνικό επιτελείο, διοίκηση)",logos:"Λογότυπα (π.χ. χορηγοί)"};
 function tImg(v){return typeof v==="string"&&/^[\w-]+\/[\w.\-\/]+$/.test(v)?v:""}
@@ -70,6 +129,16 @@ function dmedia(p){if(!p)return"";if(/^(assets\/|https?:)/.test(p))return p;retu
 function designClean(s){
  var d=JSON.parse(JSON.stringify(DESIGN_DEFAULT));if(!s||typeof s!=="object")return d;
  ["light","dark"].forEach(function(t){["navy","acc","bg","ink"].forEach(function(k){var v=s.colors&&s.colors[t]&&s.colors[t][k];if(typeof v==="string"&&/^#[0-9a-fA-F]{6}$/.test(v))d.colors[t][k]=v.toLowerCase()})});
+ ["light","dark"].forEach(function(t){DESIGN_COLORS_OPT.forEach(function(c){var v=s.colors&&s.colors[t]&&s.colors[t][c[0]];if(typeof v==="string"&&/^#[0-9a-fA-F]{6}$/.test(v))d.colors[t][c[0]]=v.toLowerCase()})});
+ d.s={};DESIGN_FIELDS.forEach(function(f){var v=s.s&&s.s[f.k],ok=false;
+  if(f.t==="select")ok=typeof v==="string"&&f.o.some(function(o){return o[0]===v});
+  else if(f.t==="fontsel")ok=typeof v==="string"&&(v==="same"||!!DESIGN_FONTS[v]);
+  else if(f.t==="range")ok=typeof v==="number"&&isFinite(v)&&v>=f.min&&v<=f.max;
+  else if(f.t==="check")ok=typeof v==="boolean";
+  else if(f.t==="text"){ok=typeof v==="string";if(ok)v=v.trim().slice(0,40)}
+  else if(f.t==="url"){ok=typeof v==="string"&&(v.trim()===""||/^(https?:\/\/|mailto:|#)/i.test(v.trim()));if(ok)v=v.trim().slice(0,300)}
+  else if(f.t==="area"){ok=typeof v==="string";if(ok)v=cssClean(v)}
+  d.s[f.k]=ok?v:f.d});
  if(typeof s.font==="string"&&DESIGN_FONTS[s.font])d.font=s.font;
  var l=s.look||{};
  if(typeof l.radius==="number"&&l.radius>=0&&l.radius<=24)d.look.radius=Math.round(l.radius);
@@ -96,9 +165,13 @@ function designCss(d){
  ["light","dark"].forEach(function(t){var c=d.colors[t],o=df[t],r="--navy:"+c.navy+";--acc:"+c.acc+";--bg:"+c.bg+";--ink:"+c.ink+";";
   if(c.bg!==o.bg||c.ink!==o.ink)r+="--soft:color-mix(in srgb,"+c.ink+" 5%,"+c.bg+");--line:color-mix(in srgb,"+c.ink+" 13%,"+c.bg+");--mute:color-mix(in srgb,"+c.ink+" 58%,"+c.bg+");";
   if(c.navy!==o.navy)r+="--W:"+(t==="light"?c.navy:"color-mix(in srgb,"+c.navy+" 70%,#fff)")+";";
+  if(c.hdr)r+="--hdr:"+c.hdr+";";if(c.hero1)r+="--hero1:"+c.hero1+";";if(c.hero2)r+="--hero2:"+c.hero2+";";if(c.card)r+="--card:"+c.card+";";if(c.line)r+="--line:"+c.line+";";
   css+=":root[data-theme=\""+t+"\"]{"+r+"}"});
+ var vv="";DESIGN_FIELDS.forEach(function(f){if(f.v)vv+=f.v+":"+d.s[f.k]+(f.x||f.u||"")+";"});
+ css+=":root{"+vv+"--fh:"+(d.s.font_head==="same"?"var(--f)":DESIGN_FONTS[d.s.font_head].css)+"}";
  css+=":root{--f:"+DESIGN_FONTS[d.font].css+";--r:"+d.look.radius+"px;--wrap:"+d.look.wrap+"px;--ad:"+(d.look.anim_speed/1000)+"s;--rw:"+({small:"118px",medium:"150px",large:"205px"}[d.look.roster])+"}";
- if(d.images.hero_bg){var g="color-mix(in srgb,var(--navy) "+d.look.hero_overlay+"%,transparent)";css+=".hero{background:linear-gradient("+g+","+g+"),url(\""+dmedia(d.images.hero_bg)+"\") center/cover no-repeat}"}
+ if(d.images.hero_bg){var g="color-mix(in srgb,var(--navy) "+d.look.hero_overlay+"%,transparent)";css+="html .hero,html[data-hero_mode] .hero{background:linear-gradient("+g+","+g+"),url(\""+dmedia(d.images.hero_bg)+"\") center/cover no-repeat}"}
+ if(d.s.css)css+="\n/* δικό σου CSS */\n"+d.s.css+"\n";
  return css}
 /* Ενότητα «Η ομάδα μας»: κείμενα, πρόσωπα, λογότυπα, όλα από το admin. Μόνο απλό κείμενο και ελεγμένοι σύνδεσμοι/εικόνες. */
 function tEl(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
@@ -134,12 +207,14 @@ function applyDesign(s){
  st.textContent=designCss(d);var R=document.documentElement;R.dataset.di=d.look.dark_invert?"1":"0";
  R.dataset.hs=d.look.hero_size;R.dataset.ha=d.look.hero_align;R.dataset.dn=d.look.density;R.dataset.cd=d.look.card;R.dataset.ps=d.look.photo;R.dataset.an=d.look.anim_style;
  var canAn=d.look.anim&&"IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion:reduce)").matches;R.classList.toggle("anim",!!canAn);
+ DESIGN_FIELDS.forEach(function(f){if(f.t==="text"||f.t==="url"||f.t==="area")return;var v=d.s[f.k];R.setAttribute("data-"+f.k,v===true?"1":v===false?"0":String(v))});
+ var hb=document.getElementById("hbtns");if(hb){hb.textContent="";[1,2].forEach(function(n){var tt=d.s["cta"+n+"_t"],uu=d.s["cta"+n+"_u"];if(tt&&uu){var ca=tEl("a","b"+n,tt);ca.href=uu;if(uu.charAt(0)!=="#")ca.rel="noopener";hb.appendChild(ca)}});hb.hidden=!hb.children.length}
  var pg=document.getElementById("prog");if(pg)pg.hidden=!d.look.progress;
  var an=document.getElementById("ann");if(an){an.hidden=!(d.announce.on&&d.announce.text);an.className="ann "+d.announce.tone;an.textContent=d.announce.text;
   if(d.announce.url){var aa=document.createElement("a");aa.href=d.announce.url;aa.textContent="Δες περισσότερα";aa.rel="noopener";an.appendChild(aa)}}
  Object.keys(d.stats).forEach(function(k){document.querySelectorAll("[data-st=\""+k+"\"]").forEach(function(el){el.hidden=!d.stats[k]})});
- var g=DESIGN_FONTS[d.font].g,lk=document.getElementById("design-font");
- if(g){if(!lk){lk=document.createElement("link");lk.id="design-font";lk.rel="stylesheet";document.head.appendChild(lk)}lk.href="https://fonts.googleapis.com/css2?family="+g+"&display=swap"}else if(lk)lk.remove();
+ var fam=[DESIGN_FONTS[d.font].g,d.s.font_head!=="same"?DESIGN_FONTS[d.s.font_head].g:null].filter(function(x,i,a){return x&&a.indexOf(x)===i}),lk=document.getElementById("design-font");
+ if(fam.length){if(!lk){lk=document.createElement("link");lk.id="design-font";lk.rel="stylesheet";document.head.appendChild(lk)}lk.href="https://fonts.googleapis.com/css2?"+fam.map(function(g){return"family="+g}).join("&")+"&display=swap"}else if(lk)lk.remove();
  DESIGN_TEXTS.forEach(function(t){var el=document.querySelector("[data-t=\""+t[0]+"\"]");if(el)el.textContent=d.texts[t[0]]||t[2]});
  DESIGN_IMAGES.forEach(function(m){if(!m[2])return;var el=document.getElementById(m[2]);if(!el)return;if(!el.dataset.d)el.dataset.d=el.getAttribute("src");el.src=d.images[m[0]]?dmedia(d.images[m[0]]):el.dataset.d});
  var lc=document.getElementById("lnk");
@@ -148,7 +223,8 @@ function applyDesign(s){
  var main=document.querySelector("main"),nav=document.getElementById("nav");
  var hasTeam=renderTeam(d.team),pvm=document.documentElement.classList.contains("pv");
  d.sections.forEach(function(x){var el=document.getElementById(x.id);if(el){main.appendChild(el);el.hidden=!x.on||(x.id==="team"&&!hasTeam&&!pvm)}});
- if(nav)nav.innerHTML=d.sections.filter(function(x){return x.on&&DESIGN_NAV.indexOf(x.id)>=0&&(x.id!=="team"||hasTeam)}).map(function(x){var t=d.texts[{nextsec:"next_eb",mc:"mc_h",matches:"matches_eb",table:"table_eb",roster:"roster_h",stats:"stats_h"}[x.id]];return"<a href=\"#"+x.id+"\">"+(x.id==="team"?(d.texts.team_nav||"Η ομάδα"):DESIGN_SECTIONS[x.id])+"</a>"}).join("");
+ var vi=0;d.sections.forEach(function(x){var el=document.getElementById(x.id);if(el){var show=!el.hidden;el.classList.toggle("alt",show&&vi%2===1);if(show)vi++}});
+ if(nav)nav.innerHTML=d.sections.filter(function(x){return x.on&&DESIGN_NAV.indexOf(x.id)>=0&&(x.id!=="team"||hasTeam)}).map(function(x){var t=d.texts[{nextsec:"next_eb",mc:"mc_h",matches:"matches_eb",table:"table_eb",roster:"roster_h",stats:"stats_h"}[x.id]];var lg=x.id==="team"?(d.texts.team_nav||"Η ομάδα"):DESIGN_SECTIONS[x.id];return"<a href=\"#"+x.id+"\"><span class=\"nl\">"+lg+"</span><span class=\"ns\">"+(DESIGN_NAV_SHORT[x.id]||lg)+"</span></a>"}).join("");
  if(window.animScan)window.animScan();
  return d}
 /* Φόρτωση: άμεσα από τη μνήμη του browser (χωρίς αναβοσβήσιμο), μετά ό,τι δημοσιεύτηκε στη βάση */
