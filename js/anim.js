@@ -3,7 +3,7 @@
    Ό,τι είναι ήδη ορατό στο άνοιγμα της σελίδας, ή αλλάζει από live ενημέρωση, εμφανίζεται κατευθείαν χωρίς να ξαναπαίξει animation. */
 (function(){
  var R=document.documentElement,io=null,spy=null,seenIO=null,firstScan=true;
- var SEL=["section>.eb","section>h2",".nx",".mcs .mc",".mr",".stbox",".ros .pl",".kpi",".sx>div",".gw",".lc",".rc",".links a",".note",".tabs"];
+ var SEL=["section>.eb","section>h2",".nx",".mcs .mc",".mr",".stbox",".ros .pl",".tm-b>.eb",".tm-b>.tm-h",".tm-intro",".tm-c",".tm-logo",".kpi",".sx>div",".gw",".lc",".rc",".links a",".note",".tabs"];
  function on(){return R.classList.contains("anim")}
  function fmt(v,d,p){var s=(+v).toFixed(d).replace(".",",");return(p&&v>0?p:"")+s}
  function count(el){var v=parseFloat(el.dataset.v),d=+el.dataset.d||0,p=el.dataset.p||"";if(isNaN(v)||!on())return;var t0=null,dur=1100;
