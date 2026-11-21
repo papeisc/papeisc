@@ -9,7 +9,7 @@ function ini(n){var w=n.replace(/[^A-Za-zΑ-Ωα-ωά-ώ0-9 ]/g,"").split(" ").f
 /* Logos: admin > τοπικά βελτιστοποιημένα > Προπάθλημα > αρχικά (βλ. js/logos.js) */
 function lsrc(n){var a=[];if(n===US){a.push(MY());return a}
  if(DBLOGO[n])a.push(DBLOGO[n]);var l=window.localLogo?localLogo(n):"";if(l)a.push(l);var p=window.plLogo?plLogo(n):"";if(p)a.push(p);return a}
-function limg(n){var s=lsrc(n);if(!s.length)return"";var u=s[0];var tn=(u.indexOf("assets/logos/")===0&&window.localTone)?localTone(n):"";return"<img class=\"lg"+(n===US?" us":u.indexOf("propathlima.gr")>=0?" pl":"")+(tn?" t"+tn:"")+"\" alt=\"\" width=\"64\" height=\"64\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" data-n=\""+esc(n)+"\""+(s.length>1?" data-fb=\""+esc(s.slice(1).join("|"))+"\"":"")+" src=\""+esc(u)+"\">"}
+function limg(n){var s=lsrc(n);if(!s.length)return"";var u=s[0];var tn=(n!==US&&window.localTone)?localTone(n):"";return"<img class=\"lg"+(n===US?" us":u.indexOf("propathlima.gr")>=0?" pl":"")+(tn?" t"+tn:"")+"\" alt=\"\" width=\"64\" height=\"64\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\" data-n=\""+esc(n)+"\""+(s.length>1?" data-fb=\""+esc(s.slice(1).join("|"))+"\"":"")+" src=\""+esc(u)+"\">"}
 function tb(n){var i=limg(n);return i?"<span class=\"tb\">"+i+"</span>":""}
 function big(n){var i=limg(n);return"<span class=\"ic"+(i?"":" fb")+"\">"+(i||esc(ini(n)))+"</span>"}
 function sl(n){var i=limg(n);return"<span class=\"sl"+(i?"":" fb")+"\">"+(i||esc(ini(n)))+"</span>"}

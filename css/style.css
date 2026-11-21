@@ -144,7 +144,7 @@ tr.me .stn{gap:12px}
 tr.me .stn span:last-child{font-size:16px;color:var(--acc)}
 tr.me td:nth-child(3){font-size:16px}
 /* Σκούρο θέμα: τα logos του Προπαθλήματος μένουν έγχρωμα πάνω σε λευκό βάθρο (δεν γίνονται σιλουέτες) */
-:root[data-theme="dark"] img.lg.pl{background:#fff;border-radius:22%;padding:2px}
+/* v9: χωρίς λευκή βάση στα logos στο σκούρο θέμα */
 :root[data-theme="dark"]:not([data-di="0"]) img.lg.pl{filter:none}
 
 /* ===== v7 ===== */
@@ -253,5 +253,5 @@ html.pv section:hover{box-shadow:inset 3px 0 0 color-mix(in srgb,var(--acc) 45%,
 .live[hidden]{display:none}
 
 /* v7.1: logos που χάνονται στο φόντο παίρνουν διακριτικό κυκλικό φόντο */
-:root:not([data-theme="dark"]) img.lg.tl{background:#16264a;border-radius:50%;padding:13%}
+:root img.lg.tl{background:#16264a;border-radius:50%;padding:13%}
 :root[data-theme="dark"] img.lg.td{background:#eef2f9;border-radius:50%;padding:13%}

@@ -6,7 +6,9 @@
 import { readFileSync } from "node:fs";
 
 const SOURCE = "https://propathlima.gr/group-f-26-27/";
+const TEAM_PAGE = "https://propathlima.gr/team/papei-sc/";
 const SEASON = "2026/27";
+const SEASON_START = "2026-08-01";
 const US_NAME = "PAPEI SC";
 const SB_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
 const SB_KEY = process.env.SUPABASE_SERVICE_KEY || "";
@@ -34,6 +36,15 @@ function tableRows(html) {
     cells: [...m[0].matchAll(/<t[dh][\s\S]*?<\/t[dh]>/gi)].map((c) => ({ html: c[0], text: txt(c[0]) })),
   }));
 }
+function imgSrc(cellHtml) {
+  const tag = (cellHtml.match(/<img[^>]*>/i) || [])[0];
+  if (!tag) return "";
+  for (const a of ["data-lazy-src", "data-src", "src"]) {
+    const m = tag.match(new RegExp(`\\s${a}\\s*=\\s*"([^"]+)"`, "i"));
+    if (m && !m[1].startsWith("data:")) { try { return new URL(dec(m[1]), SOURCE).href; } catch { /* αγνόησε */ } }
+  }
+  return "";
+}
 function parseStandings(html) {
   /* Δεν στηριζόμαστε σε επικεφαλίδες ή κλάσεις: κρατάμε τον πίνακα με τις περισσότερες γραμμές της μορφής
      θέση, όνομα, αγώνες, Ν, Ι, Η, γκολ υπέρ, γκολ κατά (ή "υπέρ-κατά"), [διαφορά], βαθμοί */
@@ -51,7 +62,7 @@ function parseStandings(html) {
       else if (g < 0 && rest.length >= 7) { [p, w, d, l, gf, ga] = nums.slice(0, 6); pts = nums[nums.length - 1]; }
       else continue;
       if ([p, w, d, l, gf, ga, pts].some((x) => x == null || Number.isNaN(x))) continue;
-      out.push({ rank: parseInt(c[0], 10), name: c[1], played: p, won: w, drawn: d, lost: l, gf, ga, points: pts });
+      out.push({ logo: imgSrc(r.cells[1].html), rank: parseInt(c[0], 10), name: c[1], played: p, won: w, drawn: d, lost: l, gf, ga, points: pts });
     }
     if (out.length > best.length) best = out;
   }
@@ -93,7 +104,17 @@ async function main() {
     console.log(`Προπάθλημα: HTTP ${res.status}, ${html.length} χαρακτήρες, ${(html.match(/<table/gi) || []).length} πίνακες`);
     if (!res.ok) throw new Error(`Το Προπάθλημα απάντησε ${res.status}. Πιθανόν μπλοκάρει τα αιτήματα του GitHub. Αρχή απάντησης: ${html.slice(0, 200).replace(/\s+/g, " ")}`);
   }
-  const standings = parseStandings(html), events = parseEvents(html);
+  const standings = parseStandings(html), events = parseEvents(html).map((e) => ({ ...e, src: "group" }));
+  /* σελίδα της ομάδας: βοηθά να ενημερώνονται τα αποτελέσματα των δικών μας αγώνων (προαιρετικό, δεν σταματά τον συγχρονισμό) */
+  try {
+    const tr = await fetch(TEAM_PAGE, { headers: { "User-Agent": "Mozilla/5.0 (compatible; PAPEI-SC-sync/1.0)", "Accept-Language": "el,en;q=0.8" } });
+    if (tr.ok) {
+      const have = new Set(events.map((e) => e.id));
+      const extra = parseEvents(await tr.text()).filter((e) => !have.has(e.id) && e.date >= SEASON_START).map((e) => ({ ...e, src: "team" }));
+      console.log(`Σελίδα ομάδας: ${extra.length} επιπλέον αγώνες`);
+      events.push(...extra);
+    } else console.log(`Σελίδα ομάδας: HTTP ${tr.status} (αγνοείται)`);
+  } catch (e) { console.log("Σελίδα ομάδας: δεν διαβάστηκε (αγνοείται):", e.message); }
   console.log(`Βαθμολογία: ${standings.length} ομάδες · Αγώνες στη σελίδα: ${events.length}`);
   if (standings.length < 8) {
     [...html.matchAll(/<table[\s\S]*?<\/table>/gi)].slice(0, 4).forEach((t, i) => { const r = tableRows(t[0]).slice(0, 2).map((x) => x.cells.map((c) => c.text).join(" | ")); console.log(`Πίνακας ${i + 1}:`, r.join(" // ").slice(0, 300)); });
@@ -112,18 +133,18 @@ async function main() {
   }
 
   /* ομάδες */
-  const teams = await sb("teams?select=id,name,is_us"), aliases = await sb("team_aliases?select=alias,team_id");
+  const teams = await sb("teams?select=id,name,is_us,logo_path"), aliases = await sb("team_aliases?select=alias,team_id");
   const byKey = new Map();
   teams.forEach((t) => byKey.set(lkey(t.name), t.id));
   aliases.forEach((a) => byKey.set(lkey(a.alias), a.team_id));
   const usTeam = teams.find((t) => t.is_us) || teams.find((t) => lkey(t.name) === usKey);
   if (!usTeam) throw new Error(`Δεν βρέθηκε η ομάδα ${US_NAME} στη βάση.`);
-  async function teamId(name) {
+  async function teamId(name, logo) {
     const k = lkey(name);
     if (byKey.has(k)) return byKey.get(k);
     let r;
-    try { r = await sb("teams", { method: "POST", body: JSON.stringify({ name, slug: slug(name), is_us: false }) }); }
-    catch (e) { r = await sb("teams", { method: "POST", body: JSON.stringify({ name, slug: slug(name) + "-" + Math.random().toString(36).slice(2, 6), is_us: false }) }); }
+    try { r = await sb("teams", { method: "POST", body: JSON.stringify({ name, slug: slug(name), is_us: false, ...(logo ? { logo_path: logo } : {}) }) }); }
+    catch (e) { r = await sb("teams", { method: "POST", body: JSON.stringify({ name, slug: slug(name) + "-" + Math.random().toString(36).slice(2, 6), is_us: false, ...(logo ? { logo_path: logo } : {}) }) }); }
     await sb("team_aliases", { method: "POST", body: JSON.stringify({ alias: name, team_id: r[0].id }) }).catch(() => {});
     byKey.set(k, r[0].id);
     console.log("Νέα ομάδα:", name);
@@ -134,10 +155,15 @@ async function main() {
   const ex = await sb(`standings?season=eq.${encodeURIComponent(SEASON)}&select=*`);
   const exBy = new Map(ex.map((r) => [r.team_id, r]));
   const seen = new Set();
-  let ch = 0;
+  let ch = 0, lc = 0;
   for (const s of standings) {
-    const tid = await teamId(s.name);
+    const tid = await teamId(s.name, s.logo);
     seen.add(tid);
+    /* logo από το Προπάθλημα: μόνο αν η ομάδα δεν έχει logo ή το είχε βάλει ο συγχρονισμός. Δεν πειράζουμε logo που ανέβασες εσύ από το admin ούτε το δικό μας */
+    const tm = teams.find((t) => t.id === tid);
+    if (/^https:\/\/propathlima\.gr\/wp-content\//.test(s.logo) && tm && !tm.is_us && (!tm.logo_path || /propathlima\.gr/.test(tm.logo_path)) && tm.logo_path !== s.logo) {
+      await sb(`teams?id=eq.${tid}`, { method: "PATCH", body: JSON.stringify({ logo_path: s.logo }) }); tm.logo_path = s.logo; lc++;
+    }
     const row = { season: SEASON, team_id: tid, rank: s.rank, played: s.played, won: s.won, drawn: s.drawn, lost: s.lost, gf: s.gf, ga: s.ga, points: s.points };
     const old = exBy.get(tid);
     if (!old) { await sb("standings", { method: "POST", body: JSON.stringify(row) }); ch++; continue; }
@@ -146,7 +172,7 @@ async function main() {
     }
   }
   for (const r of ex) if (!seen.has(r.team_id)) { await sb(`standings?season=eq.${encodeURIComponent(SEASON)}&team_id=eq.${r.team_id}`, { method: "DELETE" }); ch++; }
-  console.log(`Βαθμολογία: ${ch} αλλαγές.`);
+  console.log(`Βαθμολογία: ${ch} αλλαγές · Logos: ${lc} ενημερώσεις.`);
 
   /* αγώνες του PAPEI SC */
   if (!mine.length) { console.log("Δεν βρέθηκαν αγώνες στη σελίδα (ίσως αλλάζει η μορφή της λίστας). Η βαθμολογία συγχρονίστηκε κανονικά."); return; }
@@ -160,7 +186,7 @@ async function main() {
     if (!old) old = ms.find((m) => !m.external_id && m.home_team === home && m.away_team === away && m.kickoff && Math.abs(new Date(m.kickoff) - new Date(kickoff)) < 36e5 * 30 && athDay(m.kickoff) === e.date);
     const fields = { home_score: e.hs, away_score: e.as, status: fin ? "finished" : "scheduled", kickoff, external_id: e.id, source: "propathlima" };
     if (e.round != null) fields.round_label = `${e.round}η αγ.`;
-    if (!old) { await sb("matches", { method: "POST", body: JSON.stringify({ season: SEASON, competition: "Πρωτάθλημα", home_team: home, away_team: away, locked: false, ...fields }) }); mc++; continue; }
+    if (!old) { if (e.src !== "group") continue; await sb("matches", { method: "POST", body: JSON.stringify({ season: SEASON, competition: "Πρωτάθλημα", home_team: home, away_team: away, locked: false, ...fields }) }); mc++; continue; }
     if (old.locked && old.status === "finished") continue; /* σεβόμαστε ό,τι έχεις οριστικοποιήσει στο admin */
     const upd = {};
     for (const k of ["home_score", "away_score", "status", "external_id"]) if (!same(old[k], fields[k])) upd[k] = fields[k];
