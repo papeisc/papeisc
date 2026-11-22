@@ -154,15 +154,23 @@ function renderMC(){
  var d=$("mcd"),o=$("mcs").querySelector(".mc[aria-expanded=\"true\"]");
  if(o){var m=MCM[+o.dataset.i];d.innerHTML="<h4>"+esc(m[1])+" "+m[2]+" - "+m[3]+" "+esc(m[4])+"</h4>"+dlHtml(m,k);d.hidden=false}else d.hidden=true;
 }
+function showMatchModal(m,k){
+ var d=$("pm");if(!d||!m)return;
+ var x=m[7]||{},comp=m[5]===OST?OSTN:"Πρωτάθλημα";
+ d.classList.add("match-modal");
+ d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"match-modal-head\"><span class=\"match-modal-comp\">"+esc(comp)+" · "+esc(k)+"</span><div class=\"match-modal-score\">"+big(m[1])+"<div><b>"+m[2]+" - "+m[3]+"</b><small>"+esc(res(m)==="W"?"Νίκη":res(m)==="L"?"Ήττα":"Ισοπαλία")+"</small></div>"+big(m[4])+"</div><h3>"+esc(m[1])+" – "+esc(m[4])+"</h3></div>"+dlHtml(m,k)+"</div>";
+ if(d.showModal){if(!d.open)d.showModal()}else d.setAttribute("open","");
+}
 function bindMC(){
  $("mcs").addEventListener("click",function(e){
-  var b=e.target.closest(".mc");if(!b)return;var k=curSeason();
-  var open=b.getAttribute("aria-expanded")==="true";
-  [].forEach.call($("mcs").children,function(c){c.setAttribute("aria-expanded","false")});
-  var d=$("mcd");if(open){d.hidden=true;return}
-  var m=MCM[+b.dataset.i];b.setAttribute("aria-expanded","true");
-  d.innerHTML="<h4>"+esc(m[1])+" "+m[2]+" - "+m[3]+" "+esc(m[4])+"</h4>"+dlHtml(m,k);d.hidden=false});
- $("list").addEventListener("click",function(e){var b=e.target.closest(".mb");if(!b)return;var o=b.getAttribute("aria-expanded")==="true";b.setAttribute("aria-expanded",!o);$(b.getAttribute("aria-controls")).hidden=o});
+  var b=e.target.closest(".mc");if(!b)return;
+  showMatchModal(MCM[+b.dataset.i],curSeason());
+ });
+ $("list").addEventListener("click",function(e){
+  var b=e.target.closest(".mb");if(!b)return;
+  var all=SEASONS[curSeason()]||[],m=all.filter(function(x){return x[0]+x[1]+x[4]===b.dataset.id})[0];
+  if(m)showMatchModal(m,curSeason());
+ });
 }
 
 /* Ώρα Ελλάδας (Europe/Athens) με σωστό θερινό/χειμερινό */
