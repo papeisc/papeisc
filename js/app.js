@@ -50,7 +50,7 @@ function renderTable(){
  if(note){
   note.textContent=EXTERNAL_OK&&EXTERNAL_TABLE&&EXTERNAL_TABLE.length
    ?"Πηγή: Προπάθλημα · ΣΤ΄ Όμιλος 2026/27 · Δεδομένα έως και την "+(EXTERNAL_MATCHDAY||"—")+"η αγωνιστική."
-   :"Πηγή: Προπάθλημα · ΣΤ΄ Όμιλος 2026/27 · Προσωρινά εμφανίζονται τα τελευταία διαθέσιμα στοιχεία.";
+   :"Η ζωντανή βαθμολογία δεν είναι προσωρινά διαθέσιμη · Εμφανίζονται τα αποθηκευμένα στοιχεία.";
  }
 }
 function loadExternalStandings(){
