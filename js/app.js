@@ -120,7 +120,7 @@ function dlHtml(m,k){var x=m[7]||{},r=res(m),rt={W:"Νίκη",D:"Ισοπαλί�
   if(scorers)dl.push(["Σκόρερ",scorers]);if(assisters)dl.push(["Ασίστ",assisters]);
  }else{if(x.sc&&x.sc.length)dl.push(["Σκόρερ",x.sc.map(esc).join(", ")]);if(x.as&&x.as.length)dl.push(["Ασίστ",x.as.map(esc).join(", ")]);}
  if(x.url)dl.push(["Σελίδα αγώνα","<a rel=\"noopener\" href=\""+esc(x.url)+"\">Προπάθλημα</a>"]);
- return"<dl>"+dl.map(function(d){return"<dt>"+d[0]+"</dt><dd>"+d[1]+"</dd>"}).join("")+"</dl>"}
+ return"<dl>"+dl.map(function(d){var ev=d[0]==="Σκόρερ"||d[0]==="Ασίστ";return"<dt"+(ev?" class=\\"event-title\\"":"")+">"+d[0]+"</dt><dd"+(ev?" class=\\"event-body\\"":"")+">"+(ev?"<div class=\\"match-event-list\\">"+d[1]+"</div>":d[1])+"</dd>"}).join("")+"</dl>"}
 function row(m,k,open){
  var us=m[1]===US,id="p"+(++uid),r=res(m),dh=dlHtml(m,k);
  return"<li class=\"mr\"><button class=\"mb\" aria-expanded=\""+(open?"true":"false")+"\" aria-controls=\""+id+"\" data-id=\""+esc(m[0]+m[1]+m[4])+"\"><span class=\"d\">"+(fd(m[0])||"–")+"</span><span class=\"t h"+(us?" us":"")+"\"><b>"+esc(m[1])+"</b>"+tb(m[1])+"</span><span class=\"s "+r+"\">"+m[2]+" - "+m[3]+"</span><span class=\"t"+(us?"":" us")+"\">"+tb(m[4])+"<b>"+esc(m[4])+"</b></span><span class=\"ch\"></span></button><div class=\"pn\" id=\""+id+"\""+(open?"":" hidden")+">"+dh+"</div></li>"}
@@ -158,7 +158,7 @@ function showMatchModal(m,k){
  var d=$("pm");if(!d||!m)return;
  var x=m[7]||{},comp=m[5]===OST?OSTN:"Πρωτάθλημα";
  d.classList.add("match-modal");
- d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"match-modal-head\"><span class=\"match-modal-comp\">"+esc(comp)+" · "+esc(k)+"</span><div class=\"match-modal-score\">"+big(m[1])+"<div><b>"+m[2]+" - "+m[3]+"</b><small>"+esc(res(m)==="W"?"Νίκη":res(m)==="L"?"Ήττα":"Ισοπαλία")+"</small></div>"+big(m[4])+"</div><h3>"+esc(m[1])+" – "+esc(m[4])+"</h3></div>"+dlHtml(m,k)+"</div>";
+ d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"match-modal-head\"><span class=\"match-modal-comp\">"+esc(comp)+" · "+esc(k)+"</span><div class=\"match-modal-score\"><div class=\"match-team home\">"+big(m[1])+"<b>"+esc(m[1])+"</b></div><div class=\"match-scoreline\"><strong>"+m[2]+" : "+m[3]+"</strong><small>"+esc(res(m)==="W"?"Νίκη":res(m)==="L"?"Ήττα":"Ισοπαλία")+"</small></div><div class=\"match-team away\">"+big(m[4])+"<b>"+esc(m[4])+"</b></div></div></div>"+dlHtml(m,k)+"</div>";
  if(d.showModal){if(!d.open)d.showModal()}else d.setAttribute("open","");
 }
 function bindMC(){
