@@ -120,7 +120,7 @@ function dlHtml(m,k){var x=m[7]||{},r=res(m),rt={W:"Νίκη",D:"Ισοπαλί�
   if(scorers)dl.push(["Σκόρερ",scorers]);if(assisters)dl.push(["Ασίστ",assisters]);
  }else{if(x.sc&&x.sc.length)dl.push(["Σκόρερ",x.sc.map(esc).join(", ")]);if(x.as&&x.as.length)dl.push(["Ασίστ",x.as.map(esc).join(", ")]);}
  if(x.url)dl.push(["Σελίδα αγώνα","<a rel=\"noopener\" href=\""+esc(x.url)+"\">Προπάθλημα</a>"]);
- return"<dl>"+dl.map(function(d){var ev=d[0]==="Σκόρερ"||d[0]==="Ασίστ";return"<dt"+(ev?" class=\\"event-title\\"":"")+">"+d[0]+"</dt><dd"+(ev?" class=\\"event-body\\"":"")+">"+(ev?"<div class=\\"match-event-list\\">"+d[1]+"</div>":d[1])+"</dd>"}).join("")+"</dl>"}
+ return"<dl>"+dl.map(function(d){var ev=d[0]==="Σκόρερ"||d[0]==="Ασίστ";return"<dt"+(ev?" class=\"event-title\"":"")+">"+d[0]+"</dt><dd"+(ev?" class=\"event-body\"":"")+">"+(ev?"<div class=\"match-event-list\">"+d[1]+"</div>":d[1])+"</dd>"}).join("")+"</dl>"}
 function row(m,k,open){
  var us=m[1]===US,id="p"+(++uid),r=res(m),dh=dlHtml(m,k);
  return"<li class=\"mr\"><button class=\"mb\" aria-expanded=\""+(open?"true":"false")+"\" aria-controls=\""+id+"\" data-id=\""+esc(m[0]+m[1]+m[4])+"\"><span class=\"d\">"+(fd(m[0])||"–")+"</span><span class=\"t h"+(us?" us":"")+"\"><b>"+esc(m[1])+"</b>"+tb(m[1])+"</span><span class=\"s "+r+"\">"+m[2]+" - "+m[3]+"</span><span class=\"t"+(us?"":" us")+"\">"+tb(m[4])+"<b>"+esc(m[4])+"</b></span><span class=\"ch\"></span></button><div class=\"pn\" id=\""+id+"\""+(open?"":" hidden")+">"+dh+"</div></li>"}
