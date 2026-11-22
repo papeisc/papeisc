@@ -451,3 +451,36 @@ dialog#pm.match-modal{max-width:min(680px,calc(100vw - 24px));max-height:min(86v
  .match-modal-score .ic{width:42px;height:42px}
  .match-modal-score b{font-size:25px}
 }
+
+/* Match details: responsive score header and event lists */
+dialog#pm.match-modal{width:min(720px,calc(100vw - 28px));}
+.match-modal .match-modal-score{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:clamp(8px,2vw,22px)}
+.match-modal .match-team{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:0;text-align:center}
+.match-modal .match-team .ic{width:54px;height:54px}
+.match-modal .match-team>b{font-size:clamp(12px,2vw,15px);line-height:1.25;overflow-wrap:anywhere}
+.match-modal .match-scoreline{text-align:center;min-width:82px}
+.match-modal .match-scoreline strong{display:block;font-size:clamp(27px,5vw,38px);line-height:1;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.match-modal .match-scoreline small{display:block;color:var(--mute);margin-top:7px;font-size:12px}
+.match-modal dt.event-title{align-self:start;padding-top:5px;font-weight:750;color:var(--ink)}
+.match-modal dd.event-body{min-width:0}
+.match-modal .match-event-list{display:grid;gap:6px}
+.match-modal .evperson{align-items:center;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+.match-modal .evperson b{font-weight:650}
+.match-modal .evperson span{white-space:nowrap;font-size:13px}
+@media(max-width:520px){
+ dialog#pm.match-modal{width:calc(100vw - 16px);max-width:calc(100vw - 16px);max-height:88dvh;margin:auto;border-radius:16px}
+ .match-modal .pmb{padding:20px 14px}
+ .match-modal-head{padding:0 28px 14px 0;margin-bottom:14px}
+ .match-modal .match-modal-score{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:5px;margin:16px 0}
+ .match-modal .match-team{gap:5px}
+ .match-modal .match-team .ic{width:38px;height:38px;font-size:12px}
+ .match-modal .match-team>b{font-size:11px;max-width:100%}
+ .match-modal .match-scoreline{min-width:66px}
+ .match-modal .match-scoreline strong{font-size:27px}
+ .match-modal dl{grid-template-columns:1fr;gap:4px}
+ .match-modal dt{font-size:12px;font-weight:650}
+ .match-modal dd{margin:0 0 12px}
+ .match-modal dt.event-title{margin-top:5px;font-size:14px}
+ .match-modal dd.event-body{margin-bottom:14px}
+ .match-modal .evperson{gap:8px;padding:9px 10px}
+}
