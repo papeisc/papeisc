@@ -2,7 +2,7 @@ var US="PAPEI SC",OST="Off-Season",PR="Πρωτάθλημα";
 // [ημερομηνία ή null, γηπεδούχος, γκολ γηπεδούχου, γκολ φιλοξενούμενου, φιλοξενούμενος, διοργάνωση, ετικέτα αγωνιστικής]
 var SEASONS={
 "2026/27":[
-[null,US,7,4,"MYSTES FC",PR,"4η αγ."],["2026-11-03",US,2,3,"YONKA MALLORCA",PR,"3η αγ.",{t:"21:00",url:"https://propathlima.gr/sport-event/22624/"}],["2026-10-27","Peirates II SC",1,8,US,PR,"2η αγ.",{t:"22:00",url:"https://propathlima.gr/sport-event/22552/"}],["2026-10-20","Πανεκπαϊκός",2,7,US,PR,"1η αγ.",{t:"21:00",url:"https://propathlima.gr/sport-event/22490/"}],
+["2026-11-10",US,7,4,"MYSTES FC",PR,"4η αγ."],["2026-11-03",US,2,3,"YONKA MALLORCA",PR,"3η αγ.",{t:"21:00",url:"https://propathlima.gr/sport-event/22624/"}],["2026-10-27","Peirates II SC",1,8,US,PR,"2η αγ.",{t:"22:00",url:"https://propathlima.gr/sport-event/22552/"}],["2026-10-20","Πανεκπαϊκός",2,7,US,PR,"1η αγ.",{t:"21:00",url:"https://propathlima.gr/sport-event/22490/"}],
 ["2026-10-06","Neverlusen FC",5,7,US,OST],["2026-10-01","Peirates II SC",4,8,US,OST],["2026-09-29",US,13,1,"Κομπιναδόροι",OST]],
 "2025/26":[
 ["2026-03-31","ΛΙΟΥΝΤΑΡ FC",1,4,US],["2026-03-24","ΑΙΡΕΣΗ",2,6,US],["2026-03-10",US,0,3,"KOPRITES FC"],["2026-03-05","ΡΕΜΑΛ ΒΑΓΙΑΒΙΟΛΙΔ",4,1,US],
