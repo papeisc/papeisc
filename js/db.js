@@ -22,8 +22,8 @@ function applyDB(r){
   if(pa.t&&pa.t!=="00:00")x.t=pa.t;if(m.venue)x.venue=m.venue;if(m.venue_map_url)x.map=m.venue_map_url;
   if(m.status==="live")x.live=1;
   if(m.source==="propathlima"&&m.external_id)x.url="https://propathlima.gr/sport-event/"+m.external_id+"/";
-  var sc=es.filter(function(e){return e.scorer_id&&pn[e.scorer_id]}).map(function(e){return pn[e.scorer_id].full_name}),as=es.filter(function(e){return e.assist_id&&pn[e.assist_id]}).map(function(e){return pn[e.assist_id].full_name});
-  if(sc.length)x.sc=sc;if(as.length)x.as=as;
+  var detail=es.map(function(e){return{scorer:e.scorer_id&&pn[e.scorer_id]?pn[e.scorer_id].full_name:(e.kind==="own_goal"?"Αυτογκόλ":""),assist:e.assist_id&&pn[e.assist_id]?pn[e.assist_id].full_name:"",minute:e.minute,kind:e.kind}}).filter(function(e){return e.scorer||e.assist});
+  if(detail.length){x.events=detail;x.sc=detail.filter(function(e){return e.scorer}).map(function(e){return e.scorer});x.as=detail.filter(function(e){return e.assist}).map(function(e){return e.assist})}
   (S[m.season]=S[m.season]||[]).push([pa.d||null,h,m.home_score,m.away_score,a,m.competition==="Off-Season Tournament"?OST:PR,m.round_label||undefined,x]);
  });
  var ks=Object.keys(S).sort().reverse();if(ks.length){var o={};ks.forEach(function(k){o[k]=S[k]});SEASONS=o}
