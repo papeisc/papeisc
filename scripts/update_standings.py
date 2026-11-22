@@ -31,7 +31,7 @@ class Tables(HTMLParser):
 
     def handle_endtag(self, tag):
         if tag in ("td", "th") and self.in_cell:
-            value = re.sub(r"\\s+", " ", "".join(self.cell or [])).strip()
+            value = re.sub(r"\s+", " ", "".join(self.cell or [])).strip()
             self.row.append(value)
             self.cell, self.in_cell = None, False
         elif tag == "tr" and self.row is not None:
@@ -54,7 +54,7 @@ def main():
     for table in parser.tables:
         if not table:
             continue
-        header = [re.sub(r"\\s+", " ", x).strip().lower() for x in table[0]]
+        header = [re.sub(r"\s+", " ", x).strip().lower() for x in table[0]]
         if header[:10] == ["pos", "club", "p", "w", "d", "l", "f", "a", "gd", "pts"]:
             standings = table[1:]
         if "match day" in header:
