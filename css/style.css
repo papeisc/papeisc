@@ -487,7 +487,7 @@ dialog#pm.match-modal{width:min(720px,calc(100vw - 28px));}
 
 
 
-/* Player profile: wide panel with a full-height, uncropped portrait */
+/* Responsive player profile: adapt the portrait and layout to each screen */
 dialog#pm:not(.match-modal){
   width:min(960px,calc(100vw - 32px));
   max-width:min(960px,calc(100vw - 32px));
@@ -497,12 +497,12 @@ dialog#pm:not(.match-modal){
 }
 dialog#pm:not(.match-modal) .pmb{
   display:grid;
-  grid-template-columns:minmax(250px,40%) minmax(0,1fr);
+  grid-template-columns:minmax(240px,38%) minmax(0,1fr);
   grid-template-rows:auto auto auto minmax(0,1fr);
-  column-gap:28px;
+  column-gap:clamp(18px,3vw,32px);
   row-gap:0;
-  min-height:600px;
-  padding:28px;
+  min-height:580px;
+  padding:clamp(18px,3vw,30px);
   box-sizing:border-box;
 }
 dialog#pm:not(.match-modal) .pmw{display:contents}
@@ -547,41 +547,79 @@ dialog#pm:not(.match-modal) .pmd{
   grid-row:4;
   align-self:stretch;
   min-width:0;
-  grid-template-columns:120px minmax(0,1fr);
+  grid-template-columns:clamp(90px,12vw,120px) minmax(0,1fr);
   margin:16px 0 0;
 }
-@media(max-width:600px){
+@media(max-width:760px){
   dialog#pm:not(.match-modal){
-    width:calc(100vw - 16px);
-    max-width:calc(100vw - 16px);
-    max-height:92dvh;
+    width:calc(100vw - 20px);
+    max-width:calc(100vw - 20px);
+    max-height:94vh;
+    max-height:94dvh;
   }
   dialog#pm:not(.match-modal) .pmb{
-    grid-template-columns:minmax(0,38%) minmax(0,1fr);
-    grid-template-rows:auto auto auto minmax(0,1fr);
-    column-gap:14px;
-    min-height:540px;
-    padding:20px 12px;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto auto auto auto auto;
+    min-height:0;
+    padding:clamp(12px,3vw,20px);
+    row-gap:0;
   }
   dialog#pm:not(.match-modal) .pmw>.ph{
-    grid-row:1 / 5;
+    grid-column:1;
+    grid-row:1;
+    justify-self:center;
+    width:100%;
+    height:clamp(220px,42dvh,390px);
     min-height:0;
+    aspect-ratio:auto;
+    margin:0 auto 18px;
   }
+  dialog#pm:not(.match-modal) .pmw>.ph img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
+  dialog#pm:not(.match-modal) .pmw>div{
+    grid-column:1;
+    grid-row:2;
+  }
+  dialog#pm:not(.match-modal) .pmbio{
+    grid-column:1;
+    grid-row:3;
+    margin-top:14px;
+  }
+  dialog#pm:not(.match-modal) .pmb>p:has(.pmig){
+    grid-column:1;
+    grid-row:4;
+    margin-top:12px;
+  }
+  dialog#pm:not(.match-modal) .pmd{
+    grid-column:1;
+    grid-row:5;
+    grid-template-columns:minmax(0,1fr);
+    gap:3px;
+    margin-top:14px;
+    font-size:13px;
+  }
+  dialog#pm:not(.match-modal) .pmd dd{margin-bottom:8px}
   dialog#pm:not(.match-modal) .pmw h3{
-    font-size:18px;
+    font-size:clamp(18px,5vw,22px);
     overflow-wrap:anywhere;
     margin-right:22px;
   }
   dialog#pm:not(.match-modal) .pmst{
-    gap:8px;
+    gap:10px;
     flex-wrap:wrap;
   }
   dialog#pm:not(.match-modal) .pmst>div{min-width:0}
   dialog#pm:not(.match-modal) .pmst b{font-size:18px}
-  dialog#pm:not(.match-modal) .pmd{
-    grid-template-columns:1fr;
-    gap:3px;
-    font-size:13px;
-  }
-  dialog#pm:not(.match-modal) .pmd dd{margin-bottom:8px}
+}
+@media(max-width:380px){
+  dialog#pm:not(.match-modal) .pmb{padding:12px 10px}
+  dialog#pm:not(.match-modal) .pmw>.ph{height:38dvh}
+  dialog#pm:not(.match-modal) .pmst{gap:7px}
+}
+@media(orientation:landscape) and (max-height:520px) and (min-width:761px){
+  dialog#pm:not(.match-modal) .pmb{min-height:440px;padding:14px}
+  dialog#pm:not(.match-modal) .pmw>.ph{min-height:400px}
 }
