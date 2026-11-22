@@ -47,16 +47,21 @@ function renderTable(){
 }
 
 /* ---------- Ρόστερ ---------- */
+var IG_SVG="<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"4\"/><circle cx=\"17.5\" cy=\"6.5\" r=\"1\" fill=\"currentColor\" stroke=\"none\"/></svg>";
+function igOf(det){var x=(det||[]).filter(function(d){return d&&d.l==="Instagram"})[0];if(!x||!x.v)return null;var v=String(x.v).trim(),h;
+ var m=v.match(/^https?:\/\/(?:www\.)?instagram\.com\/([A-Za-z0-9._]{1,30})\/?(?:\?.*)?$/i);if(m)h=m[1];else{h=v.replace(/^@/,"");if(!/^[A-Za-z0-9._]{1,30}$/.test(h))return null}
+ return{h:h,url:"https://www.instagram.com/"+h+"/"}}
 function renderRoster(){
  $("ros").innerHTML=P.filter(function(p){return HIDE.indexOf(p[0])<0}).sort(function(a,b){return b[1]-a[1]||b[2]+b[3]-a[2]-a[3]}).map(function(p){
   var ph=PHOTOS[p[0]];
-  return"<button class=\"pl\" data-n=\""+esc(p[0])+"\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+"</div><div class=\"nm\">"+esc(p[0])+"</div><div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></button>"}).join("");
+  var ig=igOf((PINFO[p[0]]||{}).det);return"<div class=\"pl\" role=\"button\" tabindex=\"0\" data-n=\""+esc(p[0])+"\"><div class=\"ph\">"+(ph?"<img loading=\"lazy\" alt=\""+esc(p[0])+"\" src=\""+esc(ph)+"\">":esc(p[0][0]))+(ig?"<a class=\"ig\" target=\"_blank\" rel=\"noopener\" href=\""+esc(ig.url)+"\" aria-label=\"Instagram του "+esc(p[0])+"\">"+IG_SVG+"</a>":"")+"</div><div class=\"nm\">"+esc(p[0])+"</div><div class=\"ps\">"+p[2]+" γκολ · "+p[3]+" ασίστ · "+p[1]+" αγ.</div></div>"}).join("");
 }
 function bindPlayerCard(){
  var d=$("pm");
- $("ros").addEventListener("click",function(e){var b=e.target.closest(".pl");if(!b||!d)return;var M={};P.forEach(function(p){M[p[0]]=p});
-  var n=b.dataset.n,p=M[n];if(!p)return;var I=PINFO[n]||{},ph=PHOTOS[n],ps=[I.num?"#"+I.num:"",I.pos||""].filter(Boolean).join(" · ");
-  d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"pmw\"><div class=\"ph\">"+(ph?"<img alt=\""+esc(n)+"\" src=\""+esc(ph)+"\">":esc(n[0]))+"</div><div><h3 id=\"pmn\">"+esc(n)+"</h3><p class=\"pmm\">"+esc(ps||"Παίκτης")+"</p><div class=\"pmst\"><div><b>"+p[1]+"</b><span>αγώνες</span></div><div><b>"+p[2]+"</b><span>γκολ</span></div><div><b>"+p[3]+"</b><span>ασίστ</span></div></div></div></div>"+(I.bio?"<p class=\"pmbio\">"+esc(I.bio)+"</p>":"")+((I.det&&I.det.length)?"<dl class=\"pmd\">"+I.det.map(function(x){return"<dt>"+esc(x.l)+"</dt><dd>"+esc(x.v)+"</dd>"}).join("")+"</dl>":"")+"</div>";
+ $("ros").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("pl")){e.preventDefault();e.target.click()}});
+ $("ros").addEventListener("click",function(e){if(e.target.closest("a.ig"))return;var b=e.target.closest(".pl");if(!b||!d)return;var M={};P.forEach(function(p){M[p[0]]=p});
+  var n=b.dataset.n,p=M[n],ig=igOf((PINFO[n]||{}).det);if(!p)return;var I=PINFO[n]||{},ph=PHOTOS[n],ps=[I.num?"#"+I.num:"",I.pos||""].filter(Boolean).join(" · ");
+  d.innerHTML="<div class=\"pmb\"><button class=\"pmx\" aria-label=\"Κλείσιμο\">×</button><div class=\"pmw\"><div class=\"ph\">"+(ph?"<img alt=\""+esc(n)+"\" src=\""+esc(ph)+"\">":esc(n[0]))+"</div><div><h3 id=\"pmn\">"+esc(n)+"</h3><p class=\"pmm\">"+esc(ps||"Παίκτης")+"</p><div class=\"pmst\"><div><b>"+p[1]+"</b><span>αγώνες</span></div><div><b>"+p[2]+"</b><span>γκολ</span></div><div><b>"+p[3]+"</b><span>ασίστ</span></div></div></div></div>"+(I.bio?"<p class=\"pmbio\">"+esc(I.bio)+"</p>":"")+(ig?"<p><a class=\"pmig\" target=\"_blank\" rel=\"noopener\" href=\""+esc(ig.url)+"\">"+IG_SVG+" @"+esc(ig.h)+"</a></p>":"")+((I.det&&I.det.filter(function(x){return x.l!=="Instagram"}).length)?"<dl class=\"pmd\">"+I.det.filter(function(x){return x.l!=="Instagram"}).map(function(x){return"<dt>"+esc(x.l)+"</dt><dd>"+esc(x.v)+"</dd>"}).join("")+"</dl>":"")+"</div>";
   if(d.showModal)d.showModal();else d.setAttribute("open","")});
  if(d)d.addEventListener("click",function(e){if(e.target===d||e.target.closest(".pmx")){if(d.close)d.close();else d.removeAttribute("open")}});
 }

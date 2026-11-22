@@ -382,3 +382,46 @@ html[data-tbl_head="navy"] th{background:var(--navy);color:#fff}
 
 .top nav a .ns{display:none}
 @media (max-width:640px){html[data-m_nav="bottom"] .top nav a .nl{display:none}html[data-m_nav="bottom"] .top nav a .ns{display:inline}}
+
+/* ===== v15: ελεύθερο στυλ ενοτήτων και κάρτα «Η ομάδα μας» ===== */
+section.sxw{box-shadow:0 0 0 100vmax var(--bgc,var(--bg));clip-path:inset(0 -100vmax)}
+section.sxs a{color:var(--acc)}
+.tm-b .eb{color:var(--acc);font-weight:700;letter-spacing:.2em}
+.tm-b.tm-ebs-l>.eb,.tm-b.tm-ebs-l .tm-txt>.eb{font-size:clamp(15px,2vw,22px)}
+.tm-h{font-family:var(--tf,var(--fh));line-height:1.02;font-weight:700;margin:0 0 18px}
+.tm-ts-m .tm-h{font-size:var(--h2s)}
+.tm-ts-l .tm-h{font-size:clamp(30px,5vw,52px)}
+.tm-ts-xl .tm-h{font-size:clamp(40px,7.5vw,88px);line-height:.98}
+.tm-ts-xxl .tm-h{font-size:clamp(48px,11vw,132px);line-height:.94;letter-spacing:-.01em}
+.tm-up .tm-h{text-transform:uppercase}
+.tm-b.tm-styled{border-radius:var(--br,8px);overflow:hidden}
+.tm-b.tm-styled:not(.tm-split){padding:var(--tp,36px)}
+.tm-wide.tm-styled{box-shadow:0 0 0 100vmax var(--bgc);clip-path:inset(0 -100vmax)}
+.tm-al-center>.eb,.tm-al-center>.tm-h,.tm-al-center .tm-txt,.tm-al-center .tm-c{text-align:center}
+.tm-al-center .tm-p{margin-inline:auto}
+.tm-al-center .tm-grid{justify-content:center}
+.tm-b .tm-p{color:var(--ink)}
+/* κάρτα με φωτογραφία σε πλήρες ύψος */
+.tm-split .tm-intro{display:grid;gap:0;align-items:stretch;min-height:var(--minh,0);grid-template-columns:var(--ratio,45%) minmax(0,1fr)}
+.tm-split .tm-intro.tm-l-splitr{grid-template-columns:minmax(0,1fr) var(--ratio,45%)}
+.tm-split .tm-img{position:relative;min-height:300px}
+.tm-split .tm-img img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:var(--fit,center);border:0;border-radius:0}
+.tm-split .tm-txt{padding:var(--tp,36px);display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tm-split:not(.tm-styled){border:1px solid var(--line);border-radius:var(--br,8px);overflow:hidden}
+.tm-split .tm-p{max-width:none}
+.tm-al-center.tm-split .tm-txt{align-items:center}
+@media (max-width:760px){
+ .tm-split .tm-intro,.tm-split .tm-intro.tm-l-splitr{grid-template-columns:1fr}
+ .tm-split .tm-intro.tm-l-splitr .tm-img{order:-1}
+ .tm-split .tm-img{min-height:0;aspect-ratio:4/3}
+ .tm-split .tm-txt{padding:calc(var(--tp,36px)*.65) calc(var(--tp,36px)*.6)}
+ .tm-ts-xxl .tm-h{font-size:clamp(44px,15vw,80px)}
+}
+
+/* Instagram παικτών */
+.pl .ph{position:relative}
+.ig{position:absolute;right:8px;bottom:8px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7);box-shadow:0 2px 8px rgba(0,0,0,.3);transition:transform .2s;text-decoration:none}
+.ig:hover{transform:scale(1.12)}
+html[data-ps="circle"] .ig{right:10%;bottom:10%}
+.pmig{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;color:#fff;text-decoration:none;font-weight:600;font-size:14px;background:linear-gradient(45deg,#f9ce34,#ee2a7b 55%,#6228d7)}
+.pl:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:var(--r,6px)}
