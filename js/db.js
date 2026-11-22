@@ -32,11 +32,7 @@ function applyDB(r){
   ap.forEach(function(x){c[x.player_id]=(c[x.player_id]||0)+1});PHOTOS={};
   PINFO={};P=pl.map(function(p){if(p.photo_path)PHOTOS[p.full_name]=mediaUrl(p.photo_path);PINFO[p.full_name]={pos:p.position,num:p.shirt_number,bio:p.bio,det:p.details||[]};return[p.full_name,p.base_apps+(c[p.id]||0),p.base_goals+(g[p.id]||0),p.base_assists+(as2[p.id]||0)]});
   HIDE=pl.filter(function(p){return!p.show_on_roster}).map(function(p){return p.full_name})}
- /* Βαθμολογία: η πιο πρόσφατη σεζόν που υπάρχει στη βάση (όχι σταθερά 2026/27) */
- var seasons=st.map(function(r){return r.season}).filter(function(v,i,a){return v&&a.indexOf(v)===i}).sort().reverse();
- window.TABLE_SEASON=seasons[0]||"";
- var s=st.filter(function(r){return r.season===window.TABLE_SEASON}).sort(function(a,b){return a.rank-b.rank});
- if(s.length)TABLE=s.filter(function(r){return tn[r.team_id]}).map(function(r){return[r.rank,tn[r.team_id].name,r.played,r.won,r.drawn,r.lost,r.gf+"-"+r.ga,r.gf-r.ga,r.points]});
+ /* Η βαθμολογία προέρχεται από τον πίνακα του Προπαθλήματος στο data/data.js. */
  LASTSYNC=Date.now();
 }
 function fetchAll(){
