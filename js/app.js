@@ -108,7 +108,7 @@ function renderStats(){
 }
 
 /* ---------- Αγώνες ---------- */
-var cur=null,asc=true,uid=0;
+var cur=null,asc=false,uid=0;
 function dlHtml(m,k){var x=m[7]||{},r=res(m),rt={W:"Νίκη",D:"Ισοπαλία",L:"Ήττα"}[r];
  var comp=m[5]===OST?OSTN:"Πρωτάθλημα";
  var dl=[["Ημερομηνία",fdl(m[0])+(x.t?" · "+x.t:"")],["Διοργάνωση",comp+" · "+k],["Αποτέλεσμα",rt+" "+m[2]+" - "+m[3]]];
