@@ -486,138 +486,102 @@ dialog#pm.match-modal{width:min(720px,calc(100vw - 28px));}
 }
 
 
-/* Player profile panel: larger layout with portrait spanning the full panel height */
+
+/* Player profile: wide panel with a full-height, uncropped portrait */
 dialog#pm:not(.match-modal){
- width:min(900px,calc(100vw - 32px));
- max-width:min(900px,calc(100vw - 32px));
- max-height:92vh;
- overflow:auto;
+  width:min(960px,calc(100vw - 32px));
+  max-width:min(960px,calc(100vw - 32px));
+  max-height:92vh;
+  max-height:92dvh;
+  overflow:auto;
 }
 dialog#pm:not(.match-modal) .pmb{
- display:grid;
- grid-template-columns:minmax(260px,40%) minmax(0,1fr);
- column-gap:26px;
- row-gap:0;
- padding:28px;
+  display:grid;
+  grid-template-columns:minmax(250px,40%) minmax(0,1fr);
+  grid-template-rows:auto auto auto minmax(0,1fr);
+  column-gap:28px;
+  row-gap:0;
+  min-height:600px;
+  padding:28px;
+  box-sizing:border-box;
 }
 dialog#pm:not(.match-modal) .pmw{display:contents}
 dialog#pm:not(.match-modal) .pmw>.ph{
- grid-column:1;
- grid-row:1 / span 4;
- width:100%;
- height:100%;
- min-height:460px;
- aspect-ratio:auto;
- align-self:stretch;
- border-radius:12px;
+  grid-column:1;
+  grid-row:1 / 5;
+  align-self:stretch;
+  width:100%;
+  height:100%;
+  min-height:0;
+  aspect-ratio:auto;
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--soft);
 }
 dialog#pm:not(.match-modal) .pmw>.ph img{
- width:100%;
- height:100%;
- object-fit:cover;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
 }
-dialog#pm:not(.match-modal) .pmw>div,
-dialog#pm:not(.match-modal) .pmbio,
-dialog#pm:not(.match-modal) .pmig,
+dialog#pm:not(.match-modal) .pmw>div{
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+}
+dialog#pm:not(.match-modal) .pmbio{
+  grid-column:2;
+  grid-row:2;
+  min-width:0;
+  margin:18px 0 0;
+}
+dialog#pm:not(.match-modal) .pmb>p:has(.pmig){
+  grid-column:2;
+  grid-row:3;
+  min-width:0;
+  margin:14px 0 0;
+}
 dialog#pm:not(.match-modal) .pmd{
- grid-column:2;
- min-width:0;
+  grid-column:2;
+  grid-row:4;
+  align-self:stretch;
+  min-width:0;
+  grid-template-columns:120px minmax(0,1fr);
+  margin:16px 0 0;
 }
-dialog#pm:not(.match-modal) .pmw>div{grid-row:1}
-dialog#pm:not(.match-modal) .pmbio{grid-row:2;margin-top:18px}
-dialog#pm:not(.match-modal) .pmig{grid-row:3}
-dialog#pm:not(.match-modal) .pmd{grid-row:4;grid-template-columns:120px minmax(0,1fr);margin-top:16px}
 @media(max-width:600px){
- dialog#pm:not(.match-modal){
-  width:calc(100vw - 20px);
-  max-width:calc(100vw - 20px);
-  max-height:92dvh;
- }
- dialog#pm:not(.match-modal) .pmb{
-  grid-template-columns:minmax(120px,38%) minmax(0,1fr);
-  column-gap:14px;
-  padding:22px 14px;
- }
- dialog#pm:not(.match-modal) .pmw>.ph{min-height:390px}
- dialog#pm:not(.match-modal) .pmw h3{font-size:19px;margin-right:22px}
- dialog#pm:not(.match-modal) .pmst{gap:10px;flex-wrap:wrap}
- dialog#pm:not(.match-modal) .pmst b{font-size:19px}
- dialog#pm:not(.match-modal) .pmd{grid-template-columns:1fr;gap:3px;font-size:13px}
- dialog#pm:not(.match-modal) .pmd dd{margin-bottom:8px}
-}
-
-
-/* Player panel portrait: show the complete photo and stretch it to the panel height */
-dialog#pm:not(.match-modal) .pmb{
- grid-template-rows:auto auto auto minmax(0,1fr);
- min-height:560px;
-}
-dialog#pm:not(.match-modal) .pmw>.ph{
- grid-row:1 / 5;
- min-height:560px;
- height:100%;
- overflow:hidden;
- display:flex;
- align-items:stretch;
- justify-content:center;
- background:var(--soft);
-}
-dialog#pm:not(.match-modal) .pmw>.ph img{
- display:block;
- width:100%;
- height:100%;
- min-height:560px;
- object-fit:contain;
- object-position:center top;
-}
-dialog#pm:not(.match-modal) .pmb>p:has(.pmig){grid-column:2;grid-row:3;margin:12px 0 0}
-dialog#pm:not(.match-modal) .pmd{grid-column:2;grid-row:4;align-self:stretch}
-@media(max-width:600px){
- dialog#pm:not(.match-modal) .pmb{
-  grid-template-columns:minmax(0,44%) minmax(0,1fr);
-  grid-template-rows:auto auto auto minmax(0,1fr);
-  min-height:560px;
-  padding:18px 12px;
-  column-gap:12px;
- }
- dialog#pm:not(.match-modal) .pmw>.ph{grid-row:1 / 5;min-height:560px}
- dialog#pm:not(.match-modal) .pmw>.ph img{min-height:560px;object-fit:contain;object-position:center top}
- dialog#pm:not(.match-modal) .pmw h3{font-size:18px;overflow-wrap:anywhere}
- dialog#pm:not(.match-modal) .pmst{gap:8px}
- dialog#pm:not(.match-modal) .pmst>div{min-width:0}
- dialog#pm:not(.match-modal) .pmst b{font-size:18px}
- dialog#pm:not(.match-modal) .pmd{grid-template-columns:1fr}
-}
-
-
-/* Final player panel layout: portrait is anchored from top to bottom of the full content panel */
-dialog#pm:not(.match-modal) .pmb{
- display:block !important;position:relative !important;min-height:0 !important;
- padding:28px 28px 28px calc(40% + 52px) !important;
-}
-dialog#pm:not(.match-modal) .pmw{display:block !important}
-dialog#pm:not(.match-modal) .pmw>.ph{
- position:absolute !important;left:28px !important;top:28px !important;bottom:28px !important;
- width:calc(40% - 28px) !important;height:auto !important;min-height:0 !important;
- aspect-ratio:auto !important;display:flex !important;align-items:center !important;
- justify-content:center !important;overflow:hidden !important;
-}
-dialog#pm:not(.match-modal) .pmw>.ph img{
- display:block !important;width:100% !important;height:100% !important;min-height:0 !important;
- object-fit:contain !important;object-position:center center !important;
-}
-dialog#pm:not(.match-modal) .pmw>div{min-width:0}
-dialog#pm:not(.match-modal) .pmbio,
-dialog#pm:not(.match-modal) .pmb>p:has(.pmig),
-dialog#pm:not(.match-modal) .pmd{margin-left:0 !important;width:100% !important}
-dialog#pm:not(.match-modal) .pmd{grid-template-columns:120px minmax(0,1fr) !important}
-@media(max-width:600px){
- dialog#pm:not(.match-modal) .pmb{padding:18px 12px 18px calc(42% + 22px) !important}
- dialog#pm:not(.match-modal) .pmw>.ph{
-  left:12px !important;top:18px !important;bottom:18px !important;width:calc(42% - 10px) !important;
- }
- dialog#pm:not(.match-modal) .pmw h3{font-size:18px !important;overflow-wrap:anywhere}
- dialog#pm:not(.match-modal) .pmst{gap:8px !important;flex-wrap:wrap}
- dialog#pm:not(.match-modal) .pmst b{font-size:18px !important}
- dialog#pm:not(.match-modal) .pmd{grid-template-columns:1fr !important;gap:3px !important}
+  dialog#pm:not(.match-modal){
+    width:calc(100vw - 16px);
+    max-width:calc(100vw - 16px);
+    max-height:92dvh;
+  }
+  dialog#pm:not(.match-modal) .pmb{
+    grid-template-columns:minmax(0,38%) minmax(0,1fr);
+    grid-template-rows:auto auto auto minmax(0,1fr);
+    column-gap:14px;
+    min-height:540px;
+    padding:20px 12px;
+  }
+  dialog#pm:not(.match-modal) .pmw>.ph{
+    grid-row:1 / 5;
+    min-height:0;
+  }
+  dialog#pm:not(.match-modal) .pmw h3{
+    font-size:18px;
+    overflow-wrap:anywhere;
+    margin-right:22px;
+  }
+  dialog#pm:not(.match-modal) .pmst{
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  dialog#pm:not(.match-modal) .pmst>div{min-width:0}
+  dialog#pm:not(.match-modal) .pmst b{font-size:18px}
+  dialog#pm:not(.match-modal) .pmd{
+    grid-template-columns:1fr;
+    gap:3px;
+    font-size:13px;
+  }
+  dialog#pm:not(.match-modal) .pmd dd{margin-bottom:8px}
 }
