@@ -88,7 +88,7 @@ def main():
         "table": rows,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Published {len(rows)} teams through matchday {matchday}.")
 
 if __name__ == "__main__":
