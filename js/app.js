@@ -42,8 +42,25 @@ function renderNext(){
 }
 
 /* ---------- Βαθμολογία ---------- */
+var EXTERNAL_TABLE=null,EXTERNAL_MATCHDAY=null,EXTERNAL_UPDATED=null,EXTERNAL_OK=false;
 function renderTable(){
- $("tbody").innerHTML=TABLE.length?TABLE.map(function(r){var g=r[6].split("-");return"<tr"+(r[1]===US?" class=\"me\"":"")+"><td>"+r[0]+"</td><td><div class=\"stn\">"+sl(r[1])+"<span>"+esc(r[1])+"</span></div></td><td><b>"+r[8]+"</b></td><td>"+r[2]+"</td><td>"+r[3]+"/"+r[4]+"/"+r[5]+"</td><td>"+g[0]+"</td><td>"+g[1]+"</td></tr>"}).join(""):"<tr class=\"empty\"><td colspan=\"7\">Η βαθμολογία ανεβαίνει σύντομα. <a href=\""+SOFA+"\" rel=\"noopener\">Δες την στο SofaScore</a></td></tr>";
+ var rows=EXTERNAL_TABLE&&EXTERNAL_TABLE.length?EXTERNAL_TABLE:TABLE;
+ $("tbody").innerHTML=rows.length?rows.map(function(r){var g=String(r[6]).split("-");return"<tr"+(r[1]===US?" class=\\"me\\"":"")+"><td>"+r[0]+"</td><td><div class=\\"stn\\">"+sl(r[1])+"<span>"+esc(r[1])+"</span></div></td><td><b>"+r[8]+"</b></td><td>"+r[2]+"</td><td>"+r[3]+"/"+r[4]+"/"+r[5]+"</td><td>"+g[0]+"</td><td>"+g[1]+"</td></tr>"}).join(""):"<tr class=\\"empty\\"><td colspan=\\"7\\">Η βαθμολογία δεν είναι διαθέσιμη αυτή τη στιγμή.</td></tr>";
+ var note=$("table-source");
+ if(note){
+  note.textContent=EXTERNAL_OK&&EXTERNAL_TABLE&&EXTERNAL_TABLE.length
+   ?"Πηγή: Προπάθλημα · ΣΤ΄ Όμιλος 2026/27 · Δεδομένα έως και την "+(EXTERNAL_MATCHDAY||"—")+"η αγωνιστική."
+   :"Πηγή: Προπάθλημα · ΣΤ΄ Όμιλος 2026/27 · Προσωρινά εμφανίζονται τα τελευταία διαθέσιμα στοιχεία.";
+ }
+}
+function loadExternalStandings(){
+ fetch("data/standings-live.json?ts="+Date.now(),{cache:"no-store"})
+  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()})
+  .then(function(d){
+   if(!d||!Array.isArray(d.table)||!d.table.length)throw new Error("empty standings");
+   EXTERNAL_TABLE=d.table;EXTERNAL_MATCHDAY=d.matchday||null;EXTERNAL_UPDATED=d.updated_at||null;EXTERNAL_OK=true;
+   renderTable();
+  }).catch(function(e){console.warn("Η εξωτερική βαθμολογία δεν ανανεώθηκε",e);if(!EXTERNAL_OK)renderTable()});
 }
 
 /* ---------- Ρόστερ ---------- */
@@ -186,7 +203,7 @@ function renderAll(){
  if(window.animScan)animScan();
 }
 window.onData=renderAll;
-bindPlayerCard();bindMC();renderAll();setInterval(syncLabel,20000);
+bindPlayerCard();bindMC();renderAll();loadExternalStandings();setInterval(loadExternalStandings,60000);setInterval(syncLabel,20000);
 
 /* Θέμα και μενού */
 (function(){var r=document.documentElement,b=$("theme"),m=document.querySelector("meta[name=theme-color]");
