@@ -114,8 +114,11 @@ function dlHtml(m,k){var x=m[7]||{},r=res(m),rt={W:"Νίκη",D:"Ισοπαλί�
  var dl=[["Ημερομηνία",fdl(m[0])+(x.t?" · "+x.t:"")],["Διοργάνωση",comp+" · "+k],["Αποτέλεσμα",rt+" "+m[2]+" - "+m[3]]];
  if(m[6])dl.splice(2,0,["Αγωνιστική",esc(m[6])]);
  if(x.venue)dl.push(["Γήπεδο",esc(x.venue)+(x.map?" · <a rel=\"noopener\" href=\""+esc(x.map)+"\">Χάρτης</a>":"")]);
- if(x.sc&&x.sc.length)dl.push(["Σκόρερ",x.sc.map(esc).join(", ")]);
- if(x.as&&x.as.length)dl.push(["Ασίστ",x.as.map(esc).join(", ")]);
+ if(x.events&&x.events.length){
+  function eventPeople(field){var g={};x.events.forEach(function(e){var n=e[field];if(!n)return;(g[n]=g[n]||[]).push(e.minute!=null?e.minute+"′":"");});return Object.keys(g).map(function(n){var mins=g[n].filter(Boolean);return"<div class=\"evperson\"><b>"+esc(n)+"</b><span>"+(mins.length?mins.join(", "):"—")+"</span></div>"}).join("")}
+  var scorers=eventPeople("scorer"),assisters=eventPeople("assist");
+  if(scorers)dl.push(["Σκόρερ",scorers]);if(assisters)dl.push(["Ασίστ",assisters]);
+ }else{if(x.sc&&x.sc.length)dl.push(["Σκόρερ",x.sc.map(esc).join(", ")]);if(x.as&&x.as.length)dl.push(["Ασίστ",x.as.map(esc).join(", ")]);}
  if(x.url)dl.push(["Σελίδα αγώνα","<a rel=\"noopener\" href=\""+esc(x.url)+"\">Προπάθλημα</a>"]);
  return"<dl>"+dl.map(function(d){return"<dt>"+d[0]+"</dt><dd>"+d[1]+"</dd>"}).join("")+"</dl>"}
 function row(m,k,open){
