@@ -51,14 +51,15 @@
 <section id="team" hidden><div id="teamx"></div></section>
 
 <section id="stats"><p class="eb" data-t="stats_eb">Σεζόν 2026/27</p><h2 data-t="stats_h">Στατιστικά</h2>
-<p class="note">Ομαδικά στατιστικά · Μόνο επίσημοι αγώνες</p>
+<h3 class="stats-group-title">Ομαδικά στατιστικά - Επίσημοι αγώνες μόνο</h3>
 <div id="st_kpi" data-st="kpi"></div>
 <div id="st_form" data-st="form"></div>
 <div id="st_goals" data-st="goals"></div>
-<p class="note">Ατομικά στατιστικά παικτών · Επίσημοι αγώνες + Off-Season Tournament</p>
+<div id="st_records" data-st="records"></div>
+<h3 class="stats-group-title">Ατομικά στατιστικά</h3>
+<p class="note">Επίσημοι αγώνες + Off-Season Tournament</p>
 <div id="st_player_kpi" data-st="player-kpi"></div>
 <div class="lbs" data-st="leaders"><div class="lc" id="lbg"></div><div class="lc" id="lba"></div><div class="lc" id="lbt"></div></div>
-<div id="st_records" data-st="records"></div>
 <p class="note">Οι ασίστ είναι εκτιμώμενη κατανομή. <span class="live" id="sync" hidden></span></p></section>
 
 <section id="links"><p class="eb" data-t="links_eb">Ακολούθησε μας</p><h2 data-t="links_h">Σύνδεσμοι</h2>
@@ -71,10 +72,10 @@
 <script src="js/config.js?v=16"></script>
 <script src="data/data.js?v=17"></script>
 <script src="js/logos.js?v=16"></script>
-<script src="js/db.js?v=17"></script>
-<script src="js/design.js?v=17"></script>
+<script src="js/db.js?v=18"></script>
+<script src="js/design.js?v=18"></script>
 <script src="js/anim.js?v=16"></script>
 <script>loadDB().then(function(){if(window.onData)window.onData()}).catch(function(e){console.warn("Η βάση δεν φόρτωσε",e)});loadDesign().catch(function(e){console.warn("Οι ρυθμίσεις εμφάνισης δεν φόρτωσαν",e)})</script>
-<script src="js/app.js?v=22"></script>
+<script src="js/app.js?v=23"></script>
 </body>
 </html>
