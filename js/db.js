@@ -32,10 +32,10 @@ function applyDB(r){
  var fallback=window.SEASONS||{},o={},keys={};
  Object.keys(fallback).forEach(function(k){keys[k]=1});
  Object.keys(S).forEach(function(k){keys[k]=1});
- function normTeam(n){return String(n||"").trim().replace(/\\s+/g," ").toLocaleLowerCase("el")}
+ function normTeam(n){return String(n||"").trim().replace(/\s+/g," ").toLocaleLowerCase("el")}
  function matchKey(m){
   var teams=[normTeam(m[1]),normTeam(m[4])].sort();
-  var round=normTeam(m[6]),comp=normTeam(m[5]);
+  var round=normTeam(m[6]),comp=m[5]===OST?OST:PR;
   /* Αν λείπει ημερομηνία από τοπική εγγραφή, η αγωνιστική + διοργάνωση
      ταυτοποιούν τον ίδιο αγώνα με την πλήρη εγγραφή της βάσης. */
   var identity=round?"round:"+round:"date:"+String(m[0]||"");
