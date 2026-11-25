@@ -19,7 +19,7 @@ var DESIGN_DEFAULT={
  colors:{light:{navy:"#0b2d5e",acc:"#0b2d5e",bg:"#ffffff",ink:"#0b1b36"},dark:{navy:"#0b2d5e",acc:"#8fb0ea",bg:"#060f20",ink:"#eef2fb"}},
  font:"geom",
  look:{radius:6,wrap:960,dark_invert:true,hero_overlay:70,anim:true,anim_style:"up",anim_speed:600,hero_align:"left",hero_size:"normal",density:"normal",card:"line",roster:"medium",photo:"rounded",progress:true},
- stats:{kpi:true,form:true,donut:true,goals:true,leaders:true,records:true},
+ stats:{kpi:true,form:true,donut:true,goals:true,leaders:true,records:true,"player-kpi":true},
  announce:{on:false,text:"",url:"",tone:"navy"},
  team:{blocks:[]},sx:{},
  texts:{},links:[],images:{header_logo:"",hero_logo:"",hero_bg:""},
@@ -117,7 +117,7 @@ var DESIGN_OPTS={
  tshape:[["rect","Ορθογώνιες φωτογραφίες"],["circle","Στρογγυλές φωτογραφίες"]],
  tsize:[["small","Μικρά λογότυπα"],["medium","Μεσαία"],["large","Μεγάλα"]],
  tone:[["navy","Μπλε"],["red","Κόκκινο"],["green","Πράσινο"],["gold","Χρυσό"]]};
-var DESIGN_STATS={kpi:"Βασικοί αριθμοί",form:"Φόρμα, νίκες/ισοπαλίες/ήττες, γκολ",goals:"Γράφημα γκολ ανά αγώνα",leaders:"Σκόρερ και ασίστ",records:"Ρεκόρ και σερί"};
+var DESIGN_STATS={kpi:"Ομαδικά στατιστικά · βασικοί αριθμοί",form:"Ομαδικά στατιστικά · φόρμα και αποτελέσματα",goals:"Ομαδικά στατιστικά · γκολ ανά αγώνα",leaders:"Ατομικά στατιστικά · σκόρερ και ασίστ", "player-kpi":"Ατομικά στατιστικά · σύνολα παικτών",records:"Ομαδικά στατιστικά · ρεκόρ και σερί"};
 var DESIGN_SECTIONS={nextsec:"Επόμενος αγώνας",mc:"Match Center",matches:"Αγώνες",table:"Βαθμολογία",roster:"Ρόστερ",team:"Η ομάδα μας",stats:"Στατιστικά",links:"Σύνδεσμοι"};
 var DESIGN_NAV_SHORT={nextsec:"Επόμενος",mc:"Αποτ.",matches:"Αγώνες",table:"Βαθμ.",roster:"Ρόστερ",team:"Ομάδα",stats:"Στατ."};
 var DESIGN_NAV=["nextsec","mc","matches","table","roster","team","stats"]; /* οι «Σύνδεσμοι» δεν μπαίνουν στο μενού */
