@@ -35,7 +35,11 @@ function applyDB(r){
  function normTeam(n){return String(n||"").trim().replace(/\\s+/g," ").toLocaleLowerCase("el")}
  function matchKey(m){
   var teams=[normTeam(m[1]),normTeam(m[4])].sort();
-  return String(m[0]||"")+"|"+teams[0]+"|"+teams[1];
+  var round=normTeam(m[6]),comp=normTeam(m[5]);
+  /* Αν λείπει ημερομηνία από τοπική εγγραφή, η αγωνιστική + διοργάνωση
+     ταυτοποιούν τον ίδιο αγώνα με την πλήρη εγγραφή της βάσης. */
+  var identity=round?"round:"+round:"date:"+String(m[0]||"");
+  return comp+"|"+identity+"|"+teams[0]+"|"+teams[1];
  }
  Object.keys(keys).forEach(function(k){
   var merged=[],positions={};
