@@ -26,7 +26,21 @@ function applyDB(r){
   if(detail.length){x.events=detail;x.sc=detail.filter(function(e){return e.scorer}).map(function(e){return e.scorer});x.as=detail.filter(function(e){return e.assist}).map(function(e){return e.assist})}
   (S[m.season]=S[m.season]||[]).push([pa.d||null,h,m.home_score,m.away_score,a,m.competition==="Off-Season Tournament"?OST:PR,m.round_label||undefined,x]);
  });
- var ks=Object.keys(S).sort().reverse();if(ks.length){var o={};ks.forEach(function(k){o[k]=S[k]});SEASONS=o}
+ /* Συνδύασε τη βάση με τα τοπικά ιστορικά δεδομένα: η βάση ενημερώνει/αντικαθιστά
+    τον ίδιο αγώνα, αλλά δεν εξαφανίζει παλιούς αγώνες αν λείπουν προσωρινά από το API. */
+ var fallback=window.SEASONS||{},o={},keys={};
+ Object.keys(fallback).forEach(function(k){keys[k]=1});
+ Object.keys(S).forEach(function(k){keys[k]=1});
+ Object.keys(keys).forEach(function(k){
+  var merged=(fallback[k]||[]).slice();
+  function mk(m){return[m[1],m[4]].sort().join("|")+"|"+(m[5]||"")}
+  (S[k]||[]).forEach(function(dm){
+   var id=mk(dm),ix=merged.findIndex(function(lm){return mk(lm)===id});
+   if(ix>=0)merged[ix]=dm;else merged.push(dm);
+  });
+  o[k]=merged;
+ });
+ var ks=Object.keys(o).sort().reverse();if(ks.length)SEASONS=o;
  NEXT=nx?{date:nx.date,time:nx.time,home:nx.home,away:nx.away,venue:nx.venue||undefined,map:nx.map||undefined}:null;
  if(pl.length){var g={},as2={},c={};ev.forEach(function(e){if(e.kind==="goal"&&e.scorer_id)g[e.scorer_id]=(g[e.scorer_id]||0)+1;if(e.assist_id)as2[e.assist_id]=(as2[e.assist_id]||0)+1});
   ap.forEach(function(x){c[x.player_id]=(c[x.player_id]||0)+1});PHOTOS={};
