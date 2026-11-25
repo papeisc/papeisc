@@ -26,18 +26,26 @@ function applyDB(r){
   if(detail.length){x.events=detail;x.sc=detail.filter(function(e){return e.scorer}).map(function(e){return e.scorer});x.as=detail.filter(function(e){return e.assist}).map(function(e){return e.assist})}
   (S[m.season]=S[m.season]||[]).push([pa.d||null,h,m.home_score,m.away_score,a,m.competition==="Off-Season Tournament"?OST:PR,m.round_label||undefined,x]);
  });
- /* Συνδύασε τη βάση με τα τοπικά ιστορικά δεδομένα: η βάση ενημερώνει/αντικαθιστά
-    τον ίδιο αγώνα, αλλά δεν εξαφανίζει παλιούς αγώνες αν λείπουν προσωρινά από το API. */
+ /* Ενοποίηση τοπικών και DB αγώνων με μοναδικό κλειδί ημερομηνία + ζευγάρι.
+    Δεν χρησιμοποιούμε competition: στα παλιά τοπικά δεδομένα λείπει το πεδίο
+    και αυτό δημιουργούσε δεύτερη εγγραφή για κάθε αγώνα. */
  var fallback=window.SEASONS||{},o={},keys={};
  Object.keys(fallback).forEach(function(k){keys[k]=1});
  Object.keys(S).forEach(function(k){keys[k]=1});
+ function normTeam(n){return String(n||"").trim().replace(/\\s+/g," ").toLocaleLowerCase("el")}
+ function matchKey(m){
+  var teams=[normTeam(m[1]),normTeam(m[4])].sort();
+  return String(m[0]||"")+"|"+teams[0]+"|"+teams[1];
+ }
  Object.keys(keys).forEach(function(k){
-  var merged=(fallback[k]||[]).slice();
-  function mk(m){return[m[1],m[4]].sort().join("|")+"|"+(m[5]||"")}
-  (S[k]||[]).forEach(function(dm){
-   var id=mk(dm),ix=merged.findIndex(function(lm){return mk(lm)===id});
-   if(ix>=0)merged[ix]=dm;else merged.push(dm);
-  });
+  var merged=[],positions={};
+  function put(m,prefer){
+   var id=matchKey(m);
+   if(positions[id]===undefined){positions[id]=merged.length;merged.push(m)}
+   else if(prefer)merged[positions[id]]=m;
+  }
+  (fallback[k]||[]).forEach(function(m){put(m,false)});
+  (S[k]||[]).forEach(function(m){put(m,true)});
   o[k]=merged;
  });
  var ks=Object.keys(o).sort().reverse();if(ks.length)SEASONS=o;
