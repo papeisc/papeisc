@@ -76,10 +76,11 @@ function kpi(v,l,o){o=o||{};var d=o.d||0,p=o.p||"",txt=(p&&v>0?p:"")+(+v).toFixe
  return"<div class=\"kpi"+(o.hl?" hl":"")+"\"><b data-v=\""+v+"\" data-d=\""+d+"\""+(p?" data-p=\""+p+"\"":"")+">"+txt+"</b><span>"+l+"</span></div>"}
 function streaks(ms){var cur={u:0,w:0},best={u:0,w:0},u=0,w=0;ms.forEach(function(m){var r=res(m);u=r==="L"?0:u+1;w=r==="W"?w+1:0;if(u>best.u)best.u=u;if(w>best.w)best.w=w});cur.u=u;cur.w=w;return{cur:cur,best:best}}
 function renderStats(){
- var k=curSeason(),all=SEASONS[k]||[],ms=chron(all.filter(ours)),n=ms.length,r=rec(ms),G=0,A=0,sc=0;
+ var k=curSeason(),all=SEASONS[k]||[],ms=chron(all.filter(ours).filter(function(m){return m[5]!==OST})),n=ms.length,r=rec(ms),G=0,A=0,sc=0;
  P.forEach(function(p){G+=p[2];A+=p[3];if(p[2]>0)sc++});var d=r.f-r.a,pts=r.W*3+r.D;
  /* 1. Βασικοί αριθμοί */
- $("st_kpi").innerHTML="<div class=\"kpis\">"+[kpi(n,"αγώνες",{hl:1}),kpi(r.W,"νίκες"),kpi(r.f,"γκολ υπέρ"),kpi(r.a,"γκολ κατά"),kpi(d,"διαφορά τερμάτων",{p:"+"}),kpi(n?r.f/n:0,"γκολ ανά αγώνα",{d:2}),kpi(n?Math.round(r.W/n*100):0,"% νικών"),kpi(A,"ασίστ"),kpi(sc,"διαφορετικοί σκόρερ"),kpi(ms.filter(function(m){return myGA(m)===0}).length,"αγώνες χωρίς γκολ κατά")].join("")+"</div>";
+ $("st_kpi").innerHTML="<div class=\"kpis\">"+[kpi(n,"αγώνες",{hl:1}),kpi(r.W,"νίκες"),kpi(r.D,"ισοπαλίες"),kpi(r.L,"ήττες"),kpi(r.f,"γκολ υπέρ"),kpi(r.a,"γκολ κατά"),kpi(d,"διαφορά τερμάτων",{p:"+"}),kpi(n?r.f/n:0,"γκολ ανά αγώνα",{d:2}),kpi(n?Math.round(r.W/n*100):0,"% νικών"),kpi(pts,"βαθμοί"),kpi(ms.filter(function(m){return myGA(m)===0}).length,"αγώνες χωρίς γκολ κατά")].join("")+"</div>";
+ $("st_player_kpi").innerHTML="<div class=\"kpis\">"+[kpi(G,"γκολ παικτών"),kpi(A,"ασίστ παικτών"),kpi(G+A,"γκολ + ασίστ"),kpi(sc,"διαφορετικοί σκόρερ")].join("")+"</div>";
  /* 2. Φόρμα + W/D/L + γκολ */
  var last=ms.slice(-5),L=last.map(function(m,i){var q=res(m);return"<span class=\"fchip "+q+"\" style=\"--i:"+i+"\" title=\""+esc(oppOf(m))+" "+m[2]+"-"+m[3]+"\">"+{W:"Ν",D:"Ι",L:"Η"}[q]+"</span>"}).join("");
  var lbl=last.map(function(m){return"<span>"+esc(fd(m[0])||"")+" "+myGF(m)+"-"+myGA(m)+"</span>"}).join("");
