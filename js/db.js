@@ -35,10 +35,11 @@ function applyDB(r){
  function normTeam(n){return String(n||"").trim().replace(/\s+/g," ").toLocaleLowerCase("el")}
  function matchKey(m){
   var teams=[normTeam(m[1]),normTeam(m[4])].sort();
-  var round=normTeam(m[6]),comp=m[5]===OST?OST:PR;
-  /* Αν λείπει ημερομηνία από τοπική εγγραφή, η αγωνιστική + διοργάνωση
-     ταυτοποιούν τον ίδιο αγώνα με την πλήρη εγγραφή της βάσης. */
-  var identity=round?"round:"+round:"date:"+String(m[0]||"");
+  var comp=m[5]===OST?OST:PR;
+  /* Η ημερομηνία και το ζευγάρι είναι η κοινή ταυτότητα local/Supabase.
+     Η αγωνιστική/ετικέτα μπορεί να υπάρχει μόνο στη μία πηγή και δεν
+     πρέπει να δημιουργεί δεύτερη εγγραφή για τον ίδιο αγώνα. */
+  var identity=m[0]?"date:"+String(m[0]):"round:"+normTeam(m[6]);
   return comp+"|"+identity+"|"+teams[0]+"|"+teams[1];
  }
  Object.keys(keys).forEach(function(k){
